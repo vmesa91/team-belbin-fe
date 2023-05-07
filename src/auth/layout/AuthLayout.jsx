@@ -1,31 +1,70 @@
-import { Grid, Typography } from '@mui/material'
-import React from 'react'
+import { Helmet } from 'react-helmet-async';
+import useResponsive from "../../hooks/useResponsive";
+import styled from '@emotion/styled';
+
+import { Container , Typography } from '@mui/material';
+import { Link } from 'react-router-dom';
+
+// ----------------------------------------------------------------------
+
+const StyledRoot = styled('div')(({ theme }) => ({
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+    },
+  }))
+
+const StyledSection = styled('div')(({ theme }) => ({
+width: '80%',
+display: 'flex',
+backgroundColor: theme.palette.background.default,
+}));
+
+const StyledContent = styled('div')(({ theme }) => ({
+    maxWidth: 480,
+    margin: 'auto',
+    minHeight: '100vh',
+    display: 'flex',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    padding: theme.spacing(12, 0),
+  }));
+
+// ----------------------------------------------------------------------
 
 export const AuthLayout = ( { children , title = '' } ) => {
+
+  const mdUp = useResponsive('up', 'md')
   return (
-    <Grid container
-    spacing={ 0 }
-    direction="column"
-    alignItems="center"
-    justifyContent="center"
-    sx={{ minHeight: '100vh', backgroundColor: 'primary.main', padding: 4 }}
-    >
+    <>
+        <Helmet>
+            <title> Team Maker UI </title>
+        </Helmet>
 
-        < Grid item
-        className='box-shadow'
-        xs={ 3 }
-        sx={{ 
-            width: { sm: 450 },
-            backgroundColor: 'white', 
-            padding: 3, 
-            borderRadius: 2 
-        }}>
-            <Typography variant='h5' sx={{ mb:1 }}> {title} </Typography>
+        <StyledRoot>
 
-            { children }
+        <Container maxWidth="sm">
+            <StyledContent>
+                <Typography variant="h4" gutterBottom>
+                Sign in to Minimal
+                </Typography>
 
-        </Grid>     
-   </Grid>     
+                <Typography variant="body2" sx={{ mb: 5 }}>
+                    Don’t have an account? {''}
+                    <Link variant="subtitle2">Get started</Link>
+                </Typography>
+                  
+                  {/* LOGIN OR REGISTER */}
+                  { children }
+                
+              </StyledContent>
+            </Container>
 
+            <StyledSection>
+              <img src={
+                title === 'Login' ? "/assets/illustrations/Doodle.svg" : "/assets/illustrations/Doodle_Register.svg"} alt="login" />
+            </StyledSection>
+         </StyledRoot>
+    </>
   )
 }
+

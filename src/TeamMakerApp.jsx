@@ -1,15 +1,21 @@
 
-import { AuthProvider } from './auth'
+import { HelmetProvider } from 'react-helmet-async';
+// Routes
 import { AppRouter } from './router/AppRouter'
-import { TeamMakerAppTheme } from './theme/TeamMakerAppTheme'
+// Theme
+import ThemeProvider from './theme';
+// Components
+import { AuthProvider } from './auth'
 
 export const TeamMakerApp = () => {
   return (
-    < AuthProvider >
-      <TeamMakerAppTheme>
-      < AppRouter />
-      </TeamMakerAppTheme>
-    </ AuthProvider >
+    <HelmetProvider>
+      < AuthProvider >
+        <ThemeProvider>
+        < AppRouter />
+        </ThemeProvider>
+      </ AuthProvider >
+    </HelmetProvider>
 
   )
 }

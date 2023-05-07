@@ -1,76 +1,44 @@
-import { Button, Grid, Link, TextField, Typography } from '@mui/material'
 
-import React, { useContext } from 'react'
-import { useNavigate, Link as RouterLink } from 'react-router-dom'
-import { AuthContext } from '../context/AuthContext'
+import { Checkbox, IconButton, InputAdornment, Stack, TextField } from '@mui/material'
 import { AuthLayout } from '../layout/AuthLayout'
+import { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext'
+import { LoadingButton } from '@mui/lab';
+import { Iconify } from '../../common/components/Iconify/Iconify';
 
 export const LoginPage = () => {
 
+  const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
   const {  login  } = useContext( AuthContext )
-  const navigate = useNavigate()
 
-  const onLogin = () => {
-
-    
-    login( 'Virginia Mesa' )
-    navigate('/home', {
-      replace: 'true'
-    })
-  }
-
+  const handleClick = () => {
+    login('Virginia Mesa')
+    navigate('/home', { replace: true });
+  };
   return (
-    
     <AuthLayout title='Login'>
-
-          <form>
-            <Grid container>
-
-              <Grid item xs={ 12 } sx={{ mt: 2 }} >
-                <TextField 
-                  label="Correo"
-                  type="email"
-                  placeholder='correo@google.com'
-                  fullWidth
-                />
-              </Grid>
-
-              <Grid item xs={ 12 } sx={{ mt: 2 }} > 
-                <TextField 
-                  label="Contraseña"
-                  type="password"
-                  placeholder='Contraseña'
-                  fullWidth
-                />
-              </Grid>
-
-              <Grid container
-              spacing={ 2 }
-              sx={{ mb: 2, mt: 1}} > 
-
-                <Grid item xs={ 12 }>
-                  <Button 
-                    variant='contained' 
-                    fullWidth 
-                    onClick={ onLogin }>
-                     Acceso
-                  </Button>
-
-                </Grid>
-              </Grid>
-
-              <Grid container
-                direction='row'
-                justifyContent='end'
-              >
-                <Link component={ RouterLink } color='inherit' to='/auth/register'>
-                  Registrarme
-                </Link>
-              </Grid>
-            </Grid>
-          </form>
+        <Stack spacing={3}>
+            <TextField name="email" label="Email address" />
+            <TextField name="password" label="Password" type={ showPassword ? 'text' : 'password' } InputProps={ {
+                endAdornment: (
+                    <InputAdornment position='end'>
+                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                        <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'}/>
+                        </IconButton>
+                    </InputAdornment>
+                )
+            }}/>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
+              <Checkbox name="remember" label="Remember me" />
+        </Stack>
+        <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+              Acceso
+        </LoadingButton>
 
     </AuthLayout>
-
   )
 }

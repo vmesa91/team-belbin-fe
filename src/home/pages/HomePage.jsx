@@ -1,13 +1,10 @@
 import { Box } from '@mui/system'
 import React from 'react'
-import { HomeLayout } from '../layout/HomeLayout'
+import { HomeLayout } from '../../common/layouts/HomeLayout'
 
 export const HomePage = () => {
 
   return (
-    < HomeLayout >
-   
-  
-    </ HomeLayout >
+    <div> Dashboard </div>
   )
 }
