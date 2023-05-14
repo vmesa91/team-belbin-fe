@@ -3,6 +3,41 @@ import { sample } from 'lodash';
 
 // ----------------------------------------------------------------------
 
+const sympathy = [...Array(8)].map((_, index) => ({
+  name: faker.name.fullName(),
+  expertise: sample([
+    ':D',
+    ':)',
+    ':|',
+    ':/',
+    ':(',
+  ])
+}))
+
+const expertise = [...Array(10)].map((_, index) => ({
+  tecnologies: sample([
+    faker.name.jobDescriptor(),
+    faker.name.jobDescriptor(),
+    faker.name.jobDescriptor(),
+    faker.name.jobDescriptor(),
+    faker.name.jobDescriptor(),
+    faker.name.jobDescriptor(),
+    faker.name.jobDescriptor(),
+    faker.name.jobDescriptor(),
+    faker.name.jobDescriptor(),
+    faker.name.jobDescriptor()
+  ]),
+  expertise: sample([
+    '5',
+    '4',
+    '3',
+    '2',
+    '1',
+  ])
+}))
+
+
+
 export const members = [...Array(24)].map((_, index) => ({
   id: faker.datatype.uuid(),
   avatarUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
@@ -27,7 +62,9 @@ export const members = [...Array(24)].map((_, index) => ({
     'Team 16',
     'Team 17'
   ]),
-  language: faker.address.country()
+  language: faker.address.country(),
+  sympathy: sympathy,
+  expertise: expertise
 }));
 
 

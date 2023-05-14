@@ -1,11 +1,25 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useLocation } from 'react-router-dom';
 import { NavItem } from './NavItem'
 import { Collapse } from '@mui/material'
+import useActiveLink from '../../../hooks/useActiveLink'
 
 export const NavList = ({ data , depth , hasChild }) => {
     
+    const { pathname } = useLocation()
+
+    console.log(pathname)
     
-    const [isOpen, setIsOpen] = useState(false)
+    const { active } = useActiveLink(data.path) 
+
+    const [isOpen, setIsOpen] = useState(active)
+
+
+    useEffect(() => {
+      if (!active) {
+        handleClose();
+      }
+    }, [pathname])
 
     const handleToggle = () => {
         setIsOpen(!isOpen);
@@ -17,7 +31,7 @@ export const NavList = ({ data , depth , hasChild }) => {
 
      return (
         <>  
-            < NavItem item={data} open={isOpen} depth={depth} onClick={handleToggle} />
+            < NavItem item={data} open={isOpen} depth={depth} active={active} onClick={handleToggle} />
 
             { hasChild && (
                 
@@ -37,8 +51,10 @@ const NavSubList = ({ data , depth }) => {
       <>
         {data.map((list) => (
           <NavList
+            key={list.title + list.path}
             data={list}
             depth={ depth + 1}
+            hasChild={!!list.children}
           />
         ))}
       </>

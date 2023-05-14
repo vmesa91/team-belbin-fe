@@ -6,22 +6,24 @@ import { Iconify } from '../Iconify/Iconify.jsx';
 
 // ----------------------------------------------------------------------
 
-export const NavItem = ({ item , open , depth, ...other }) => {
+export const NavItem = ({ item , open , depth, active, ...other }) => {
  
   const { title, path , children=undefined, icon } = item; 
   const subItem = depth !== 1;
 
   const renderContent = (
-     <StyledItem depth={depth} active={open} {...other}>
-      <StyledIcon>{icon && icon}</StyledIcon>
+     <StyledItem depth={depth} active={active} {...other}>
+      {icon && <StyledIcon>{icon}</StyledIcon>}
 
       {subItem && (
         <StyledIcon>
-          <StyledDotIcon active={open && subItem} />
+          <StyledDotIcon active={active && subItem} />
         </StyledIcon>
       )}
 
-      <ListItemText primary={title} primaryTypographyProps={{ noWrap: true, component: 'span', variant: 'body2' }}/>
+      <ListItemText 
+          primary={title} 
+          primaryTypographyProps={{ noWrap: true, component: 'span', variant: 'body2' }}/>
 
       {!!children && (
         <Iconify

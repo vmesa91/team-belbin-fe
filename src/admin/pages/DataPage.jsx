@@ -7,16 +7,20 @@ import{ useEffect, useState } from 'react'
 // @MUI
 import {  
   Box,
-  Container
+  Button,
+  Container,
+  Dialog,
+  DialogTitle
 } from '@mui/material'
 
-import { useNavigate } from 'react-router-dom'
-
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBreadcrumbs'
 import { dataRoles } from '../../_mock/dataRoles'
 import { dataKnowledges } from '../../_mock/dataKnowledges'
 import { dataTechnologies } from '../../_mock/dataTechnologies'
-import { DataTableBodyLayout } from '../sections/DataTableBodyLayout'
+import { DataTableBodyLayout } from '../sections/table/DataTableBodyLayout'
+import { Iconify } from '../../common/components/Iconify/Iconify';
+import { NewDataModalForm } from '../sections/dialog/NewDataModalForm';
 
 
 const TABLE_HEAD_ROLES = [
@@ -38,8 +42,15 @@ export const DataPage = () => {
   const [tableDataKnowledges, setTableDataKnowledges] = useState([]);
   const [tableDataTechnologies, setTableDataTechnologies] = useState([]);
 
+  const [openFormNewData, setOpenFormNewData] = useState(false);
 
+  const handleOpenModalNewData = () => {
+    setOpenFormNewData(true)
+  }
 
+  const handleCloseModalNewData = () => {
+    setOpenFormNewData(false)
+  }
 
   useEffect(() => {
     setTableDataRoles(dataRoles);
@@ -62,6 +73,16 @@ export const DataPage = () => {
             { name: 'Administración', href: '' },
             { name: 'Crear Datos' },
           ]}
+          action={
+            <Button
+              component={RouterLink}
+              onClick={handleOpenModalNewData}
+              variant="contained"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+            >
+              Nuevo Dato
+            </Button>
+          }
         />
         <Box spacing={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
@@ -72,6 +93,11 @@ export const DataPage = () => {
         </Box>
 
       </Container>
+
+      <Dialog fullWidth maxWidth="xs" open={openFormNewData} onClose={handleCloseModalNewData}>
+        < DialogTitle > Añadir Dato </ DialogTitle >
+        < NewDataModalForm onCancel={ handleCloseModalNewData } />
+      </Dialog>
     </>
   )
 }

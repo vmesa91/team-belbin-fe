@@ -53,7 +53,7 @@ export const AccountPopover = () => {
                     },
                 }),
             }}>
-               <Avatar  src={account.photoURL} alt="photoURL"/>
+               <Avatar src={account.photoURL} alt="photoURL"/>
             </IconButton>
 
             <Popover 

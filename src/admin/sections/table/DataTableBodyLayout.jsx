@@ -2,13 +2,13 @@
 
 import { Button, Card, IconButton, Table, TableBody, TableContainer, TablePagination, Tooltip } from '@mui/material'
 import { DataTableToolbar } from './DataTableToolbar'
-import { DataTableRow, TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedAction, TableSkeleton } from '../components/Table'
-import { Iconify } from '../../common/components/Iconify/Iconify'
+import { DataTableRow, TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedAction, TableSkeleton } from '../../components/Table'
+import { Iconify } from '../../../common/components/Iconify/Iconify'
 import { useState } from 'react'
-import { useTable } from '../hooks/useTable'
-import { getComparator } from '../utils/utils'
-import { TablePaginationCustom } from '../components/Table/TablePaginationCustom'
-import { ConfirmDialog } from '../../common/components/ConfirmDialog/ConfirmDialog'
+import { useTable } from '../../hooks/useTable'
+import { getComparator } from '../../utils/utils'
+import { TablePaginationCustom } from '../../components/Table/TablePaginationCustom'
+import { ConfirmDialog } from '../../../common/components/ConfirmDialog/ConfirmDialog'
 
 export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD }) => {
 

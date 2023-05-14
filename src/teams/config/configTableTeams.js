@@ -1,13 +1,19 @@
-export const dataTableTeams = {
 
-    breadcrumb: 'Gestionar Equipos',
-    buttonCreateNew : 'Nuevo Equipo',
-    tableHead : [
-        { id: 'team', label: 'Equipo', alignRight: false },
-        { id: 'profile', label: 'Perfiles', alignRight: false },
-        { id: 'member', label: 'Miembros', alignRight: false },
-        { id: 'language', label: 'Idiomas', alignRight: false },
-        { id: '' },
+export const dataTableConfigTeam = 
+    [
+        { id: 'members', label: 'Nombre y Apellido', align: 'center' },
+        { id: 'profiles', label: 'Perfil', align: 'center' },
+        { id: 'teams', label: 'Equipos', align: 'center' },
+        { id: 'language', label: 'Idiomas', align: 'center' },
+        { id: '' }
     ]
 
-}
+
+export const dataTableTeams = 
+    [
+        { id: 'team', label: 'Equipo', align: 'center' },
+        { id: 'profile', label: 'Perfiles', align: 'center' },
+        { id: 'member', label: 'Miembros', align: 'center' },
+        { id: 'language', label: 'Idiomas', align: 'center' },
+        { id: '' }
+    ]

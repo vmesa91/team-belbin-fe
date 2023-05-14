@@ -69,7 +69,7 @@ export const NavBar = ({ openNav, onCloseNav }) => {
                 flexShrink: { lg: 0 },
                 width: { lg: NAV_WIDTH },
             }}
-        >
+            >
             {isDesktop ? (
                 <Drawer
                     open
@@ -83,6 +83,7 @@ export const NavBar = ({ openNav, onCloseNav }) => {
                     }}
                 >
                     {renderContent}
+                    
                 </Drawer>
             ) : (
                 <Drawer

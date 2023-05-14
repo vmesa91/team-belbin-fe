@@ -1,7 +1,7 @@
 import { Box, Container } from '@mui/material'
 import { Helmet } from 'react-helmet-async'
 import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBreadcrumbs'
-import { UserAccount } from '../../common/sections/user/account/UserAccount'
+import { UserAccount } from '../sections/account/UserAccount'
 
 export const AccountSettingsPage = () => {
   return (

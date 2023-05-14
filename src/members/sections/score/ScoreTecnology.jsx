@@ -1,12 +1,11 @@
 // form
 import { useFormContext, useFieldArray } from 'react-hook-form';
 // @mui
-import { Box, Stack, Button, Divider, Typography, InputAdornment, MenuItem } from '@mui/material';
-import { Iconify } from '../../common/components/Iconify/Iconify'
-import { CustomSelect } from '../../common/components/Form/CustomSelect';
+import { Stack, Button, Divider, Typography, InputAdornment, MenuItem, Rating } from '@mui/material';
+import { Iconify } from '../../../common/components/Iconify/Iconify'
+import { CustomSelect } from '../../../common/components/Form/CustomSelect';
 // mocks
-import { dataTechnologies } from '../../_mock/dataTechnologies'
-import { CustomRating } from '../../common/components/Rating/CustomRating';
+import { dataTechnologies } from '../../../_mock/dataTechnologies'
 
 
 export const ScoreTecnology = () => {
@@ -42,9 +41,9 @@ export const ScoreTecnology = () => {
     
     return (
 
-    <Box sx={{ p: 3 }}>
-        <Typography variant="h6" sx={{ color: 'text.disabled', mb: 3 }}>
-            Tecnologías:
+    <Stack sx={{ display: 'flex' , flexDirection: 'row' ,  justifyContent: 'space-around'}}>
+       <Typography variant="title" sx={{ color: 'text.secondary' }}>
+            Añadir Tecnología/s
         </Typography>
 
 
@@ -55,7 +54,7 @@ export const ScoreTecnology = () => {
                         <CustomSelect
                             name={`items[${index}].tecnologyName`}
                             size="small"
-                            label="Tecnología"
+                            label="Selecciona una o varias tecnologías"
                             InputLabelProps={{ shrink: true }}
                             sx={{ maxWidth: { md: 160 } }}
                         >
@@ -81,7 +80,7 @@ export const ScoreTecnology = () => {
 
                         </CustomSelect>
 
-                        <CustomRating />
+                        <Rating />
 
                         <Button
                             size="small"
@@ -89,7 +88,7 @@ export const ScoreTecnology = () => {
                             startIcon={<Iconify icon="eva:trash-2-outline" />}
                             onClick={() => handleRemove(index)}
                             >
-                            Remove
+                            Eliminar
                             </Button>
                     </Stack>
                 </Stack>
@@ -125,7 +124,7 @@ export const ScoreTecnology = () => {
 
 
     </Stack>
-    </Box>    
+    </Stack>    
         
 
   )

@@ -1,6 +1,6 @@
 import { Button, InputAdornment, Stack, TextField } from '@mui/material'
 import React from 'react'
-import { Iconify } from '../../common/components/Iconify/Iconify'
+import { Iconify } from '../../../common/components/Iconify/Iconify'
 
 export const DataTableToolbar = ({ 
     filterName,

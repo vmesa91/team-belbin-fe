@@ -1,13 +1,7 @@
-export const dataTableMembers = {
-
-    breadcrumb: 'Gestionar Miembros',
-    buttonCreateNew : 'Nuevo Miembro',
-    tableHead : [
-        { id: 'name', label: 'Nombre y Apellido', alignRight: false },
-        { id: 'profile', label: 'Perfil', alignRight: false },
-        { id: 'team', label: 'Equipos', alignRight: false },
-        { id: 'language', label: 'Idiomas', alignRight: false },
+export const dataTableMembers = [
+        { id: 'name', label: 'Nombre y Apellido', align: 'center' },
+        { id: 'profile', label: 'Perfil', align: 'center' },
+        { id: 'team', label: 'Equipos', align: 'center' },
+        { id: 'language', label: 'Idiomas', align: 'center' },
         { id: '' },
     ]
-
-}

@@ -1,13 +1,12 @@
-
 import { LoadingButton } from '@mui/lab'
 import { Box, Card, Grid, Stack, TextField, Typography } from '@mui/material'
 import React from 'react'
-import { FormProvider } from '../../../components/Form/FormProvider'
+import { FormProvider } from '../../../common/components/Form/FormProvider'
 import { useForm } from 'react-hook-form'
-import { CustomTextField } from '../../../components/Form/CustomTextField'
-import account from '../../../../_mock/account'
+import { CustomTextField } from '../../../common/components/Form/CustomTextField'
+import account from '../../../_mock/account'
 import { styled, alpha } from '@mui/material/styles';
-import { Image } from '../../../components/Image/Image'
+import { Image } from '../../../common/components/Image/Image'
 
 
 const StyledDropZone = styled('div')(({ theme }) => ({
@@ -118,4 +117,3 @@ export const UserAccount = () => {
     </FormProvider>
   )
 }
-
