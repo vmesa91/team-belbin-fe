@@ -6,11 +6,21 @@ import { CustomSwitch } from "../../../common/components/Form/CustomSwitch";
 import { LoadingButton } from "@mui/lab";
 import { CustomSelect } from "../../../common/components/Form/CustomSelect";
 import { dataOptions } from '../../config/dataOptions' 
+import { createData } from "../../../redux/store/data/dataThunk";
+import { useDispatch } from "react-redux";
+import { faker } from "@faker-js/faker";
 
 
 export const NewDataModalForm = ({ onCancel }) => {
 
-    const methods = useForm({})
+  const dispatch = useDispatch()
+  const defaultValues = {
+      name: '',
+      dataOption: null,
+      activation: false
+    }
+
+    const methods = useForm({ defaultValues })
 
     const {
         reset,
@@ -20,9 +30,11 @@ export const NewDataModalForm = ({ onCancel }) => {
         formState: { isSubmitting },
       } = methods
 
-
+    const values = watch()  
+  
     const onSubmit = (data) => {
-        console.log('Creado', data)
+      dispatch(createData({...data}))
+      onCancel()
     }
 
 
@@ -36,14 +48,13 @@ export const NewDataModalForm = ({ onCancel }) => {
                 name='dataOption'
                 size="small"
                 label="Tipo de Dato"
-                InputLabelProps={{ shrink: true }}
                 sx={{ maxWidth: { md: 160 } }}>
-                {dataOptions.map((data) => (
+                {dataOptions.map((option) => (
                     <MenuItem
-                    key={dataOptions.id}
-                    value={dataOptions.label}
+                    key={option.id}
+                    value={option.label}
                     >
-                    {data.label}
+                      {option.label}
                   </MenuItem>
                 ))}
         </CustomSelect>

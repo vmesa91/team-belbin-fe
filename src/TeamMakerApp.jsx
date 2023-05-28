@@ -1,4 +1,8 @@
 
+// Redux
+import { Provider } from 'react-redux';
+import { store } from './redux/store/store';
+//Helmet
 import { HelmetProvider } from 'react-helmet-async';
 // Routes
 import { AppRouter } from './router/AppRouter'
@@ -15,9 +19,11 @@ export const TeamMakerApp = () => {
   return (
     <HelmetProvider>
       < AuthProvider >
-        <ThemeProvider>
-        < AppRouter />
-        </ThemeProvider>
+        <Provider store={ store }>
+          <ThemeProvider>
+            < AppRouter />
+          </ThemeProvider>
+        </Provider>
       </ AuthProvider >
     </HelmetProvider>
 

@@ -37,7 +37,6 @@ import {  TableListToolbar } from '../../common/sections/table/TableListToolbar'
 import { dataTableProfiles } from '../config/configTableProfiles'
 
 // Mock
-import { profiles } from '../../_mock/dataProfiles'
 import { teams } from '../../_mock/dataTeams'
 import { dataTechnologies } from '../../_mock/dataTechnologies'
 import { dataRoles } from '../../_mock/dataRoles'
@@ -51,6 +50,7 @@ import { ProfileTableToolbar } from '../sections/table/ProfileTableToolbar';
 import { TableSelectedAction } from '../../common/sections/table/TableSelectedAction';
 import { ProfileTableRow } from '../sections/table/ProfileTableRow';
 import { ConfirmDialog } from '../../common/components/ConfirmDialog/ConfirmDialog';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -75,6 +75,8 @@ export function TableProfilesPage() {
   } = useTable()
 
   const navigate = useNavigate()
+
+  const { activeProfile , profiles } = useSelector( state => state.profileStore )
 
   const [tableData, setTableData] = useState(profiles)
   

@@ -14,7 +14,9 @@ export const DataTableRow = ({
     onDeleteRow,
 }) => {
 
-    const { name, status } = row;
+    const { name, activation } = row;
+
+    const status = activation ? 'Active' : 'Inactive'   
 
     const [openConfirm, setOpenConfirm] = useState(false);
   
@@ -38,6 +40,7 @@ export const DataTableRow = ({
 
   return (
 
+
     <>
     
     <TableRow  hover selected={selected}>
@@ -55,7 +58,7 @@ export const DataTableRow = ({
          <Label
            variant="soft"
            color={
-             (status === 'inactive' && 'error') ||
+             (status === 'Inactive' && 'error') ||
              'success'
            }
            sx={{ textTransform: 'capitalize' }}

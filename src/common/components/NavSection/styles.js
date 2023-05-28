@@ -4,7 +4,7 @@ import { ListItemIcon, ListItemButton } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-export const StyledItem = styled(ListItemButton)(({ active , depth, theme }) => {
+export const StyledItem = styled(ListItemButton, {  shouldForwardProp: (prop) => prop !== 'active' })(({ active , depth, theme }) => {
   const isLight = theme.palette.mode === 'light';
 
   const subItem = depth !== 1;
@@ -68,7 +68,7 @@ export const StyledIcon = styled(ListItemIcon)({
 
 // ----------------------------------------------------------------------
 
-export const StyledDotIcon = styled('span')(({ active, theme }) => ({
+export const StyledDotIcon = styled('span', { shouldForwardProp: (prop) => prop !== 'active' })(({ active, theme }) => ({
   width: 4,
   height: 4,
   borderRadius: '50%',

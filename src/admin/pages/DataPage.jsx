@@ -2,10 +2,11 @@
 import { Helmet } from 'react-helmet-async'
 
 // Status handle
-import{ useEffect, useState } from 'react'
+import{ useEffect, useMemo, useState } from 'react'
 
 // @MUI
 import {  
+  Alert,
   Box,
   Button,
   Container,
@@ -13,14 +14,13 @@ import {
   DialogTitle
 } from '@mui/material'
 
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBreadcrumbs'
-import { dataRoles } from '../../_mock/dataRoles'
-import { dataKnowledges } from '../../_mock/dataKnowledges'
-import { dataTechnologies } from '../../_mock/dataTechnologies'
 import { DataTableBodyLayout } from '../sections/table/DataTableBodyLayout'
 import { Iconify } from '../../common/components/Iconify/Iconify';
 import { NewDataModalForm } from '../sections/dialog/NewDataModalForm';
+import { useDispatch, useSelector } from 'react-redux';
+import { getDataForRoles , getDataForKnowledges , getDataForTools } from '../../redux/store/data/dataThunk';
 
 
 const TABLE_HEAD_ROLES = [
@@ -33,31 +33,38 @@ const TABLE_HEAD_TECHNOLOGIES = [
   { id: 'tecnhnologies' , label: 'Tecnologías' , align: 'center'}
 ]
 
-
 export const DataPage = () => {
 
-  const navigate = useNavigate();
+  const { tools , roles, knowledges , errorMessage } = useSelector( state => state.dataStore )
 
+  const [hasError, setHasError] = useState(false)
   const [tableDataRoles, setTableDataRoles] = useState([]);
   const [tableDataKnowledges, setTableDataKnowledges] = useState([]);
-  const [tableDataTechnologies, setTableDataTechnologies] = useState([]);
+  const [tableDataTools, setTableDataTools] = useState([]);
 
   const [openFormNewData, setOpenFormNewData] = useState(false);
 
   const handleOpenModalNewData = () => {
     setOpenFormNewData(true)
   }
-
+  
   const handleCloseModalNewData = () => {
     setOpenFormNewData(false)
   }
-
-  useEffect(() => {
-    setTableDataRoles(dataRoles);
-    setTableDataKnowledges(dataKnowledges);
-    setTableDataTechnologies(dataTechnologies);
-  }, [dataRoles , dataKnowledges, dataTechnologies])
   
+  useEffect(() => {
+    setTableDataRoles(roles)
+    setTableDataKnowledges(knowledges)
+    setTableDataTools(tools)
+  }, [roles , knowledges, tools])  
+  
+  
+  useEffect(() => {
+    if (errorMessage !== undefined) {
+      setHasError(true)
+      
+    }
+  }, [errorMessage])
 
   return (
     <>
@@ -84,11 +91,12 @@ export const DataPage = () => {
             </Button>
           }
         />
+        {!!hasError && <Alert severity="error" sx={{ width: '30%' , padding: '2px' }}> {errorMessage} </Alert>}
         <Box spacing={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-          <DataTableBodyLayout tableData={tableDataRoles} setTableData={setTableDataRoles} TABLE_HEAD={TABLE_HEAD_ROLES}/>       
-          <DataTableBodyLayout tableData={tableDataKnowledges} setTableData={setTableDataKnowledges} TABLE_HEAD={TABLE_HEAD_KNOWLEDGES}/> 
-          <DataTableBodyLayout tableData={tableDataTechnologies} setTableData={setTableDataTechnologies} TABLE_HEAD={TABLE_HEAD_TECHNOLOGIES}/> 
+          <DataTableBodyLayout key={'roles'} tableData={tableDataRoles} setTableData={setTableDataRoles} TABLE_HEAD={TABLE_HEAD_ROLES} typeData={'Rol'}/>       
+          <DataTableBodyLayout key={'knowledges'} tableData={tableDataKnowledges} setTableData={setTableDataKnowledges} TABLE_HEAD={TABLE_HEAD_KNOWLEDGES} typeData={'Knowledge'}/> 
+          <DataTableBodyLayout key={'tools'} tableData={tableDataTools} setTableData={setTableDataTools} TABLE_HEAD={TABLE_HEAD_TECHNOLOGIES} typeData={'Tool'}/> 
           
         </Box>
 

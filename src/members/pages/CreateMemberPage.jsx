@@ -4,7 +4,6 @@ import { Card, Container, Divider, MenuItem, Select, Stack, TextField, Typograph
 // @mui
 import { Helmet } from "react-helmet-async";
 import { CustomBreadcrumbs } from "../../common/components/Breadcrumbs/CustomBreadcrumbs";
-import { SetInputs } from "../../common/sections/form/SetInputs";
 import { members } from '../../_mock/dataMembers'
 import { dataRoles } from '../../_mock/dataRoles'
 import { dataKnowledges } from '../../_mock/dataKnowledges'
@@ -21,8 +20,6 @@ import { ScoreColleagues } from "../sections/score/ScoreColleagues";
 
 export const CreateMemberPage = ({ isEdit, currentProfile }) => {
 
-
-
   const  methodsForm = useForm() 
   const { reset, watch, setValue, handleSubmit , formState: { isSubmitting } } = methodsForm
 
@@ -30,7 +27,7 @@ export const CreateMemberPage = ({ isEdit, currentProfile }) => {
     console.log('On Submit')
   }
   
-
+  
   return (
 
     <FormProvider methods={methodsForm} onSubmit={handleSubmit(onSubmit)}>

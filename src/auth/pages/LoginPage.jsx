@@ -1,44 +1,96 @@
 
-import { Checkbox, IconButton, InputAdornment, Stack, TextField } from '@mui/material'
+import { Alert, Box, Checkbox, IconButton, InputAdornment, Stack, TextField } from '@mui/material'
 import { AuthLayout } from '../layout/AuthLayout'
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext'
 import { LoadingButton } from '@mui/lab';
 import { Iconify } from '../../common/components/Iconify/Iconify';
+import { useForm } from 'react-hook-form';
+import { FormProvider } from '../../common/components/Form/FormProvider'
+import { CustomTextField } from '../../common/components/Form/CustomTextField';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../redux/store/auth/authThunk';
 
 export const LoginPage = () => {
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
+  const { errorMessage } = useSelector( state => state.authStore )
 
-  const {  login  } = useContext( AuthContext )
+  const dispatch = useDispatch()
 
-  const handleClick = () => {
-    login('Virginia Mesa')
-    navigate('/home', { replace: true });
-  };
+  useEffect(() => {
+    if (errorMessage !== undefined) {
+
+      reset()
+      setError('afterSubmit', {
+        message: errorMessage
+      })
+      
+    }
+
+    console.log(errors)
+  }, [errorMessage])
+  
+
+  const defaultValues = {
+    email: '',
+    password: ''
+  }
+
+  const methods = useForm({ defaultValues });
+
+  const {
+    reset,
+    setError,
+    handleSubmit,
+    formState: { errors, isSubmitting, isSubmitSuccessful },
+  } = methods;
+
+  const onSubmit = ( data ) => {
+      dispatch( login( data ) )
+      
+  }
+
   return (
     <AuthLayout title='Login'>
-        <Stack spacing={3}>
-            <TextField name="email" label="Email address" />
-            <TextField name="password" label="Password" type={ showPassword ? 'text' : 'password' } InputProps={ {
-                endAdornment: (
-                    <InputAdornment position='end'>
-                        <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                        <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'}/>
-                        </IconButton>
-                    </InputAdornment>
-                )
-            }}/>
-        </Stack>
-        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-              <Checkbox name="remember" label="Remember me" />
-        </Stack>
-        <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
-              Acceso
-        </LoadingButton>
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+          <Stack spacing={3}>
+          {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
+              <CustomTextField name="email" label="Correo electrónico" />
+              <CustomTextField name="password" label="Contraseña" type={ showPassword ? 'text' : 'password' } InputProps={ {
+                  endAdornment: (
+                      <InputAdornment position='end'>
+                          <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                          <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'}/>
+                          </IconButton>
+                      </InputAdornment>
+                  )
+              }}/>
+          </Stack>
 
+          <Box sx={{ my: 2 }}/>
+        
+          <LoadingButton
+                fullWidth
+                color="inherit"
+                size="large"
+                type="submit"
+                variant="contained"
+                loading={isSubmitSuccessful || isSubmitting}
+                sx={{
+                  bgcolor: 'common.blue',
+                  color: 'common.white',
+                  '&:hover': {
+                    bgcolor: 'text.primary',
+                    color: 'common.white',
+                  },
+                }}
+              >
+                Acceso
+        </LoadingButton>
+      </FormProvider>
     </AuthLayout>
   )
 }

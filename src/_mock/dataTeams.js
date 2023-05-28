@@ -3,8 +3,8 @@ import { sample } from 'lodash';
 
 // ----------------------------------------------------------------------
 
-export const teams = [...Array(24)].map((_, index) => ({
-  id: faker.datatype.uuid(),
+export const teams = [...Array(10)].map((_, index) => ({
+  _id: faker.datatype.uuid(),
   name: sample([
     'Team 1',
     'Team 2',

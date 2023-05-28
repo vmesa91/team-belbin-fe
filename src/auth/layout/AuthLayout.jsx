@@ -45,12 +45,12 @@ export const AuthLayout = ( { children , title = '' } ) => {
         <Container maxWidth="sm">
             <StyledContent>
                 <Typography variant="h4" gutterBottom>
-                Sign in to Minimal
+                  BIENVENIDO!! 
                 </Typography>
 
                 <Typography variant="body2" sx={{ mb: 5 }}>
                     Don’t have an account? {''}
-                    <Link variant="subtitle2">Get started</Link>
+                    <Link variant="subtitle2">Registro</Link>
                 </Typography>
                   
                   {/* LOGIN OR REGISTER */}

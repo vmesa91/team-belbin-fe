@@ -3,12 +3,14 @@ import account from '../../../_mock/account'
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../auth/context/AuthContext";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../redux/store/auth/authThunk";
 
 
 export const AccountPopover = () => {
 
     const navigate = useNavigate();
-    const { logged } = useContext( AuthContext ) 
+    const dispatch = useDispatch()
 
     const [open, setOpen] = useState(null);
 
@@ -22,8 +24,8 @@ export const AccountPopover = () => {
 
     const handleLogout = async () => {
         try {
-          // Manejar el logout
-          navigate("/auth/login", { replace: true });
+          
+          dispatch( logout() )
           handleClose();
         } catch (error) {
           console.error(error);

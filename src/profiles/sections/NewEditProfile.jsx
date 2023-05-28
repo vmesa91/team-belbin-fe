@@ -1,8 +1,7 @@
 
 import { Box, Card, Container, MenuItem, Select, Snackbar, Stack, TextField, Typography } from "@mui/material"
 // @mui
-import { dataRoles } from '../../_mock/dataRoles'
-import { dataTechnologies } from '../../_mock/dataTechnologies'
+
 import { FormProvider } from "../../common/components/Form/FormProvider";
 import { useForm } from "react-hook-form";
 import { CustomAutocomplete } from "../../common/components/Form/CustomAutocomplete";
@@ -13,62 +12,63 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { CustomSnackbar } from "../../common/components/SnackBar/CustomSnackbar";
 import { useEffect, useMemo } from "react";
+import { useDispatch , useSelector } from "react-redux";
+import { createProfile } from "../../redux/store/profiles/profileThunk";
 
 
 export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  /* // Comprobaciones
+
+/*   // Comprobaciones
   const NewProfileSchema = Yup.object().shape({
     name: Yup.string().required('El nombre es requerido'),
     description: Yup.string().required('La descripción es requerida'),
     rol: Yup.array().required('Es requerido al menos un Rol'),
     technology: Yup.array().required('Es requerida al menos una tecnología'),
   })
+ */
 
   const defaultValues = useMemo(
     () => ({
       name: currentProfile?.name || '',
-      description: currentProfile?.description || [],
-      rol: currentProfile?.rol || '',
-      technology: currentProfile?.technology || [],
+      description: currentProfile?.description || '',
+      roles: currentProfile?.role || [],
+      tools: currentProfile?.tools || [],
     }),
     [ currentProfile ] 
   )
-
+ /*
   const  methodsForm = useForm({  
     resolver: yupResolver(NewProfileSchema),
     defaultValues
   })  */
 
-  const  methodsForm = useForm()
+  const  methodsForm = useForm({ defaultValues })
+
+  const { tools , roles, knowledges , errorMessage } = useSelector( state => state.dataStore )
 
   const { reset, watch, setValue, handleSubmit , formState: { isSubmitting } } = methodsForm
 
   const values = watch()
 
 
-/*   useEffect(() => {
+ useEffect(() => {
     if (isEdit && currentProfile) {
       reset(defaultValues);
     }
     if (!isEdit) {
       reset(defaultValues);
     }
-  }, [isEdit, currentProfile]) */
+  }, [isEdit, currentProfile]) 
 
   
-  const onSubmit = async(data) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      CustomSnackbar();
+  const onSubmit = ( data ) => {
+      //reset();
+      dispatch(createProfile(data))
       //navigate(PATH_DASHBOARD.user.list);
-      console.log('DATA', data);
-    } catch (error) {
-      console.error(error);
-    }
   }
   
   return (
@@ -102,25 +102,25 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
         <Stack sx={{ display: 'flex' , flexDirection: 'row' ,  justifyContent: 'space-around'}}>
 
           < CustomAutocomplete
-              name="rol"
+              name="roles"
               label="Selecciona Rol"
               multiple
-              options={dataRoles.map((rol) => rol.name)}
+              options={roles.map((rol) => rol.name)}
               sx={{ width: '450px' }}
               />
 
           < CustomAutocomplete
-              name="technology"
+              name="tools"
               label="Selecciona Tecnología" 
               multiple
-              options={dataTechnologies.map((technology) => technology.name)}
+              options={tools.map((tool) => tool.name)}
               sx={{ width: '450px' }}
               />
         </Stack>
      </Card>
 
       <Stack spacing={3} sx={{ mt: 3 , display:"flex", flexDirection:'row', justifyContent:'center', gap:'20px'}}>
-          <LoadingButton type="submit" variant="contained">
+          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
           {!isEdit ? 'Crear Perfil' : 'Guardar Cambios'}
           </LoadingButton>
           <LoadingButton type="submit" variant="outlined" sx={{ marginTop: '0 !important' }}>

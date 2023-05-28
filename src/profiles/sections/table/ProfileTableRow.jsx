@@ -13,7 +13,8 @@ export const ProfileTableRow = ({
     onDeleteRow,
 }) => {
 
-  const { name, role, tecnologies , team } = row
+  const { members, name, roles, tools, id } = row
+
 
   const [openConfirm, setOpenConfirm] = useState(false)
 
@@ -51,9 +52,9 @@ export const ProfileTableRow = ({
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{role}</TableCell>
-        <TableCell align="left">{team}</TableCell>
-        <TableCell align="left">{tecnologies}</TableCell>
+        <TableCell align="left"> { roles.map( (rol )  => `${rol?.name} , `   ) } </TableCell>
+        <TableCell align="left"> { members.map( ( member )  => member?.name  ) }  </TableCell>
+        <TableCell align="left">{ tools.map( (tool )  => tool?.name  ) }</TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

@@ -3,9 +3,10 @@ import { sample } from 'lodash';
 
 // ----------------------------------------------------------------------
 
-export const profiles = [...Array(24)].map((_, index) => ({
-  id: faker.datatype.uuid(),
+export const profiles = [...Array(10)].map((_, index) => ({
+  _id: faker.datatype.uuid(),
   name: faker.name.jobTitle(),
+  description: faker.name.jobTitle(),
   role: sample([
     'Leader',
     'Hr Manager',

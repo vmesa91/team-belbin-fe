@@ -7,8 +7,6 @@ import useActiveLink from '../../../hooks/useActiveLink'
 export const NavList = ({ data , depth , hasChild }) => {
     
     const { pathname } = useLocation()
-
-    console.log(pathname)
     
     const { active } = useActiveLink(data.path) 
 

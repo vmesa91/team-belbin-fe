@@ -3,12 +3,12 @@ import { sample } from 'lodash';
 
 // ----------------------------------------------------------------------
 
-export const dataTechnologies = [...Array(24)].map((_, index) => ({
-  id: faker.datatype.uuid(),
+export const dataTechnologies = [...Array(10)].map((_, index) => ({
+  _id: faker.datatype.uuid(),
   name: faker.name.jobDescriptor(),
-  status: sample([
-    'Active',
-    'Inactive'])
+  activation: sample([
+    true,
+    false])
 }));
 
 

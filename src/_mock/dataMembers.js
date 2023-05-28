@@ -38,8 +38,8 @@ const expertise = [...Array(10)].map((_, index) => ({
 
 
 
-export const members = [...Array(24)].map((_, index) => ({
-  id: faker.datatype.uuid(),
+export const members = [...Array(10)].map((_, index) => ({
+  _id: faker.datatype.uuid(),
   avatarUrl: `/assets/images/avatars/avatar_${index + 1}.jpg`,
   name: faker.name.fullName(),
   profile: faker.name.jobTitle(),

@@ -3,8 +3,8 @@ import { sample } from 'lodash';
 
 // ----------------------------------------------------------------------
 
-export const dataRoles = [...Array(24)].map((_, index) => ({
-  id: faker.datatype.uuid(),
+export const dataRoles = [...Array(10)].map((_, index) => ({
+  _id: faker.datatype.uuid(),
   name: sample([
     'Leader',
     'Hr Manager',
@@ -17,9 +17,9 @@ export const dataRoles = [...Array(24)].map((_, index) => ({
     'Front End Developer',
     'Full Stack Developer',
   ]),
-  status: sample([
-    'active',
-    'inactive'])
+  activation: sample([
+    true,
+    false])
 }));
 
 

@@ -9,8 +9,12 @@ import { useTable } from '../../hooks/useTable'
 import { getComparator } from '../../utils/utils'
 import { TablePaginationCustom } from '../../components/Table/TablePaginationCustom'
 import { ConfirmDialog } from '../../../common/components/ConfirmDialog/ConfirmDialog'
+import { useDispatch } from 'react-redux'
+import { deleteData } from '../../../redux/store/data/dataThunk'
 
-export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD }) => {
+export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , typeData }) => {
+
+    const dispatch = useDispatch()
 
     const {
         page,
@@ -57,9 +61,11 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD }) =
   };
 
   const handleDeleteRow = (id) => {
+
     const deleteRow = tableData.filter((row) => row.id !== id);
     setSelected([]);
-    setTableData(deleteRow);
+    dispatch( deleteData( deleteRows , typeData ) )
+    setTableData(deleteRow)
 
     if (page > 0) {
       if (dataInPage.length < 2) {
@@ -69,9 +75,12 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD }) =
   };
 
   const handleDeleteRows = (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
+    
+    const deleteRows = tableData.filter((row) => selectedRows.includes(row.id));
     setSelected([]);
-    setTableData(deleteRows);
+    dispatch( deleteData( deleteRows , typeData ) )
+    setTableData(deleteRows)
+    
 
     if (page > 0) {
       if (selectedRows.length === dataInPage.length) {
@@ -92,116 +101,113 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD }) =
   return (
 
     <>
-            <Card sx={{ minHeight: '615px' }}>
-                <DataTableToolbar 
-                filterName={filterName}
-                onFilterName={handleFilterName}
-                isFiltered={isFiltered}
-                onResetFilter={handleResetFilter}
-                
-                />
+        <Card sx={{ minHeight: '615px' }}>
+            <DataTableToolbar 
+            filterName={filterName}
+            onFilterName={handleFilterName}
+            isFiltered={isFiltered}
+            onResetFilter={handleResetFilter}
+            
+            />
 
-                <TableContainer >
-                    <TableSelectedAction 
-                        spacing={1}
-                        alignItems="center"
-                        direction={{
-                        xs: 'column',
-                        md: 'row',
-                        }}
-                        sx={{ px: 2.5, py: 2 }} 
-                        numSelected={selected.length}
-                        rowCount={tableData.length}
-                        onSelectAllRows={(checked) =>
-                        onSelectAllRows(
-                            checked,
-                            tableData.map((row) => row.id)
-                        )
-                        }
-                        action={
-                        <Tooltip title="Delete">
-                            <IconButton color="primary" onClick={handleOpenConfirm}>
-                            <Iconify icon="eva:trash-2-outline" />
-                            </IconButton>
-                        </Tooltip>
-                        }
-                    />
-                    <Table sx={{ minWidth: 350 }} >
-                        <TableHeadCustom sx={{ backgroundColor: 'red' }}
-                            order={order}
-                            orderBy={orderBy}
-                            headLabel={TABLE_HEAD}
-                            rowCount={tableData.length}
-                            numSelected={selected.length}
-                            onSort={onSort}
-                            onSelectAllRows={(checked) =>
-                                onSelectAllRows(
-                                checked,
-                                tableData.map((row) => row.id)
-                                )
-                            }
-                        />
-
-                        <TableBody>
-                            {
-                            dataFiltered
-                                .slice( page * rowsPerPage, page * rowsPerPage + rowsPerPage )
-                                .map((row, index) => (
-                                row ? (
-                                    <DataTableRow 
-                                        key={row.id}
-                                        row={row}
-                                        selected={selected.includes(row.id)}
-                                        onSelectRow={() => onSelectRow(row.id)}
-                                        onDeleteRow={() => handleDeleteRow(row.id)}
-                                    />
-                                ) : (
-                                    !isNotFound && <TableSkeleton key={index} sx={{ height: 60 }} />
-                                )
-                                ))
-                            }
-
-                            <TableEmptyRows />
-
-                            <TableNoData isNotFound={isNotFound} />  
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-
-                <TablePaginationCustom count={dataFiltered.length}
-                    page={page}
-                    rowsPerPage={rowsPerPage}
-                    onPageChange={onChangePage}
-                    onRowsPerPageChange={onChangeRowsPerPage}/>
-            </Card>
-
-            <ConfirmDialog 
-                    open={openConfirm}
-                    onClose={handleCloseConfirm}
-                    title="Delete"
-                    content={
-                    <>
-                        ¿Estás seguro que desea eliminar <strong> {selected.length} </strong> elementos?
-                    </>
+            <TableContainer >
+                <TableSelectedAction 
+                    spacing={1}
+                    alignItems="center"
+                    direction={{
+                    xs: 'column',
+                    md: 'row',
+                    }}
+                    sx={{ px: 2.5, py: 2 }} 
+                    numSelected={selected.length}
+                    rowCount={tableData.length}
+                    onSelectAllRows={(checked) =>
+                    onSelectAllRows(
+                        checked,
+                        tableData.map((row) => row.id)
+                    )
                     }
                     action={
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={() => {
-                            handleDeleteRows(selected);
-                            handleCloseConfirm();
-                          }}
-                        >
-                          Eliminar
-                        </Button>
-                      } 
-            />
+                    <Tooltip title="Delete">
+                        <IconButton color="primary" onClick={handleOpenConfirm}>
+                        <Iconify icon="eva:trash-2-outline" />
+                        </IconButton>
+                    </Tooltip>
+                    }
+                />
+                <Table sx={{ minWidth: 350 }} >
+                    <TableHeadCustom sx={{ backgroundColor: 'red' }}
+                        order={order}
+                        orderBy={orderBy}
+                        headLabel={TABLE_HEAD}
+                        rowCount={tableData.length}
+                        numSelected={selected.length}
+                        onSort={onSort}
+                        onSelectAllRows={(checked) =>
+                            onSelectAllRows(
+                            checked,
+                            tableData.map((row) => row.id)
+                            )
+                        }
+                    />
+
+                    <TableBody>
+                        {
+                        dataFiltered
+                            .slice( page * rowsPerPage, page * rowsPerPage + rowsPerPage )
+                            .map((row, index) => (
+                            row ? (
+                                <DataTableRow 
+                                    key={row.id}
+                                    row={row}
+                                    selected={selected.includes(row.id)}
+                                    onSelectRow={() => onSelectRow(row.id)}
+                                    onDeleteRow={() => handleDeleteRow(row.id)}
+                                />
+                            ) : (
+                                !isNotFound && <TableSkeleton key={index} sx={{ height: 60 }} />
+                            )
+                            ))
+                        }
+
+                        <TableEmptyRows />
+
+                        <TableNoData isNotFound={isNotFound} />  
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+            <TablePaginationCustom count={dataFiltered.length}
+                page={page}
+                rowsPerPage={rowsPerPage}
+                onPageChange={onChangePage}
+                onRowsPerPageChange={onChangeRowsPerPage}/>
+        </Card>
+
+        <ConfirmDialog 
+            open={openConfirm}
+            onClose={handleCloseConfirm}
+            title="Delete"
+            content={
+            <>
+                ¿Estás seguro que desea eliminar <strong> {selected.length} </strong> elementos?
+            </>
+            }
+            action={
+                <Button
+                  variant="contained"
+                  color="error"
+                  onClick={() => {
+                    handleDeleteRows(selected);
+                    handleCloseConfirm();
+                  }}
+                >
+                  Eliminar
+                </Button>
+              } 
+        />
     
-    </>
-
-
-            
+    </>    
   )
 }
 
