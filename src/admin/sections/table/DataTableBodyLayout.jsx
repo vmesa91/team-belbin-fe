@@ -9,12 +9,14 @@ import { useTable } from '../../hooks/useTable'
 import { getComparator } from '../../utils/utils'
 import { TablePaginationCustom } from '../../components/Table/TablePaginationCustom'
 import { ConfirmDialog } from '../../../common/components/ConfirmDialog/ConfirmDialog'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteData } from '../../../redux/store/data/dataThunk'
+
 
 export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , typeData }) => {
 
     const dispatch = useDispatch()
+ 
 
     const {
         page,
@@ -64,7 +66,7 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
 
     const deleteRow = tableData.filter((row) => row.id !== id);
     setSelected([]);
-    dispatch( deleteData( deleteRows , typeData ) )
+    dispatch( deleteData( deleteRow , typeData ) )
     setTableData(deleteRow)
 
     if (page > 0) {
@@ -97,6 +99,8 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
   const handleResetFilter = () => {
     setFilterName('');
   };
+
+
     
   return (
 

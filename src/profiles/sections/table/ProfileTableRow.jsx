@@ -3,6 +3,7 @@ import { Iconify } from "../../../common/components/Iconify/Iconify"
 import { MenuPopover } from "../../../common/components/MenuPopover/MenuPopover"
 import { useState } from "react"
 import { ConfirmDialog } from "../../../common/components/ConfirmDialog/ConfirmDialog"
+import { summaryOptions } from "../../utils/summaryOptions"
 
 
 export const ProfileTableRow = ({
@@ -46,15 +47,15 @@ export const ProfileTableRow = ({
         <TableCell>
         <Stack direction="row" alignItems="center" spacing={2}>
             <Avatar alt={name} />
-            <Typography variant="subtitle2" noWrap>
+            <Typography variant="subtitle2" color="common.blue" noWrap>
               {name}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left"> { roles.map( (rol )  => `${rol?.name} , `   ) } </TableCell>
-        <TableCell align="left"> { members.map( ( member )  => member?.name  ) }  </TableCell>
-        <TableCell align="left">{ tools.map( (tool )  => tool?.name  ) }</TableCell>
+        <TableCell align="left"> { summaryOptions(roles) } </TableCell>
+        <TableCell align="left"> { summaryOptions(members) }  </TableCell>
+        <TableCell align="left">{ summaryOptions(tools) }</TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

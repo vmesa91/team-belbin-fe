@@ -41,14 +41,16 @@ function IconContainer(props) {
   return <span {...other}>{customIcons[value].icon}</span>;
 }
 
-export function CustomRating() {
+export function CustomRating({ onChange }) {
   return (
     <StyledRating
       name="highlight-selected-only"
-      defaultValue={2}
+      defaultValue={0}
       IconContainerComponent={IconContainer}
       getLabelText={(value) => customIcons[value].label}
       highlightSelectedOnly
+      onChange={onChange}
+      size="large" 
     />
   );
 }

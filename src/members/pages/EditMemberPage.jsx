@@ -24,7 +24,11 @@ import { NewEditMember } from "../sections/NewEditMember";
 
 
 
-export const CreateMemberPage = () => { 
+export const EditMemberPage = () => {
+
+  const { name } = useParams();
+
+  const currentMember = profiles.find((profile) => paramCase(profile.name) === name);
   
   return (
     <>
@@ -43,7 +47,7 @@ export const CreateMemberPage = () => {
           ]}
         />
 
-        < NewEditMember />
+        < NewEditMember isEdit currentMember={currentMember}/>
       </Container>
     </>
 )

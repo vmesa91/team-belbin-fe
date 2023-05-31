@@ -14,6 +14,7 @@ import { CustomSnackbar } from "../../common/components/SnackBar/CustomSnackbar"
 import { useEffect, useMemo } from "react";
 import { useDispatch , useSelector } from "react-redux";
 import { createProfile } from "../../redux/store/profiles/profileThunk";
+import { PATH_PROFILE } from "../../home/routes/paths"
 
 
 export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
@@ -66,15 +67,15 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
 
   
   const onSubmit = ( data ) => {
-      //reset();
+      reset();
       dispatch(createProfile(data))
-      //navigate(PATH_DASHBOARD.user.list);
+      navigate(PATH_PROFILE.manageProfiles);
   }
   
   return (
 
     <FormProvider methods={methodsForm} onSubmit={handleSubmit(onSubmit)}>
-          <Card sx={{ p: 3, m: 4, display: 'flex', flexDirection: 'row', padding: '4%' , justifyContent: 'space-between'}}>
+          <Card sx={{display: 'flex', flexDirection: 'row', padding: '4%' , justifyContent: 'space-between'}}>
             <Stack
               rowGap={3}
               columnGap={1}

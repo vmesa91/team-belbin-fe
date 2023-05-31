@@ -7,15 +7,15 @@ export const ProfileTableToolbar = ({
   filterName,
   filterRol,
   filterTechnology,
-  filterTeam,
+  filterMember,
   onFilterByName,
   onFilterByRol,
-  onFilterByTeam,
+  onFilterByMember,
   onFilterByTechnology,
   onResetFilter,
   optionsRoles,
   optionsTechnologies,
-  optionsTeams
+  optionsMembers
 }) => {
 
   return (
@@ -43,7 +43,7 @@ export const ProfileTableToolbar = ({
       />
       <Autocomplete
         multiple
-        limitTags={3}
+        limitTags={2}
         id="roles"
         options={optionsRoles.map((rol) => rol.name)}
         defaultValue={[ ]}
@@ -54,18 +54,18 @@ export const ProfileTableToolbar = ({
       />
       <Autocomplete
         multiple
-        limitTags={3}
+        limitTags={2}
         id="teams"
-        options={optionsTeams.map((team) => team.name)}
+        options={optionsMembers.map((team) => team.name)}
         defaultValue={[ ]}
         sx={{ maxHeight: 120 , width: '500px' }}
         renderInput={(params) => (
-          <TextField {...params} label="Equipos" placeholder="Equipos" sx={{textTransform: 'capitalize'}}/>
+          <TextField {...params} label="Miembros" placeholder="Miembros" sx={{textTransform: 'capitalize'}}/>
         )}
       />
       <Autocomplete
         multiple
-        limitTags={3}
+        limitTags={2}
         id="technologies"
         options={optionsTechnologies.map((technology) => technology.name)}
         defaultValue={[ ]}

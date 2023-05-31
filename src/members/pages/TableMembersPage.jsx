@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // @mui
 import {
   Card,
@@ -39,11 +39,13 @@ import {  TableListToolbar } from '../../common/sections/table/TableListToolbar'
 import { dataTableMembers } from '../config/configTableMembers'
 
 // Mock
-import { profiles } from '../../_mock/dataProfiles'
 import { teams } from '../../_mock/dataTeams'
-import { members } from '../../_mock/dataMembers'
-import { dataRoles } from '../../_mock/dataRoles'
+
+// Breadcrumbs
 import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBreadcrumbs';
+
+// Paths
+import { PATH_MEMBER } from '../../home/routes/paths'
 
 // UTILS Methods
 import { getComparator } from '../../common/utils/comparatorMethods'
@@ -53,6 +55,7 @@ import { MemberTableToolbar } from '../sections/table/MemberTableToolbar'
 import { TableSelectedAction } from '../../common/sections/table/TableSelectedAction';
 import { MemberTableRow } from '../sections/table/MemberTableRow';
 import { ConfirmDialog } from '../../common/components/ConfirmDialog/ConfirmDialog';
+import { useDispatch, useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -75,7 +78,13 @@ export function TableMembersPage() {
     onChangeRowsPerPage
   } = useTable()
 
+  const dispatch = useDispatch()
+
   const navigate = useNavigate()
+
+  const { activeMember , members } = useSelector( state => state.memberStore )
+
+  const { profiles } = useSelector( state => state.profileStore )
 
   const [tableData, setTableData] = useState(members)
   
@@ -99,6 +108,9 @@ export function TableMembersPage() {
     filterLanguage
   })
 
+  useEffect(() => {
+    setTableData(members)
+  }, [members]) 
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 
@@ -212,7 +224,7 @@ export function TableMembersPage() {
             action={
               <Button
                 component={RouterLink}
-                to={''}
+                to={PATH_MEMBER.createMember}
                 variant="contained"
                 startIcon={<Iconify icon="eva:plus-fill" />}
               >

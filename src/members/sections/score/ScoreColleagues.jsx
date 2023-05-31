@@ -7,23 +7,27 @@ import { CustomSelect } from '../../../common/components/Form/CustomSelect';
 // mocks
 import { members } from '../../../_mock/dataMembers'
 import { CustomRating } from '../../../common/components/Rating/CustomRating';
+import { useCallback, useState } from 'react';
 
 
-export const ScoreColleagues = () => {
+export const ScoreColleagues = ( { users } ) => {
 
+
+    const [ newUsers, setNewUser ] = useState(users)
+    const [ selectUsers, setSelecetUsers ] = useState([])
 
     const { control, setValue, watch, resetField } = useFormContext();
 
     const { fields, append, remove } = useFieldArray({
       control,
-      name: 'items',
+      name: 'colleagues',
     });
 
     const values = watch();
 
     const handleAdd = () => {
          append({
-            name: '',
+            user: '',
             score: 0
             });
     } 
@@ -32,14 +36,43 @@ export const ScoreColleagues = () => {
         remove(index);
       };
 
-    const handleClearTecnology = () => {
-        console.log('Clear')
+    const handleClearColleagues = () => {
+        (index) => {
+            resetField(`tools[${index}].user`);
+            resetField(`items[${index}].score`);
+          },
+          [resetField]
     }
     
-    const handleSelectTecnology = ( index, name ) => {
-        console.log(name)
-    }
+    const handleSelectColleague = useCallback(
+        (index, option) => {
+            let updatedUsers = [...newUsers]
+            let selectedUser = updatedUsers.find(user => user.id === option)
+            selectedUser = { ...selectedUser, rating: 0 } // rating initial set to 0
     
+            const selectedIndex = updatedUsers.findIndex(user => option === user.id)
+            updatedUsers.splice(selectedIndex,1)
+    
+            setNewUser(updatedUsers)
+            setSelecetUsers([...selectUsers, selectedUser])
+    
+            setValue(`colleagues[${index}].user`, selectedUser);
+        },
+        [setValue, newUsers, selectUsers]
+    );
+
+    const handleSelectScore = useCallback(
+        (index, { target }) => {
+            const selectedUsersCopy = [...selectUsers];
+            selectedUsersCopy[index].rating = target.value;
+    
+            setSelecetUsers(selectedUsersCopy);
+    
+            setValue(`colleagues[${index}].score`, target.value);
+        },
+        [setValue, selectUsers]
+    );
+      
     return (
 
     <Stack sx={{ display: 'flex' , flexDirection: 'row' ,  justifyContent: 'space-around'}}>
@@ -53,7 +86,7 @@ export const ScoreColleagues = () => {
                 <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
                     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
                         <CustomSelect
-                            name={`items[${index}].name`}
+                            name={`colleagues[${index}].user`}
                             size="small"
                             label="Añade una red de compañeros/as"
                             InputLabelProps={{ shrink: true }}
@@ -61,7 +94,7 @@ export const ScoreColleagues = () => {
                         >
                                 <MenuItem
                                     value=""
-                                    onClick={() => handleClearTecnology(index)}
+                                    onClick={() => handleClearColleagues(index)}
                                     sx={{ fontStyle: 'italic', color: 'text.secondary' }}
                                 >
                                     None
@@ -69,19 +102,19 @@ export const ScoreColleagues = () => {
 
                                 <Divider />
 
-                                {members.map((member) => (
+                                {users.map((user) => (
                                     <MenuItem
-                                        key={member.id}
-                                        value={member.name}
-                                        onClick={() => handleSelectTecnology(index, member.name)}
+                                        key={user.id}
+                                        value={user.id}
+                                        onClick={() => handleSelectColleague(index, user.id)}
                                     >
-                                        {member.name}
+                                        {user.name + ' ' + user.surname}
                                     </MenuItem>
                                 ))}
 
                         </CustomSelect>
 
-                        <CustomRating />
+                        <CustomRating onChange={ (data) => handleSelectScore(index, data) }/>
 
                         <Button
                             size="small"

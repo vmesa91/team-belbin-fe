@@ -1,7 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // @mui
 import {
   Card,
@@ -36,10 +36,7 @@ import {  TableListToolbar } from '../../common/sections/table/TableListToolbar'
 // Config
 import { dataTableProfiles } from '../config/configTableProfiles'
 
-// Mock
-import { teams } from '../../_mock/dataTeams'
-import { dataTechnologies } from '../../_mock/dataTechnologies'
-import { dataRoles } from '../../_mock/dataRoles'
+// Breadcrumbs
 import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBreadcrumbs';
 
 // UTILS Methods
@@ -50,9 +47,10 @@ import { ProfileTableToolbar } from '../sections/table/ProfileTableToolbar';
 import { TableSelectedAction } from '../../common/sections/table/TableSelectedAction';
 import { ProfileTableRow } from '../sections/table/ProfileTableRow';
 import { ConfirmDialog } from '../../common/components/ConfirmDialog/ConfirmDialog';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteProfile , deleteProfiles } from '../../redux/store/profiles/profileThunk';
 
-// ----------------------------------------------------------------------
+// ------------------------------------------------------------------
 
 
 export function TableProfilesPage() {
@@ -72,11 +70,15 @@ export function TableProfilesPage() {
     onSort,
     onChangePage,
     onChangeRowsPerPage
-  } = useTable()
+  } = useTable() 
+
+  const dispatch = useDispatch()
 
   const navigate = useNavigate()
 
   const { activeProfile , profiles } = useSelector( state => state.profileStore )
+
+  const { tools , roles, errorMessage } = useSelector( state => state.dataStore )
 
   const [tableData, setTableData] = useState(profiles)
   
@@ -88,7 +90,11 @@ export function TableProfilesPage() {
 
   const [filterTechnology, setFilterTechnology] = useState('')
 
-  const [filterTeam, setFilterTeam] = useState('')
+  const [filterMember, setFilterMember] = useState('')
+
+  useEffect(() => {
+    setTableData(profiles)
+  }, [profiles]) 
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -96,7 +102,7 @@ export function TableProfilesPage() {
     filterName,
     filterRol,
     filterTechnology,
-    filterTeam
+    filterMember
   })
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -105,13 +111,13 @@ export function TableProfilesPage() {
   filterName !== '' ||
   filterRol !== '' ||
   filterTechnology !== '' ||
-  filterTeam !== '' 
+  filterMember !== '' 
 
   const isNotFound =
   (!dataFiltered.length && !!filterName) ||
   (!dataFiltered.length && !!filterRol) ||
   (!dataFiltered.length && !!filterTechnology) || 
-  (!dataFiltered.length && !!filterTeam) 
+  (!dataFiltered.length && !!filterMember) 
 
 
   // Methods
@@ -138,15 +144,18 @@ export function TableProfilesPage() {
     setFilterTechnology(event.target.value);
   }
 
-  const handleFilterByTeam = (event) => {
+  const handleFilterByMember = (event) => {
     setPage(0);
-    setFilterTeam(event.target.value);
+    setFilterMember(event.target.value);
   }
 
   const handleDeleteRow = (id) => {
     const deleteRow = tableData.filter((row) => row.id !== id);
     setSelected([]);
+    dispatch( deleteProfile( id ) )
     setTableData(deleteRow);
+
+
 
     if (page > 0) {
       if (dataInPage.length < 2) {
@@ -158,6 +167,7 @@ export function TableProfilesPage() {
   const handleDeleteRows = (selectedRows) => {
     const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
     setSelected([]);
+    dispatch( deleteProfiles( selectedRows ) )
     setTableData(deleteRows);
 
     if (page > 0) {
@@ -181,7 +191,7 @@ export function TableProfilesPage() {
     setFilterName('');
     setFilterRol()
     setFilterTechnology('');
-    setFilterTeam('')
+    setFilterMember('')
   }
 
   return (
@@ -221,21 +231,21 @@ export function TableProfilesPage() {
 
          <Card>
 
-          {/* <TableListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} /> */}
+
           < ProfileTableToolbar 
             isFiltered={isFiltered}
             filterName={filterName}
             filterRol={filterRol}
             filterTechnology={filterTechnology}
-            filterTeam={filterTeam}
+            filterMember={filterMember}
             onFilterByName={handleFilterByName}
             onFilterByRol={handleFilterByRol}
-            onFilterByTeam={handleFilterByTeam}
+            onFilterByMember={handleFilterByMember}
             onFilterByTechnology={handleFilterByTechnology}
             onResetFilter={handleResetFilter}
-            optionsRoles={dataRoles} 
-            optionsTechnologies={dataTechnologies}
-            optionsTeams={teams}
+            optionsRoles={roles} 
+            optionsTechnologies={tools}
+            optionsMembers={tools}
             />
 
             <TableContainer sx={{ minWidth: 800 }}>

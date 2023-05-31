@@ -8,7 +8,8 @@ export const dataSlice = createSlice({
         tools: [],
         knowledges: [],
         roles: [],
-        errorMessage: undefined
+        errorMessage: undefined,
+        isLoading: false
     },
     reducers: {
         onSetData: ( state, { payload } ) => {

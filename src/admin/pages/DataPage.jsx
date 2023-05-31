@@ -21,6 +21,7 @@ import { Iconify } from '../../common/components/Iconify/Iconify';
 import { NewDataModalForm } from '../sections/dialog/NewDataModalForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDataForRoles , getDataForKnowledges , getDataForTools } from '../../redux/store/data/dataThunk';
+import Loading from '../../common/animations/Loading';
 
 
 const TABLE_HEAD_ROLES = [
@@ -35,7 +36,7 @@ const TABLE_HEAD_TECHNOLOGIES = [
 
 export const DataPage = () => {
 
-  const { tools , roles, knowledges , errorMessage } = useSelector( state => state.dataStore )
+  const { tools , roles, knowledges , errorMessage, isLoading } = useSelector( state => state.dataStore )
 
   const [hasError, setHasError] = useState(false)
   const [tableDataRoles, setTableDataRoles] = useState([]);
@@ -72,7 +73,7 @@ export const DataPage = () => {
         <title> Administración | Creación Datos </title>
       </Helmet>
 
-      <Container maxWidth={'lg'}>
+      { isLoading ? < Loading /> : <Container maxWidth={'lg'}>
       <CustomBreadcrumbs
           heading="Crear Datos"
           links={[
@@ -100,7 +101,7 @@ export const DataPage = () => {
           
         </Box>
 
-      </Container>
+      </Container>}
 
       <Dialog fullWidth maxWidth="xs" open={openFormNewData} onClose={handleCloseModalNewData}>
         < DialogTitle > Añadir Dato </ DialogTitle >

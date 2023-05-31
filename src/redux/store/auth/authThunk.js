@@ -19,7 +19,7 @@ export const login = ( value ) => {
                     email: data.email,
                     uid: data.uid
                 } 
-    
+        
             dispatch(onSetAuth ( { type: 'status' , value: 'authorized' } ))
             dispatch(onSetAuth ( { type: 'user' , value: user } ))
             localStorage.setItem('token',  data.token)
@@ -34,7 +34,7 @@ export const login = ( value ) => {
 
 export const logout = () => {
 
-        return (dispatch) => {
+        return ( dispatch ) => {
             dispatch(onSetAuth ( { type: 'user' , value: '' } ))
             dispatch(onSetAuth ( { type: 'status' , value: 'not-authorized' } ))
             localStorage.clear()
@@ -43,11 +43,11 @@ export const logout = () => {
 
 export const register = (value) => {
 
-    return async (dispatch) => {
+    return async ( dispatch ) => {
         try {
             dispatch(onSetAuth ( { type: 'status' , value: 'checking' } ))
 
-            const { data } = await api.post( '/auth/register' , value)
+            const { data } = await api.post( '/auth/register' , value )
 
             const user = { 
                 name: data.name,
@@ -55,8 +55,6 @@ export const register = (value) => {
                 email: data.email,
                 uid: data.uid
             } 
-
-            console.log(data)
 
             dispatch(onSetAuth ( { type: 'status' , value: 'authorized' } ))
             dispatch(onSetAuth ( { type: 'user' , value: user } ))

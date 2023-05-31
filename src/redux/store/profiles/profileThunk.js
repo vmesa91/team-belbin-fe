@@ -13,7 +13,10 @@ export const getProfiles = () => {
     }
 }
 
+
 export const createProfile = ( value ) => {
+
+    console.log(value)
 
     return async (dispatch, getState) => {
 
@@ -53,6 +56,59 @@ export const updateProfile = () => {
 
 }
 
+
+export const deleteProfile = ( value ) => {
+
+    console.log(value)
+    
+
+    return async (dispatch, getState) => {
+
+        const { profileStore } = getState()
+
+        let actualState = profileStore.profiles
+        console.log(actualState)
+        let newState = []
+
+        newState = actualState.filter( (row) => !value.includes(row.id))
+
+        try {
+            await api.delete(`/profile/${value}`)
+            dispatch(onSetProfile ( { type: 'profiles' , value : newState  } ))
+        } catch ( error ) {
+            dispatch(onSetProfile ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
+        }
+
+    }
+}
+
+export const deleteProfiles = ( value ) => {
+
+    console.log(value)
+    
+    return async (dispatch, getState) => {
+
+        const { profileStore } = getState()
+
+        let actualState = profileStore.profiles
+        let newState = []
+
+        newState = actualState.filter( (row) => !value.includes(row.id))
+        console.log(newState)
+
+        try {
+            value.map((val) => { api.delete(`/profile/${val}`)} )
+            dispatch(onSetProfile ( { type: 'profiles' , value : newState  } ))
+        } catch ( error ) {
+            dispatch(onSetProfile ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
+        }
+
+    }
+}
+
+
+
+// ***  Methods to get ID 
 
 const searchID = ( value , store  ) => {
     const { id } = store.find( data => data.name === value )

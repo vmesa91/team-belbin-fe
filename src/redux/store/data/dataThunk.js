@@ -6,10 +6,16 @@ import { onSetData } from "./dataSlice"
 
 export const getDataForRoles = () => {
     
-    return async (dispatch) => {
-    
+    return async (dispatch) => {    
+        
+        dispatch(onSetData({ type:'isLoading', value: true }))
         const { data } = await api.get('/role')
         dispatch(onSetData ( { type: 'roles' , value : data.roles  } ))
+        setTimeout(() => {
+            dispatch(onSetData({ type:'isLoading', value: false }))
+        }, 3000);
+        
+
     }
 }
 
@@ -79,16 +85,14 @@ export const createData = ( value ) => {
             dispatch(onSetData ( { type: typeOption , value : newState  } ))
 
         } catch(error) {
-            console.log(error.response.data?.msg)
             dispatch(onSetData ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
         }
     }
 }
 
 
-export const deleteData = ( value , type) => {
+export const deleteData = ( value , type ) => {
 
-    console.log(value)
 
     return async (dispatch, getState) => {
         
@@ -118,14 +122,14 @@ export const deleteData = ( value , type) => {
 
 
         newState = actualState.filter( (row) => !value.includes(row))
-        // llamada al backend
+       
         try{
-
-           //value.map((val) => { api.post(`/${method}:${val.id}`)} )
+            // llamada al backend
+           //value.map((val) => { api.delete(`/${method}:${val.id}`)} )
            dispatch(onSetData ( { type: typeOption , value : newState  } ))
 
         } catch( error ) {
-            console.log(error)
+            dispatch(onSetData ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
         }
  
         }

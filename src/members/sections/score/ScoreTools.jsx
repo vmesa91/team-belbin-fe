@@ -6,23 +6,25 @@ import { Iconify } from '../../../common/components/Iconify/Iconify'
 import { CustomSelect } from '../../../common/components/Form/CustomSelect';
 // mocks
 import { dataTechnologies } from '../../../_mock/dataTechnologies'
+import { useCallback } from 'react';
 
 
-export const ScoreTecnology = () => {
+export const ScoreTools = ( { tools } ) => {
 
 
     const { control, setValue, watch, resetField } = useFormContext();
 
     const { fields, append, remove } = useFieldArray({
       control,
-      name: 'items',
+      name: 'expertise',
     });
+
 
     const values = watch();
 
     const handleAdd = () => {
          append({
-            tecnologyName: '',
+            tool: '',
             score: 0
             });
     } 
@@ -32,13 +34,34 @@ export const ScoreTecnology = () => {
       };
 
     const handleClearTecnology = () => {
-        console.log('Clear')
+        (index) => {
+            resetField(`expertise[${index}].tool`);
+            resetField(`expertise[${index}].score`);
+          },
+          [resetField]
     }
     
-    const handleSelectTecnology = ( index, name ) => {
-        console.log(name)
-    }
+    const handleSelectTecnology = useCallback(
+        (index, option) => {
+          setValue(
+            `expertise[${index}].tool`,
+            tools.find((tool) => tool.name === option)
+          );
+        },
+        [setValue, values.tools]
+      );
+
+    const handleSelectScore = useCallback(
+        ( index, { target } ) => {
+            setValue(
+                `expertise[${index}].score`,
+                target.value
+            ); 
+        },
+        [setValue, values.tools]
+    );
     
+      
     return (
 
     <Stack sx={{ display: 'flex' , flexDirection: 'row' ,  justifyContent: 'space-around'}}>
@@ -52,7 +75,7 @@ export const ScoreTecnology = () => {
                 <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
                     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
                         <CustomSelect
-                            name={`items[${index}].tecnologyName`}
+                            name={`expertise[${index}].tool`}
                             size="small"
                             label="Selecciona una o varias tecnologías"
                             InputLabelProps={{ shrink: true }}
@@ -68,19 +91,19 @@ export const ScoreTecnology = () => {
 
                                 <Divider />
 
-                                {dataTechnologies.map((tecnology) => (
+                                {tools.map((tool) => (
                                     <MenuItem
-                                        key={tecnology.id}
-                                        value={tecnology.name}
-                                        onClick={() => handleSelectTecnology(index, tecnology.name)}
+                                        key={tool.id}
+                                        value={tool.id}
+                                        onClick={() => handleSelectTecnology(index, tool.name)}
                                     >
-                                        {tecnology.name}
+                                        {tool.name}
                                     </MenuItem>
                                 ))}
 
                         </CustomSelect>
 
-                        <Rating />
+                        <Rating size="large" onChange={ (data) => handleSelectScore(index, data)}/>
 
                         <Button
                             size="small"
@@ -94,8 +117,6 @@ export const ScoreTecnology = () => {
                 </Stack>
             )) }
         </Stack>
-
-
 
 
     <Stack
@@ -118,7 +139,6 @@ export const ScoreTecnology = () => {
             direction={{ xs: 'column', md: 'row' }}
             sx={{ width: 1 , backgroundColor: 'yellow' }}
         >
-
 
         </Stack>
 

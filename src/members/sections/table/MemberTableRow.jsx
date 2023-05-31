@@ -1,4 +1,4 @@
-import { Avatar, Button, Checkbox, Divider, IconButton, Link, MenuItem, Stack, TableCell, TableRow } from "@mui/material"
+import { Avatar, Button, Checkbox, Divider, IconButton, Link, MenuItem, Stack, TableCell, TableRow, Typography } from "@mui/material"
 import { Iconify } from "../../../common/components/Iconify/Iconify"
 import { MenuPopover } from "../../../common/components/MenuPopover/MenuPopover"
 import { useState } from "react"
@@ -14,7 +14,9 @@ export const MemberTableRow = ({
     onDeleteRow,
 }) => {
 
-  const { name, profile, avatarUrl, team , language } = row
+  const { user, profiles, expertise, colleagues , knowledges, laguage, belbinRol } = row
+
+  const { name , surname, email } = user 
 
   const [openConfirm, setOpenConfirm] = useState(false)
 
@@ -45,24 +47,16 @@ export const MemberTableRow = ({
 
         <TableCell>
         <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar name={name} src={avatarUrl}/>
-
-            <div>
-              <Link
-                noWrap
-                variant="subtitle2"
-                onClick={onViewRow}
-                sx={{ cursor: 'pointer' }}
-              >
-                {name}
-              </Link>
-            </div>
+            <Avatar name={name} src={''}/>
+            <Typography variant="subtitle2" color="common.blue" noWrap>
+              {name + ' ' + surname}
+            </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{profile}</TableCell>
-        <TableCell align="left">{team}</TableCell>
-        <TableCell align="left">{language}</TableCell>
+        <TableCell align="left">{ profiles.map( profile => profile.name ) }</TableCell>
+        <TableCell align="left">{ '-' }</TableCell>
+        <TableCell align="left">{'language'}</TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

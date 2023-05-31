@@ -1,15 +1,15 @@
 
 import { createSlice } from '@reduxjs/toolkit';
 
-export const profileSlice = createSlice({
-    name: 'profile',
+export const teamSlice = createSlice({
+    name: 'team',
     initialState: {
-        activeProfile: null,
-        profiles: [],
+        activeTeam: null,
+        teams: [],
         errorMessage: undefined
     },
     reducers: {
-        onSetProfile: ( state, { payload } ) => {
+        onSetTeam: ( state, { payload } ) => {
             state[payload.type] = payload.value
             return state
         },
@@ -18,4 +18,4 @@ export const profileSlice = createSlice({
 
 
 
-export const { onSetProfile } = profileSlice.actions;
+export const { onSetTeam } = teamSlice.actions;
