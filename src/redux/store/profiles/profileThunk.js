@@ -59,9 +59,6 @@ export const updateProfile = () => {
 
 export const deleteProfile = ( value ) => {
 
-    console.log(value)
-    
-
     return async (dispatch, getState) => {
 
         const { profileStore } = getState()
@@ -82,8 +79,6 @@ export const deleteProfile = ( value ) => {
 }
 
 export const deleteProfiles = ( value ) => {
-
-    console.log(value)
     
     return async (dispatch, getState) => {
 
@@ -93,7 +88,6 @@ export const deleteProfiles = ( value ) => {
         let newState = []
 
         newState = actualState.filter( (row) => !value.includes(row.id))
-        console.log(newState)
 
         try {
             value.map((val) => { api.delete(`/profile/${val}`)} )

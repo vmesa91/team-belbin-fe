@@ -10,7 +10,6 @@ import { CustomTextField } from "../../common/components/Form/CustomTextField";
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
-import { CustomSnackbar } from "../../common/components/SnackBar/CustomSnackbar";
 import { useEffect, useMemo } from "react";
 import { useDispatch , useSelector } from "react-redux";
 import { createProfile } from "../../redux/store/profiles/profileThunk";

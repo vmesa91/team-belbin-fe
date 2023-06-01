@@ -51,7 +51,7 @@ export const createMember = ( value ) => {
 
 
 export const deleteMember = (value) => { 
-    console.log(value)
+
     return async (dispatch, getState) => {
 
         const { memberStore } = getState()
@@ -71,8 +71,22 @@ export const deleteMember = (value) => {
     }
 }
 export const deleteMembers = (value) => {
-    console.log(value)
-    return () => {
+
+        return async (dispatch, getState) => {
+
+        const { memberStore } = getState()
+
+        let actualState = memberStore.members
+        let newState = []
+
+        newState = actualState.filter( (row) => !value.includes(row.id))
+
+        try {
+            value.map((val) => { api.delete(`/member/${val}`)} )
+            dispatch(onSetMember ( { type: 'members' , value : newState  } ))
+        } catch ( error ) {
+            dispatch(onSetMember ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
+        }
 
     }
 }

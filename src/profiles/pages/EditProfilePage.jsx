@@ -17,11 +17,13 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { CustomSnackbar } from "../../common/components/SnackBar/CustomSnackbar";
 import { useEffect, useMemo } from "react";
 import { NewEditProfile } from "../sections/NewEditProfile";
+import { useSelector } from "react-redux";
 
 
 export const EditProfilePage = () => {
 
     const { name } = useParams();
+    useSelector(  )
 
     const currentProfile = profiles.find((profile) => paramCase(profile.name) === name);
 
