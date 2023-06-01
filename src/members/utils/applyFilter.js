@@ -1,47 +1,48 @@
 // Aplicar filtro
 export function applyFilter({
     inputData,
-    comparator,
     filterName,
-    filterSympathy,
     filterProfile,
     filterTeam,
+    filterLanguage
   }) {
-/*     const stabilizedThis = inputData.map((el, index) => [el, index]);
-  
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) return order;
-      return a[1] - b[1];
-    });
-  
-    inputData = stabilizedThis.map((el) => el[0]);
-  
+
+
     if (filterName) {
       inputData = inputData.filter(
-        (invoice) =>
-          invoice.invoiceNumber.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
-          invoice.invoiceTo.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+        (member) => { 
+          const { user } = member
+          return user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+        }
       );
     }
-  
-    if (filterSympathy !== 'all') {
-      inputData = inputData.filter((invoice) => invoice.status === filterStatus);
-    }
-  
-    if (filterService !== 'all') {
-      inputData = inputData.filter((invoice) =>
-        invoice.items.some((c) => c.service === filterService)
+
+    
+    if (filterProfile.length > 0) {
+       inputData = inputData.filter((member) => {
+          const { profiles } = member
+          return profiles.find( (profile) => filterProfile.find(( fp ) => (fp === profile.name) ? true : false) )
+        } 
       );
     }
-  
-    if (filterStartDate && filterEndDate) {
-      inputData = inputData.filter(
-        (invoice) =>
-          fTimestamp(invoice.createDate) >= fTimestamp(filterStartDate) &&
-          fTimestamp(invoice.createDate) <= fTimestamp(filterEndDate)
+
+    if (filterTeam.length > 0) {
+       inputData = inputData.filter((member) => {
+          const { teams } = member
+          return teams.find( (team) => filterTeam.find(( ft ) => (ft === team.name) ? true : false) )
+        } 
       );
-    } */
-  
+    }
+
+    if (filterLanguage.length > 0) {
+
+      inputData = inputData.filter((member) => {
+          const { languages } = member
+          return languages.find( (language) => filterLanguage.find(( fl ) => (fl === language.name) ? true : false) )
+        } 
+      ); 
+    }
+
+
     return inputData;
   }

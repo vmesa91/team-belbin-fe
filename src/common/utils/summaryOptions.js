@@ -7,7 +7,7 @@ export const summaryOptions = ( list ) => {
 
     if ( isEmpty(list)) return '-'
     
-    const listSummary = list.map( (rol )  => `${rol?.name} , `   )
+    const listSummary = list.map( (li )  => `${li?.name} , `   )
         
     return listSummary
 }

@@ -1,5 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import { filter } from 'lodash';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -8,38 +7,26 @@ import {
   Card,
   Table,
   Stack,
-  Paper,
-  Avatar,
   Button,
-  Popover,
-  Checkbox,
-  TableRow,
-  MenuItem,
   TableBody,
-  TableCell,
   Container,
-  Typography,
   IconButton,
   TableContainer,
   TablePagination,
-  Tabs,
-  Divider,
-  Tab,
   Tooltip,
 } from '@mui/material';
+
 // components
-import { Label } from '../../common/components/Label';
 import { Iconify } from '../../common/components/Iconify/Iconify'
 
 // sections
 import { TableListHead } from '../../common/sections/table/TableListHead';
-import {  TableListToolbar } from '../../common/sections/table/TableListToolbar';
+
+// Languages
+import { dataCountries } from '../../_mock/dataCountries'
 
 // Config
 import { dataTableMembers } from '../config/configTableMembers'
-
-// Mock
-import { teams } from '../../_mock/dataTeams'
 
 // Breadcrumbs
 import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBreadcrumbs';
@@ -48,7 +35,6 @@ import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBre
 import { PATH_MEMBER } from '../../home/routes/paths'
 
 // UTILS Methods
-import { getComparator } from '../../common/utils/comparatorMethods'
 import { applyFilter } from '../utils/applyFilter'
 import { useTable } from '../../hooks/useTable';
 import { MemberTableToolbar } from '../sections/table/MemberTableToolbar'
@@ -56,6 +42,10 @@ import { TableSelectedAction } from '../../common/sections/table/TableSelectedAc
 import { MemberTableRow } from '../sections/table/MemberTableRow';
 import { ConfirmDialog } from '../../common/components/ConfirmDialog/ConfirmDialog';
 import { useDispatch, useSelector } from 'react-redux';
+import { TableNoData } from '../../common/sections/table/TableNoData';
+import { TableEmptyRows } from '../../common/sections/table/TableEmptyRows';
+import { emptyRows } from '../../common/utils/emptyRows';
+import { deleteMember, deleteMembers } from '../../redux/store/members/memberThunk';
 
 // ----------------------------------------------------------------------
 
@@ -63,8 +53,6 @@ export function TableMembersPage() {
 
   const {
     page,
-    order,
-    orderBy,
     rowsPerPage,
     setPage,
     //
@@ -73,7 +61,6 @@ export function TableMembersPage() {
     onSelectRow,
     onSelectAllRows,
     //
-    onSort,
     onChangePage,
     onChangeRowsPerPage
   } = useTable()
@@ -84,6 +71,8 @@ export function TableMembersPage() {
 
   const { activeMember , members } = useSelector( state => state.memberStore )
 
+  const { teams } = useSelector( state => state.teamStore )
+
   const { profiles } = useSelector( state => state.profileStore )
 
   const [tableData, setTableData] = useState(members)
@@ -92,33 +81,32 @@ export function TableMembersPage() {
 
   const [filterName, setFilterName] = useState('')
 
-  const [filterProfile, setFilterProfile] = useState('')
+  const [filterProfile, setFilterProfile] = useState([])
 
-  const [filterTeam, setFilterTeam] = useState('')
+  const [filterTeam, setFilterTeam] = useState([])
   
-  const [filterLanguage, setFilterLanguage] = useState('')
+  const [filterLanguage, setFilterLanguage] = useState([])
 
+
+  useEffect(() => {
+    setTableData(members)
+  }, [members]) 
 
   const dataFiltered = applyFilter({
     inputData: tableData,
-    comparator: getComparator(order, orderBy),
     filterName,
     filterProfile,
     filterTeam,
     filterLanguage
   })
 
-  useEffect(() => {
-    setTableData(members)
-  }, [members]) 
-
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 
   const isFiltered =
   filterName !== '' ||
-  filterProfile !== '' ||
-  filterLanguage !== '' ||
-  filterTeam !== '' 
+  filterProfile.length > 0 ||
+  filterLanguage.length > 0 ||
+  filterTeam.length > 0 
 
   const isNotFound =
   (!dataFiltered.length && !!filterName) ||
@@ -141,24 +129,25 @@ export function TableMembersPage() {
     setFilterName(event.target.value);
   }
 
-  const handleFilterByProfile = (event, newValue) => {
+  const handleFilterByProfile = ({ target }) => {
     setPage(0);
-    setFilterProfile(newValue);
+    (target.innerText === undefined ) ? handleResetFilter() : setFilterProfile([ ...filterProfile , target.innerText ])
   }
 
-  const handleFilterByTeam = (event) => {
+  const handleFilterByTeam = ({ target }) => {
     setPage(0);
-    setFilterTeam(event.target.value);
+    (target.innerText === undefined ) ? handleResetFilter() : setFilterTeam([ ...filterTeam , target.innerText ])
   }
 
-  const handleFilterByLanguage = (event) => {
+  const handleFilterByLanguage = ({ target }) => {
     setPage(0);
-    setFilterLanguage(event.target.value);
+    (target.innerText === undefined ) ? handleResetFilter() : setFilterLanguage([ ...filterLanguage , target.innerText ])
   }
 
   const handleDeleteRow = (id) => {
     const deleteRow = tableData.filter((row) => row.id !== id);
     setSelected([]);
+    dispatch( deleteMember( id ) )
     setTableData(deleteRow);
 
     if (page > 0) {
@@ -171,6 +160,7 @@ export function TableMembersPage() {
   const handleDeleteRows = (selectedRows) => {
     const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
     setSelected([]);
+    dispatch( deleteMembers( selectedRows ) )
     setTableData(deleteRows);
 
     if (page > 0) {
@@ -192,9 +182,9 @@ export function TableMembersPage() {
 
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterProfile('');
-    setFilterTeam('');
-    setFilterLanguage('');
+    setFilterProfile([]);
+    setFilterTeam([]);
+    setFilterLanguage([]);
   }
 
 
@@ -235,7 +225,6 @@ export function TableMembersPage() {
 
          <Card>
 
-          {/* <TableListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} /> */}
           < MemberTableToolbar 
             isFiltered={isFiltered}
             filterName={filterName}
@@ -249,7 +238,7 @@ export function TableMembersPage() {
             onResetFilter={handleResetFilter}
             optionsProfiles={profiles}
             optionsTeams={teams}
-            optionsLanguages={profiles}
+            optionsLanguages={dataCountries}
             />
 
             <TableContainer sx={{ minWidth: 800 }}>
@@ -275,12 +264,9 @@ export function TableMembersPage() {
 
                 <Table sx={{ minWidth: 800 }}>
                  <TableListHead 
-                    order={order}
-                    orderBy={orderBy}
                     headLabel={dataTableMembers}
                     rowCount={tableData.length}
                     numSelected={selected.length}
-                    onSort={onSort}
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,
@@ -305,6 +291,11 @@ export function TableMembersPage() {
                           />
                        ))
                     }
+                    <TableEmptyRows
+                      emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                    />
+
+                    <TableNoData isNotFound={isNotFound} />
                   </TableBody>
                 </Table>
 

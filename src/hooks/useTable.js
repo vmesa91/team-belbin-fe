@@ -3,12 +3,12 @@ import { useState, useCallback } from 'react';
 export const useTable = (props) => {
 
 
-  // State to manage how we want order the table
+ /*  // State to manage how we want order the table
   const [orderBy, setOrderBy] = useState(props?.defaultOrderBy || 'name')
 
 
   // State to manage the way to order the table
-  const [order, setOrder] = useState(props?.defaultOrder || 'asc')
+  const [order, setOrder] = useState(props?.defaultOrder || 'asc') */
 
   // State to manage the pagination 
   const [page, setPage] = useState(props?.defaultCurrentPage || 0)
@@ -19,7 +19,7 @@ export const useTable = (props) => {
   // State to manage the selected row
   const [selected, setSelected] = useState(props?.defaultSelected || [])
 
-  // Function to manage the order
+/*   // Function to manage the order
   const onSort = useCallback(
     (id) => {
       const isAsc = orderBy === id && order === 'asc';
@@ -29,7 +29,7 @@ export const useTable = (props) => {
       }
     },
     [order, orderBy]
-  )
+  ) */
 
   // Function to manage the selected row
   const onSelectRow = useCallback(
@@ -57,6 +57,8 @@ export const useTable = (props) => {
 
   // Function to manage all selected rows
   const onSelectAllRows = useCallback((checked, newSelecteds) => {
+
+    console.log(checked, newSelecteds)
     if (checked) {
       setSelected(newSelecteds);
       return;
@@ -79,22 +81,17 @@ export const useTable = (props) => {
   )
 
   return {
-    order,
     page,
-    orderBy,
     rowsPerPage,
 
     selected,
     onSelectRow,
     onSelectAllRows,
 
-    onSort,
     onChangePage,
     onChangeRowsPerPage,
 
     setPage,
-    setOrder,
-    setOrderBy,
     setSelected,
     setRowsPerPage
   }

@@ -3,6 +3,7 @@ import { Iconify } from "../../../common/components/Iconify/Iconify"
 import { MenuPopover } from "../../../common/components/MenuPopover/MenuPopover"
 import { useState } from "react"
 import { ConfirmDialog } from "../../../common/components/ConfirmDialog/ConfirmDialog"
+import { summaryOptions } from "../../../common/utils/summaryOptions"
 
 
 export const MemberTableRow = ({
@@ -14,7 +15,7 @@ export const MemberTableRow = ({
     onDeleteRow,
 }) => {
 
-  const { user, profiles, expertise, colleagues , knowledges, laguage, belbinRol } = row
+  const { user, profiles, language, teams } = row
 
   const { name , surname, email } = user 
 
@@ -54,9 +55,9 @@ export const MemberTableRow = ({
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{ profiles.map( profile => profile.name ) }</TableCell>
-        <TableCell align="left">{ '-' }</TableCell>
-        <TableCell align="left">{'language'}</TableCell>
+        <TableCell align="left">{ summaryOptions(profiles) }</TableCell>
+        <TableCell align="left">{ summaryOptions(teams) }</TableCell>
+        <TableCell align="left">{summaryOptions(language)}</TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

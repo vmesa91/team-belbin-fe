@@ -3,7 +3,7 @@ import { Iconify } from "../../../common/components/Iconify/Iconify"
 import { MenuPopover } from "../../../common/components/MenuPopover/MenuPopover"
 import { useState } from "react"
 import { ConfirmDialog } from "../../../common/components/ConfirmDialog/ConfirmDialog"
-import { summaryOptions } from "../../utils/summaryOptions"
+import { summaryOptions } from "../../../common/utils/summaryOptions"
 
 
 export const ProfileTableRow = ({

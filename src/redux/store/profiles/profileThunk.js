@@ -67,7 +67,6 @@ export const deleteProfile = ( value ) => {
         const { profileStore } = getState()
 
         let actualState = profileStore.profiles
-        console.log(actualState)
         let newState = []
 
         newState = actualState.filter( (row) => !value.includes(row.id))

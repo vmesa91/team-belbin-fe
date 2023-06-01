@@ -45,33 +45,39 @@ export const MemberTableToolbar = ({
         multiple
         limitTags={3}
         id="profiles"
-        options={optionsProfiles.map((profile) => profile.name)}
-        defaultValue={[ ]}
+        filterSelectedOptions
+        options={optionsProfiles}
+        getOptionLabel={(option) => option.name}
+        defaultValue={[]}
         sx={{ maxHeight: 120 , width: '500px'}}
         renderInput={(params) => (
-          <TextField {...params} label="Perfiles" placeholder="Perfiles" sx={{textTransform: 'capitalize'}}/>
+          <TextField {...params} label="Perfiles" placeholder="Perfiles" value={filterProfile} sx={{textTransform: 'capitalize'}}/>
         )}
       />
       <Autocomplete
         multiple
         limitTags={3}
         id="teams"
-        options={optionsTeams.map((team) => team.name)}
-        defaultValue={[ ]}
+        filterSelectedOptions
+        options={optionsTeams}
+        getOptionLabel={(option) => option.name}
+        defaultValue={[]}
         sx={{ maxHeight: 120 , width: '500px' }}
         renderInput={(params) => (
-          <TextField {...params} label="Equipos" placeholder="Equipos" sx={{textTransform: 'capitalize'}}/>
+          <TextField {...params} label="Equipos" placeholder="Equipos" value={filterTeam} sx={{textTransform: 'capitalize'}}/>
         )}
       />
       <Autocomplete
         multiple
         limitTags={3}
         id="languages"
-        options={optionsLanguages.map((language) => language.name)}
-        defaultValue={[ ]}
+        filterSelectedOptions
+        options={optionsLanguages}
+        getOptionLabel={(option) => option.name}
+        defaultValue={[]}
         sx={{ maxHeight: 120 , width: '500px' }}
         renderInput={(params) => (
-          <TextField {...params} label="Idiomas" placeholder="Idiomas" sx={{textTransform: 'capitalize'}}/>
+          <TextField {...params} label="Idiomas" placeholder="Idiomas" value={filterLanguage} sx={{textTransform: 'capitalize'}}/>
         )}
       />
       {isFiltered && (

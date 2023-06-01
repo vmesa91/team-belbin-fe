@@ -45,33 +45,42 @@ export const ProfileTableToolbar = ({
         multiple
         limitTags={2}
         id="roles"
-        options={optionsRoles.map((rol) => rol.name)}
-        defaultValue={[ ]}
+        filterSelectedOptions
+        onChange={onFilterByRol}
+        options={optionsRoles}
+        getOptionLabel={(option) => option.name}
+        defaultValue={[]}
         sx={{ maxHeight: 120 , width: '500px'}}
         renderInput={(params) => (
-          <TextField {...params} label="Roles" placeholder="Roles" sx={{textTransform: 'capitalize'}}/>
+          <TextField {...params} label="Roles" placeholder="Roles" value={filterRol} sx={{textTransform: 'capitalize'}}/>
         )}
       />
       <Autocomplete
         multiple
         limitTags={2}
-        id="teams"
-        options={optionsMembers.map((team) => team.name)}
-        defaultValue={[ ]}
+        id="members"
+        filterSelectedOptions
+        onChange={onFilterByMember}
+        options={optionsMembers}
+        getOptionLabel={(option) => option.name}
+        defaultValue={[]}
         sx={{ maxHeight: 120 , width: '500px' }}
         renderInput={(params) => (
-          <TextField {...params} label="Miembros" placeholder="Miembros" sx={{textTransform: 'capitalize'}}/>
+          <TextField {...params} label="Miembros" placeholder="Miembros" value={filterTechnology} sx={{textTransform: 'capitalize'}}/>
         )}
       />
       <Autocomplete
         multiple
         limitTags={2}
         id="technologies"
-        options={optionsTechnologies.map((technology) => technology.name)}
-        defaultValue={[ ]}
+        filterSelectedOptions
+        onChange={onFilterByTechnology}
+        options={optionsTechnologies}
+        getOptionLabel={(option) => option.name}
+        defaultValue={[]}
         sx={{ maxHeight: 120 , width: '500px' }}
         renderInput={(params) => (
-          <TextField {...params} label="Tecnologías" placeholder="Tecnología" sx={{textTransform: 'capitalize'}}/>
+          <TextField {...params} label="Tecnologías" placeholder="Tecnología" value={filterMember} sx={{textTransform: 'capitalize'}}/>
         )}
       />
       {isFiltered && (
@@ -81,7 +90,7 @@ export const ProfileTableToolbar = ({
           onClick={onResetFilter}
           startIcon={<Iconify icon="eva:trash-2-outline" />}
         >
-          Clear
+          Borrar
         </Button>
       )}
     </Stack>

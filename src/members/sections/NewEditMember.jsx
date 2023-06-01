@@ -134,7 +134,7 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
             label="Selecciona uno o varios roles"
             multiple
             options={dataRolesBelbin}
-            getOptionLabel={(option) => option.label}
+            getOptionLabel={(option) => option.name}
             groupBy={ ( option ) => option.group }
             sx={{ width: '450px' }}
             />
@@ -151,7 +151,7 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
             label="Selecciona uno o varios idiomas"
             multiple
             options={dataCountries}
-            getOptionLabel={(option) => option.label}
+            getOptionLabel={(option) => option.name}
             sx={{ width: '450px' }}
             />
         </Stack>

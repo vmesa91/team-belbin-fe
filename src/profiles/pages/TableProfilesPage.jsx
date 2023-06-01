@@ -7,31 +7,20 @@ import {
   Card,
   Table,
   Stack,
-  Paper,
-  Avatar,
   Button,
-  Popover,
-  Checkbox,
-  TableRow,
-  MenuItem,
   TableBody,
-  TableCell,
   Container,
-  Typography,
   IconButton,
   TableContainer,
   TablePagination,
-  Tabs,
-  Divider,
-  Tab,
   Tooltip,
 } from '@mui/material';
+
 // components
 import { Iconify } from '../../common/components/Iconify/Iconify'
 
 // sections
 import { TableListHead } from '../../common/sections/table/TableListHead';
-import {  TableListToolbar } from '../../common/sections/table/TableListToolbar';
 
 // Config
 import { dataTableProfiles } from '../config/configTableProfiles'
@@ -39,8 +28,10 @@ import { dataTableProfiles } from '../config/configTableProfiles'
 // Breadcrumbs
 import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBreadcrumbs';
 
+// Paths
+import { PATH_PROFILE } from '../../home/routes/paths'
+
 // UTILS Methods
-import { getComparator } from '../../common/utils/comparatorMethods'
 import { applyFilter } from '../utils/applyFilter'
 import { useTable } from '../../hooks/useTable';
 import { ProfileTableToolbar } from '../sections/table/ProfileTableToolbar';
@@ -49,6 +40,9 @@ import { ProfileTableRow } from '../sections/table/ProfileTableRow';
 import { ConfirmDialog } from '../../common/components/ConfirmDialog/ConfirmDialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteProfile , deleteProfiles } from '../../redux/store/profiles/profileThunk';
+import { TableEmptyRows } from '../../common/sections/table/TableEmptyRows';
+import { TableNoData } from '../../common/sections/table/TableNoData';
+import { emptyRows } from '../../common/utils/emptyRows';
 
 // ------------------------------------------------------------------
 
@@ -57,8 +51,6 @@ export function TableProfilesPage() {
 
   const {
     page,
-    order,
-    orderBy,
     rowsPerPage,
     setPage,
     //
@@ -67,7 +59,6 @@ export function TableProfilesPage() {
     onSelectRow,
     onSelectAllRows,
     //
-    onSort,
     onChangePage,
     onChangeRowsPerPage
   } = useTable() 
@@ -86,19 +77,20 @@ export function TableProfilesPage() {
  
   const [filterName, setFilterName] = useState('')
 
-  const [filterRol, setFilterRol] = useState('')
+  const [filterRol, setFilterRol] = useState([])
 
-  const [filterTechnology, setFilterTechnology] = useState('')
+  const [filterTechnology, setFilterTechnology] = useState([])
 
-  const [filterMember, setFilterMember] = useState('')
+  const [filterMember, setFilterMember] = useState([])
+
 
   useEffect(() => {
     setTableData(profiles)
   }, [profiles]) 
 
+
   const dataFiltered = applyFilter({
     inputData: tableData,
-    comparator: getComparator(order, orderBy),
     filterName,
     filterRol,
     filterTechnology,
@@ -109,16 +101,16 @@ export function TableProfilesPage() {
 
   const isFiltered =
   filterName !== '' ||
-  filterRol !== '' ||
-  filterTechnology !== '' ||
-  filterMember !== '' 
+  filterRol.length > 0 ||
+  filterTechnology.length > 0 ||
+  filterMember.length > 0 
 
-  const isNotFound =
+ const isNotFound =
   (!dataFiltered.length && !!filterName) ||
   (!dataFiltered.length && !!filterRol) ||
   (!dataFiltered.length && !!filterTechnology) || 
   (!dataFiltered.length && !!filterMember) 
-
+ 
 
   // Methods
   const handleOpen = () => {
@@ -134,19 +126,19 @@ export function TableProfilesPage() {
     setFilterName(event.target.value);
   }
 
-  const handleFilterByRol = (event) => {
+  const handleFilterByRol = ({ target }) => {
     setPage(0);
-    setFilterRol(event.target.value);
+    (target.innerText === undefined ) ? handleResetFilter() : setFilterRol([ ...filterRol , target.innerText ])
   }
 
-  const handleFilterByTechnology = (event) => {
+  const handleFilterByTechnology = ({ target }) => {
     setPage(0);
-    setFilterTechnology(event.target.value);
+    (target.innerText === undefined ) ? handleResetFilter() : setFilterTechnology([ ...filterTechnology , target.innerText ])
   }
 
-  const handleFilterByMember = (event) => {
+  const handleFilterByMember = ({ target }) => {
     setPage(0);
-    setFilterMember(event.target.value);
+    (target.innerText === undefined ) ? handleResetFilter() : setFilterMember([ ...filterMember , target.innerText ])
   }
 
   const handleDeleteRow = (id) => {
@@ -154,8 +146,6 @@ export function TableProfilesPage() {
     setSelected([]);
     dispatch( deleteProfile( id ) )
     setTableData(deleteRow);
-
-
 
     if (page > 0) {
       if (dataInPage.length < 2) {
@@ -189,9 +179,9 @@ export function TableProfilesPage() {
 
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterRol()
-    setFilterTechnology('');
-    setFilterMember('')
+    setFilterRol([])
+    setFilterTechnology([]);
+    setFilterMember([])
   }
 
   return (
@@ -220,7 +210,7 @@ export function TableProfilesPage() {
             action={
               <Button
                 component={RouterLink}
-                to={''}
+                to={PATH_PROFILE.createProfile}
                 variant="contained"
                 startIcon={<Iconify icon="eva:plus-fill" />}
               >
@@ -271,12 +261,9 @@ export function TableProfilesPage() {
 
                 <Table sx={{ minWidth: 800 }}>
                  <TableListHead 
-                    order={order}
-                    orderBy={orderBy}
                     headLabel={dataTableProfiles}
                     rowCount={tableData.length}
                     numSelected={selected.length}
-                    onSort={onSort}
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,
@@ -300,6 +287,12 @@ export function TableProfilesPage() {
                           />
                        ))
                     }
+
+                    <TableEmptyRows
+                      emptyRows={emptyRows(page, rowsPerPage, tableData.length)}
+                    />
+
+                    <TableNoData isNotFound={isNotFound} />
                   </TableBody>
                 </Table>
 
@@ -344,3 +337,5 @@ export function TableProfilesPage() {
     </>
   );
 }
+
+

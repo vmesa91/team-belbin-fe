@@ -1,34 +1,12 @@
 // Aplicar filtro
 export function applyFilter({
     inputData,
-    comparator,
     filterName,
-    filterProfile,
     filterRol,
     filterTechnology,
-    filterTeam
+    filterMember
   }) {
 
-    /* 
-      InputData = {
-        id: faker.datatype.uuid(),
-        name: String,
-        role: [],
-        team: [],
-        tecnologies: []
-      }
-
-    */
-
-    const stabilizedThis = inputData.map((el, index) => [el, index]);
-  
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) return order;
-      return a[1] - b[1];
-    });
-  
-    inputData = stabilizedThis.map((el) => el[0]);
   
     if (filterName) {
       inputData = inputData.filter(
@@ -37,10 +15,28 @@ export function applyFilter({
       );
     }
 
-  
-    if (filterRol !== '') {
-        inputData = inputData.filter((profile) =>
-        profile.role === filterRol
+    
+    if (filterRol.length > 0) {
+       inputData = inputData.filter((profile) => {
+          const { roles } = profile
+          return roles.find( (rol) => filterRol.find(( fr ) => (fr === rol.name) ? true : false) )
+        } 
+      );
+    }
+
+    if (filterTechnology.length > 0) {
+       inputData = inputData.filter((profile) => {
+          const { tools } = profile
+          return tools.find( (tool) => filterTechnology.find(( ft ) => (ft === tool.name) ? true : false) )
+        } 
+      );
+    }
+
+    if (filterMember.length > 0) {
+       inputData = inputData.filter((profile) => {
+          const { members } = profile
+          return members.find( (member) => filterMember.find(( fm ) => (fm === member.name) ? true : false) )
+        } 
       );
     }
   
