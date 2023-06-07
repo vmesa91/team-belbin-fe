@@ -3,6 +3,7 @@ import { Iconify } from "../../../common/components/Iconify/Iconify"
 import { MenuPopover } from "../../../common/components/MenuPopover/MenuPopover"
 import { useState } from "react"
 import { ConfirmDialog } from "../../../common/components/ConfirmDialog/ConfirmDialog"
+import { summaryOptions } from "../../../common/utils/summaryOptions"
 
 
 export const ConfigTeamTableRow = ({
@@ -14,7 +15,7 @@ export const ConfigTeamTableRow = ({
     onDeleteRow,
 }) => {
 
-  const { name, profile, team, language, expertise, sympathy } = row
+  const { user, profiles, expertise, colleagues, knowledges, language, belbinRol, team } = row
 
   const [openConfirm, setOpenConfirm] = useState(false)
 
@@ -45,7 +46,7 @@ export const ConfigTeamTableRow = ({
 
         <TableCell>
         <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar name={name} />
+            <Avatar name={user.name} />
 
             <div>
               <Link
@@ -54,15 +55,15 @@ export const ConfigTeamTableRow = ({
                 onClick={onViewRow}
                 sx={{ cursor: 'pointer' }}
               >
-                {name}
+                { user.name + ' ' + user.surname }
               </Link>
             </div>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{profile}</TableCell>
-        <TableCell align="left">{team}</TableCell>
-        <TableCell align="left">{language}</TableCell>
+        <TableCell align="left">{summaryOptions( profiles )}</TableCell>
+        <TableCell align="left">{summaryOptions( team )}</TableCell>
+        <TableCell align="left">{summaryOptions( language )}</TableCell>
       </TableRow>
 
    </>

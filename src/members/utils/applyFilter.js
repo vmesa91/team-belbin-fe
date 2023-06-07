@@ -17,7 +17,6 @@ export function applyFilter({
       );
     }
 
-    
     if (filterProfile.length > 0) {
        inputData = inputData.filter((member) => {
           const { profiles } = member

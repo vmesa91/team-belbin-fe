@@ -16,8 +16,6 @@ export const getProfiles = () => {
 
 export const createProfile = ( value ) => {
 
-    console.log(value)
-
     return async (dispatch, getState) => {
 
         const { profileStore , dataStore } = getState()
@@ -29,7 +27,7 @@ export const createProfile = ( value ) => {
 
         const actualState = profiles
 
-        try{
+        try {
             // Buscar IDs
             const idRoles = rolesNewValue.map( (role) => searchID( role , rolesStore ))
             const idTools = toolsNewValue.map( (tool) => searchID( tool , toolsStore ))

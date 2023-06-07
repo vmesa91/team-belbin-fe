@@ -1,47 +1,56 @@
 // Aplicar filtro
 export function applyFilter({
-    inputData,
-    comparator,
-    filterName,
-    filterSympathy,
-    filterProfile,
-    filterTeam,
+  inputData,
+  filterName,
+  filterSympathy,
+  filterRoles,
+  filterKnowledges,
+  filterTools
   }) {
-/*     const stabilizedThis = inputData.map((el, index) => [el, index]);
-  
-    stabilizedThis.sort((a, b) => {
-      const order = comparator(a[0], b[0]);
-      if (order !== 0) return order;
-      return a[1] - b[1];
-    });
-  
-    inputData = stabilizedThis.map((el) => el[0]);
-  
+
+
+    console.log(inputData)
+    
     if (filterName) {
       inputData = inputData.filter(
-        (invoice) =>
-          invoice.invoiceNumber.toLowerCase().indexOf(filterName.toLowerCase()) !== -1 ||
-          invoice.invoiceTo.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+        (member) => { 
+          const { user } = member
+          return user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
+        }
       );
     }
   
-    if (filterSympathy !== 'all') {
-      inputData = inputData.filter((invoice) => invoice.status === filterStatus);
-    }
+    if (filterRoles.length > 0) {
+      inputData = inputData.filter((member) => {
+         const { profiles } = member
+        
+         profiles.map( ( profile ) => {
+          const { roles } = profile
+          
+          return roles.find( (rol) => filterRoles.find(( fr ) => (fr === rol.name) ? true : false) )
+         }  )
+         
+       } 
+     )
+   }
+
+    if (filterKnowledges.length > 0) {
+      inputData = inputData.filter((member) => {
+         const { knowledges } = member
+         return knowledges.find( (knowledge) => filterKnowledges.find(( fk ) => (fk === knowledge.name) ? true : false) )
+       } 
+     );
+   }
+
+    if (filterTools.length > 0) {
+      inputData = inputData.filter((member) => {
+         const { tools } = member
+         return tools.find( (tool) => filterTools.find(( ft ) => (ft === tool.name) ? true : false) )
+       } 
+     );
+   }
   
-    if (filterService !== 'all') {
-      inputData = inputData.filter((invoice) =>
-        invoice.items.some((c) => c.service === filterService)
-      );
-    }
-  
-    if (filterStartDate && filterEndDate) {
-      inputData = inputData.filter(
-        (invoice) =>
-          fTimestamp(invoice.createDate) >= fTimestamp(filterStartDate) &&
-          fTimestamp(invoice.createDate) <= fTimestamp(filterEndDate)
-      );
-    } */
-  
+
+
     return inputData;
   }

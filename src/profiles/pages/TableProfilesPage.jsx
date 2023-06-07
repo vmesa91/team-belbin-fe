@@ -64,7 +64,6 @@ export function TableProfilesPage() {
   } = useTable() 
 
   const dispatch = useDispatch()
-
   const navigate = useNavigate()
 
   const { activeProfile , profiles } = useSelector( state => state.profileStore )

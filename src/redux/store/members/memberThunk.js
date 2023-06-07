@@ -36,7 +36,7 @@ export const createMember = ( value ) => {
                 language: getID(language)
             }
             
-            console.log(data)
+
             const resp = await api.post('/member' , data)
             const newState = [ ...actualState,  { ...data, id: resp.data.uid} ]
  
@@ -93,5 +93,4 @@ export const deleteMembers = (value) => {
 
 
 // Extract ID
-
 const getID = ( list ) => list.map( li => li.id ) 

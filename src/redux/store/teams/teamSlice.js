@@ -5,6 +5,7 @@ export const teamSlice = createSlice({
     name: 'team',
     initialState: {
         activeTeam: null,
+        configureTeam: null,
         teams: [],
         errorMessage: undefined
     },

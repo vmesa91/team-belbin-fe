@@ -33,16 +33,9 @@ import { Iconify } from '../../common/components/Iconify/Iconify'
 
 // sections
 import { TableListHead } from '../../common/sections/table/TableListHead';
-import {  TableListToolbar } from '../../common/sections/table/TableListToolbar';
 
 // Config
 import { dataTableTeams , dataTableConfigTeam } from '../config/configTableTeams'
-
-// Mock
-import { profiles } from '../../_mock/dataProfiles'
-import { dataKnowledges } from '../../_mock/dataKnowledges'
-import { dataTechnologies } from '../../_mock/dataTechnologies'
-import { members } from '../../_mock/dataMembers'
 
 import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBreadcrumbs';
 
@@ -57,18 +50,15 @@ import { ConfigTeamTableRow } from '../sections/table/ConfigTeamTableRow';
 import { LoadingButton } from '@mui/lab';
 import { ConfigTeamTableToolbar } from '../sections/table/ConfigTeamTableToolbar';
 import { ConfirmDialog } from '../../common/components/ConfirmDialog/ConfirmDialog';
+import { useDispatch, useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
 
 export function ConfigTeamPage() {
 
-  const navigate = useNavigate();
-
   const {
     page,
-    order,
-    orderBy,
     rowsPerPage,
     setPage,
     //
@@ -77,10 +67,18 @@ export function ConfigTeamPage() {
     onSelectRow,
     onSelectAllRows,
     //
-    onSort,
     onChangePage,
     onChangeRowsPerPage
-  } = useTable()
+  } = useTable() 
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const { configureTeam } = useSelector( state => state.teamStore )
+  const { members } = useSelector( state => state.memberStore )
+  const { roles, knowledges, tools } = configureTeam
+
+  console.log(roles)
 
   const [tableData, setTableData] = useState(members)
   
@@ -88,19 +86,16 @@ export function ConfigTeamPage() {
  
   const [filterName, setFilterName] = useState('');
   const [filterSympathy, setFilterSympathy] = useState(':D')
-  const [filterProfile, setFilterProfile] = useState('')
-  const [filterKnowledge, setFilterKnowledge] = useState('')
-  const [filterTechnology, setFilterTechnology] = useState('')
+
 
 
   const dataFiltered = applyFilter({
     inputData: tableData,
-    comparator: getComparator(order, orderBy),
     filterName,
     filterSympathy,
-    filterProfile,
-    filterKnowledge,
-    filterTechnology
+    filterRoles: roles,
+    filterKnowledges: knowledges,
+    filterTools: tools
   })
 
   const getLengthBySympathy = (status) => {
@@ -119,19 +114,12 @@ export function ConfigTeamPage() {
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 
-  const isFiltered =
-  filterSympathy !== ':D' ||
-  filterName !== '' ||
-  filterProfile !== '' ||
-  filterKnowledge !== '' ||
-  filterTechnology !== '' 
-
   const isNotFound =
   (!dataFiltered.length && !!filterName) ||
   (!dataFiltered.length && !!filterSympathy) ||
-  (!dataFiltered.length && !!filterProfile) ||
-  (!dataFiltered.length && !!filterKnowledge) ||
-  (!dataFiltered.length && !!filterTechnology) 
+  (!dataFiltered.length && !!roles) ||
+  (!dataFiltered.length && !!knowledges) ||
+  (!dataFiltered.length && !!tools) 
 
 
   // Methods
@@ -153,61 +141,6 @@ export function ConfigTeamPage() {
     setFilterName(event.target.value);
   }
 
-  const handleFilterByProfile = (event) => {
-    setPage(0);
-    setFilterProfile(event.target.value);
-  }
-
-  const handleFilterByKnowledge = (event) => {
-    setPage(0);
-    setFilterKnowledge(event.target.value);
-  }
-
-  const handleFilterByTechnology = (event) => {
-    setPage(0);
-    setFilterTechnology(event.target.value);
-  }
-
-  const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
-    setSelected([]);
-    setTableData(deleteRow);
-
-    if (page > 0) {
-      if (dataInPage.length < 2) {
-        setPage(page - 1);
-      }
-    }
-  }
-
-  const handleDeleteRows = (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
-    setSelected([]);
-    setTableData(deleteRows);
-
-    if (page > 0) {
-      if (selectedRows.length === dataInPage.length) {
-        setPage(page - 1);
-      } else if (selectedRows.length === dataFiltered.length) {
-        setPage(0);
-      } else if (selectedRows.length > dataInPage.length) {
-        const newPage = Math.ceil((tableData.length - selectedRows.length) / rowsPerPage) - 1;
-        setPage(newPage);
-      }
-    }
-  }
-
-  const handleEditRow = (id) => {
-    // navigate(PATH_DASHBOARD.invoice.edit(id));
-  }
-
-
-  const handleResetFilter = () => {
-    setFilterName('');
-    setFilterProfile('');
-    setFilterKnowledge('');
-    setFilterTechnology('')
-  }
 
   const handleClickItem = (path) => {
     navigate(path);
@@ -263,24 +196,17 @@ export function ConfigTeamPage() {
 
           <Divider />
 
-          {/* <TableListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} /> */}
           < ConfigTeamTableToolbar 
-            isFiltered={isFiltered}
             filterName={filterName}
             filterSympathy={filterSympathy}
-            filterProfile={filterProfile}
-            filterKnowledge={filterKnowledge}
-            filterTechnology={filterTechnology}
+            filterRole={roles}
+            filterKnowledge={knowledges}
+            filterTool={tools}
             onFilterByName={handleFilterByName}
-            onFilterBySympathy={handleFilterBySympathy}
-            onFilterByProfile={handleFilterByProfile}
-            onFilterByKnowledge={handleFilterByKnowledge}
-            onFilterByTechnology={handleFilterByTechnology}
-            onResetFilter={handleResetFilter}
             optionsSympathies={members} 
-            optionsProfiles={profiles}
-            optionsKnowledges={dataKnowledges}
-            optionsTechnologies={dataTechnologies}
+            optionsRoles={roles}
+            optionsKnowledges={knowledges}
+            optionsTools={tools}
             />
 
             <TableContainer sx={{ minWidth: 800 }}>
@@ -306,12 +232,9 @@ export function ConfigTeamPage() {
 
                 <Table sx={{ minWidth: 800 }}>
                   <TableListHead 
-                    order={order}
-                    orderBy={orderBy}
                     headLabel={dataTableConfigTeam}
                     rowCount={tableData.length}
                     numSelected={selected.length}
-                    onSort={onSort}
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,
@@ -330,9 +253,9 @@ export function ConfigTeamPage() {
                               row={row}
                               selected={selected.includes(row.id)}
                               onSelectRow={() => onSelectRow(row.id)}
-                              onViewRow={() => handleViewRow(row.id)}
+/*                               onViewRow={() => handleViewRow(row.id)}
                               onEditRow={() => handleEditRow(row.id)}
-                              onDeleteRow={() => handleDeleteRow(row.id)}
+                              onDeleteRow={() => handleDeleteRow(row.id)} */
                           />
                        ))
                     }

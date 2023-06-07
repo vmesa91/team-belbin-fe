@@ -4,23 +4,17 @@ import { CustomAutocomplete } from '../../../common/components/Form/CustomAutoco
 import { Iconify } from '../../../common/components/Iconify/Iconify'
 
 export const ConfigTeamTableToolbar = ({
-    isFiltered,
     filterName,
     filterSympathy,
-    filterProfile,
+    filterRole,
     filterKnowledge,
-    filterTechnology,
+    filterTool,
     onFilterByName,
-    onFilterBySympathy,
-    onFilterByProfile,
-    onFilterByKnowledge,
-    onFilterByTechnology,
-    onResetFilter,
-    optionsSympathies,
-    optionsProfiles,
+    optionsRoles,
     optionsKnowledges,
-    optionsTechnologies
+    optionsTools
 }) => {
+
 
   return (
     <Stack
@@ -48,11 +42,11 @@ export const ConfigTeamTableToolbar = ({
       <Autocomplete
         multiple
         limitTags={3}
-        id="profiles"
+        id="roles"
         freeSolo
         readOnly
-        options={optionsProfiles.map((profile) => profile.name)}
-        defaultValue={[ optionsTechnologies[1].name, optionsTechnologies[4].name ]}
+        options={optionsRoles}
+        defaultValue={optionsRoles.map((role) => role.name)}
         sx={{ maxHeight: 120 , width: '500px'}}
         renderInput={(params) => (
           <TextField {...params} label="Perfiles" placeholder="Perfiles" sx={{textTransform: 'capitalize'}}/>
@@ -64,8 +58,8 @@ export const ConfigTeamTableToolbar = ({
         id="knowledges"
         freeSolo
         readOnly
-        options={optionsKnowledges.map((knowledge) => knowledge.name)}
-        defaultValue={[ optionsKnowledges[1].name, optionsKnowledges[4].name ]}
+        options={optionsKnowledges}
+        defaultValue={optionsKnowledges.map((knowledge) => knowledge.name)}
         sx={{ maxHeight: 120 , width: '500px'}}
         renderInput={(params) => (
           <TextField {...params} label="Conocimientos" placeholder="Conocimientos" sx={{textTransform: 'capitalize'}}/>
@@ -74,27 +68,17 @@ export const ConfigTeamTableToolbar = ({
       <Autocomplete
         multiple
         limitTags={3}
-        id="technologies"
+        id="tools"
         freeSolo
         readOnly
-        options={optionsTechnologies.map((technology) => technology.name)}
-        defaultValue={[ optionsTechnologies[1].name, optionsTechnologies[4].name ]}
+        options={optionsTools}
+        defaultValue={optionsTools.map((tool) => tool.name)}
         sx={{ maxHeight: 120 , width: '500px' }}
         renderInput={(params) => (
           <TextField {...params} label="Tecnologías" placeholder="Tecnologías" sx={{textTransform: 'capitalize'}}/>
         )}
       />
 
-      {isFiltered && (
-        <Button
-          color="error"
-          sx={{ flexShrink: 0 }}
-          onClick={onResetFilter}
-          startIcon={<Iconify icon="eva:trash-2-outline" />}
-        >
-          Clear
-        </Button>
-      )}
     </Stack>
   )
 }

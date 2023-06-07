@@ -46,6 +46,7 @@ export const MemberTableToolbar = ({
         limitTags={3}
         id="profiles"
         filterSelectedOptions
+        onChange={onFilterByProfile}
         options={optionsProfiles}
         getOptionLabel={(option) => option.name}
         defaultValue={[]}
@@ -59,6 +60,7 @@ export const MemberTableToolbar = ({
         limitTags={3}
         id="teams"
         filterSelectedOptions
+        onChange={onFilterByTeam}
         options={optionsTeams}
         getOptionLabel={(option) => option.name}
         defaultValue={[]}
@@ -72,6 +74,7 @@ export const MemberTableToolbar = ({
         limitTags={3}
         id="languages"
         filterSelectedOptions
+        onChange={onFilterByLanguage}
         options={optionsLanguages}
         getOptionLabel={(option) => option.name}
         defaultValue={[]}

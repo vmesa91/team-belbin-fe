@@ -2,7 +2,7 @@
 export const dataTableConfigTeam = 
     [
         { id: 'members', label: 'Nombre y Apellido', align: 'center' },
-        { id: 'profiles', label: 'Perfil', align: 'center' },
+        { id: 'roles', label: 'Roles', align: 'center' },
         { id: 'teams', label: 'Equipos', align: 'center' },
         { id: 'language', label: 'Idiomas', align: 'center' },
         { id: '' }

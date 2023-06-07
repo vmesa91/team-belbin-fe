@@ -8,9 +8,9 @@ export const EditTeamPage = () => {
 
     const { name } = useParams();
 
-    const { activeProfile , profiles } = useSelector( state => state.profileStore )
+    const { activeProfile , teams } = useSelector( state => state.teamStore )
 
-    const currentTeam = profiles.find((profile) => paramCase(profile.name) === name);
+    const currentTeam = teams.find((team) => paramCase(team.name) === name);
 
     return (
 
@@ -30,7 +30,7 @@ export const EditTeamPage = () => {
                { name: 'Crear Equipo' },
              ]}
            />
-            <NewEditTeam isEdit currentProfile={currentTeam}/>
+            <NewEditTeam isEdit currentTeam={currentTeam}/>
          </Container>
         </>
     

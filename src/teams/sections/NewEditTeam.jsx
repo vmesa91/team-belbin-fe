@@ -12,28 +12,31 @@ import { useNavigate } from "react-router-dom";
 import { CustomSelect } from '../../common/components/Form/CustomSelect'
 import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { configureTeam, createTeam } from '../../redux/store/teams/teamThunk'
+import { PATH_TEAM } from '../../home/routes/paths'
 
-export const NewEditTeam = ({ isEdit, currentMember }) => {
+export const NewEditTeam = ({ isEdit, currentTeam }) => {
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const defaultValues = useMemo(
     () => ({
-      name: currentMember?.name || '',
-      description: currentMember?.description || '',
-      leader: currentMember?.leader || '',
-      roles: currentMember?.role || [],
-      tools: currentMember?.tools || [],
-      knowledges: currentMember?.knowledges || [],
-      language: currentMember?.language || []
+      name: currentTeam?.name || '',
+      description: currentTeam?.description || '',
+      leader: currentTeam?.leader || '',
+      roles: currentTeam?.role || [],
+      tools: currentTeam?.tools || [],
+      knowledges: currentTeam?.knowledges || [],
+      language: currentTeam?.language || []
     }),
-    [ currentMember ] 
+    [ currentTeam ] 
   )
 
   const  methodsForm = useForm({ defaultValues })
 
   const { tools , roles, knowledges , errorMessage } = useSelector( state => state.dataStore )
+  const { teams } = useSelector( state => state.teamStore )
   const { members } = useSelector( state => state.memberStore )
 
 
@@ -42,25 +45,23 @@ export const NewEditTeam = ({ isEdit, currentMember }) => {
   const values = watch()
 
   useEffect(() => {
-    if (isEdit && currentMember) {
+    if (isEdit && currentTeam) {
       reset(defaultValues);
     }
     if (!isEdit) {
       reset(defaultValues);
     }
-  }, [isEdit, currentMember]) 
+  }, [isEdit, currentTeam]) 
 
   const onSubmit = (data) => {
-    console.log(data)
+    dispatch( configureTeam( data ) )
+    navigate(PATH_TEAM.configTeam)
   }
 
-  const handleClickItem = (path) => {
-    // Config ActiveTeam
-    navigate(path);
-  }; 
 
-  const handleClickTeamLead = () => {
-    console.log('Clear')
+
+  const handleClickTeamLead = (data) => {
+    console.log(data)
 }
   
   return (
@@ -95,10 +96,10 @@ export const NewEditTeam = ({ isEdit, currentMember }) => {
               flexDirection='row'
               flexWrap='wrap'
               >
-                <CustomTextField name="displayName" label="Introduce el nombre del perfil" />
+                <CustomTextField name="name" label="Introduce el nombre del perfil" />
                 <CustomTextField name="description" label="Introduce la descripción del perfil" multiline rows={4} sx={{ width: '100%' }} />
                 <CustomSelect
-                      name={'teamLead'}
+                      name="leader"
                       size="small"
                       label="Selecciona un líder del equipo"
                       InputLabelProps={{ shrink: true }}
@@ -106,9 +107,9 @@ export const NewEditTeam = ({ isEdit, currentMember }) => {
                         >
                         {members.map((member) => (
                             <MenuItem
-                                key={member.id}
-                                value={member.user.name}
-                                onClick={() => handleClickTeamLead(member.user.name)}
+                                key={member.user._id}
+                                value={member.user._id}
+                                onClick={handleClickTeamLead}
                             >
                                 { member.user.name + ' ' + member.user.surname }
                             </MenuItem>
@@ -129,32 +130,34 @@ export const NewEditTeam = ({ isEdit, currentMember }) => {
 
             <Stack sx={{ }}>
               < CustomAutocomplete
-                  name="Roles"
+                  name="roles"
                   label="Selecciona Rol"
                   multiple
-                  options={roles.map((rol) => rol.name)}
+                  options={roles}
+                  getOptionLabel={(option) => option.name}
                   sx={{ width: '450px' }}
                 />
 
               < CustomAutocomplete
-                  name="Tecnología"
+                  name="tools"
                   label="Selecciona Tecnología" 
                   multiple
-                  options={tools.map((tool) => tool.name)}
+                  options={tools}
+                  getOptionLabel={(option) => option.name}
                   sx={{ width: '450px' }}
                   />
         
               < CustomAutocomplete
-                  name="Conocimiento"
+                  name="knowledges"
                   label="Añadir uno o más conocimientos"
                   multiple
-                  options
-                  ={knowledges.map((knowledgde) => knowledgde.name)}
+                  options={knowledges}
+                  getOptionLabel={(option) => option.name}
                   sx={{ p: 3}}
                   />
                   
               < CustomAutocomplete
-                  name="Idioma"
+                  name="language"
                   label="Añadir uno o más idiomas"
                   multiple
                   options={dataCountries.map((language) => language.name)}
@@ -167,7 +170,7 @@ export const NewEditTeam = ({ isEdit, currentMember }) => {
           <LoadingButton type="submit" variant="contained">
               {'Cancelar'}
           </LoadingButton>
-          <LoadingButton onClick={ () => handleClickItem( "/team/configTeam" ) } type="submit" variant="outlined">
+          <LoadingButton type="submit" variant="outlined">
               {'Siguiente'}
           </LoadingButton>
       </Stack>
