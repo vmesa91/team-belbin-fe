@@ -4,6 +4,7 @@ import { MenuPopover } from "../../../common/components/MenuPopover/MenuPopover"
 import { useState } from "react"
 import { ConfirmDialog } from "../../../common/components/ConfirmDialog/ConfirmDialog"
 import { summaryOptions } from "../../../common/utils/summaryOptions"
+import { CustomAvatar } from "../../../common/components/CustomAvatar/CustomAvatar"
 
 
 export const ProfileTableRow = ({
@@ -15,7 +16,6 @@ export const ProfileTableRow = ({
 }) => {
 
   const { members, name, roles, tools, id } = row
-
 
   const [openConfirm, setOpenConfirm] = useState(false)
 
@@ -46,16 +46,16 @@ export const ProfileTableRow = ({
 
         <TableCell>
         <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar alt={name} />
+            <CustomAvatar name={name} />
             <Typography variant="subtitle2" color="common.blue" noWrap>
               {name}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left"> { summaryOptions(roles) } </TableCell>
-        <TableCell align="left"> { summaryOptions(members) }  </TableCell>
-        <TableCell align="left">{ summaryOptions(tools) }</TableCell>
+        <TableCell align="left"> { summaryOptions('roles', roles) } </TableCell>
+        <TableCell align="left"> { summaryOptions('members', members) }  </TableCell>
+        <TableCell align="left">{ summaryOptions('tools', tools) }</TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

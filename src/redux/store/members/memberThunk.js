@@ -19,32 +19,32 @@ export const createMember = ( value ) => {
     return async( dispatch, getState ) => {
         
         const { memberStore } = getState()
-        const { user, profiles, knowledges, expertise, colleagues, belbinRol, language} = value
+        const { user, profile, knowledges, expertise, colleagues, belbinRol, language} = value
         try {
 
               // To dispatch
             const { members } = memberStore
             const actualState = members
 
-            const data = {
+            const newData = {
                 user,
-                profiles: getID(profiles),
+                profile: profile._id,
                 belbinRol: getID(belbinRol),
                 expertise,
                 colleagues,
                 knowledges: getID(knowledges),
-                language: getID(language)
+                language: language
             }
             
-
-            const resp = await api.post('/member' , data)
-            const newState = [ ...actualState,  { ...data, id: resp.data.uid} ]
- 
+            const { data } = await api.post('/member' , newData)
+            
+            const newState = [ ...actualState,  data.member ]
+        
             dispatch(onSetMember ( { type: 'members' , value : newState  } ))
 
         } catch(error){
             console.log(error)
-        }
+        } 
 
     }
 } 
@@ -59,11 +59,11 @@ export const deleteMember = (value) => {
         let actualState = memberStore.members
         let newState = []
 
-        newState = actualState.filter( (row) => !value.includes(row.id))
+        newState = actualState.filter( (row) => !value.includes(row._id))
 
         try {
             const rest = await api.delete(`/member/${value}`)
-            console.log(rest)
+    
             dispatch(onSetMember ( { type: 'members' , value : newState  } ))
         } catch ( error ) {
             dispatch(onSetMember ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
@@ -79,7 +79,7 @@ export const deleteMembers = (value) => {
         let actualState = memberStore.members
         let newState = []
 
-        newState = actualState.filter( (row) => !value.includes(row.id))
+        newState = actualState.filter( (row) => !value.includes(row._id))
 
         try {
             value.map((val) => { api.delete(`/member/${val}`)} )
@@ -93,4 +93,4 @@ export const deleteMembers = (value) => {
 
 
 // Extract ID
-const getID = ( list ) => list.map( li => li.id ) 
+const getID = ( list ) => list.map( li => li._id )

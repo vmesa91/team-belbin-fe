@@ -47,7 +47,7 @@ import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBre
 // UTILS Methods
 import { getComparator } from '../../common/utils/comparatorMethods'
 import { applySortFilter } from '../../common/utils/filterMethods'
-import {  applyFilter } from '../utils/applyFilter'
+import {  applyFilter } from '../utils/applyTableFilter'
 import { useTable } from '../../hooks/useTable';
 import { TeamTableToolbar } from '../sections/table/TeamTableToolbar';
 import { TableSelectedAction } from '../../common/sections/table/TableSelectedAction';
@@ -93,7 +93,6 @@ export function TableTeamsPage() {
 
   const dataFiltered = applyFilter({
     inputData: tableData,
-    comparator: getComparator(order, orderBy),
     filterName,
     filterProfile,
     filterMember,
@@ -146,7 +145,7 @@ export function TableTeamsPage() {
   }
 
   const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
+    const deleteRow = tableData.filter((row) => row._id !== id);
     setSelected([]);
     setTableData(deleteRow);
 
@@ -158,7 +157,7 @@ export function TableTeamsPage() {
   }
 
   const handleDeleteRows = (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
+    const deleteRows = tableData.filter((row) => !selectedRows.includes(row._id));
     setSelected([]);
     setTableData(deleteRows);
 
@@ -247,7 +246,7 @@ export function TableTeamsPage() {
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,
-                        tableData.map((row) => row.id)
+                        tableData.map((row) => row._id)
                       )
                     }
                     action={
@@ -272,7 +271,7 @@ export function TableTeamsPage() {
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,
-                        tableData.map((row) => row.id)
+                        tableData.map((row) => row._id)
                       )
                     }
                   />
@@ -283,13 +282,13 @@ export function TableTeamsPage() {
                        .slice( page * rowsPerPage, page * rowsPerPage + rowsPerPage )
                        .map( (row) => (
                           <TeamTableRow 
-                              key={row.id}
+                              key={row._id}
                               row={row}
-                              selected={selected.includes(row.id)}
-                              onSelectRow={() => onSelectRow(row.id)}
-                              onViewRow={() => handleViewRow(row.id)}
-                              onEditRow={() => handleEditRow(row.id)}
-                              onDeleteRow={() => handleDeleteRow(row.id)}
+                              selected={selected.includes(row._id)}
+                              onSelectRow={() => onSelectRow(row._id)}
+                              onViewRow={() => handleViewRow(row._id)}
+                              onEditRow={() => handleEditRow(row._id)}
+                              onDeleteRow={() => handleDeleteRow(row._id)}
                           />
                        ))
                     }

@@ -32,15 +32,16 @@ export const createProfile = ( value ) => {
             const idRoles = rolesNewValue.map( (role) => searchID( role , rolesStore ))
             const idTools = toolsNewValue.map( (tool) => searchID( tool , toolsStore ))
 
-            const data = {
+            const newData = {
                 name: value.name,
                 description: value.description,
                 roles: idRoles,
                 tools: idTools
             }
 
-            const resp = await api.post('/profile' , data)
-            const newState = [ ...actualState,  { ...data, id: resp.data.uid} ]
+            const { data } = await api.post('/profile' , newData)
+
+            const newState = [ ...actualState,  data.profile ]
  
             dispatch(onSetProfile ( { type: 'profiles' , value : newState  } ))
 
@@ -64,7 +65,7 @@ export const deleteProfile = ( value ) => {
         let actualState = profileStore.profiles
         let newState = []
 
-        newState = actualState.filter( (row) => !value.includes(row.id))
+        newState = actualState.filter( (row) => !value.includes(row._id))
 
         try {
             await api.delete(`/profile/${value}`)
@@ -85,7 +86,7 @@ export const deleteProfiles = ( value ) => {
         let actualState = profileStore.profiles
         let newState = []
 
-        newState = actualState.filter( (row) => !value.includes(row.id))
+        newState = actualState.filter( (row) => !value.includes(row._id))
 
         try {
             value.map((val) => { api.delete(`/profile/${val}`)} )
@@ -102,6 +103,6 @@ export const deleteProfiles = ( value ) => {
 // ***  Methods to get ID 
 
 const searchID = ( value , store  ) => {
-    const { id } = store.find( data => data.name === value )
-    return id;
+    const { _id } = store.find( data => data.name === value )
+    return _id;
 }

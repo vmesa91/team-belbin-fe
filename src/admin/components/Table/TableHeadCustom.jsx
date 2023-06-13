@@ -40,24 +40,24 @@ export const TableHeadCustom = ({
 
           {headLabel.map((headCell) => (
             <TableCell 
-                key={headCell.id}
+                key={headCell._id}
                 align={headCell.align || 'left'}
-                sortDirection={orderBy === headCell.id ? order : false}
+                sortDirection={orderBy === headCell._id ? order : false}
                 sx={{ width: headCell.width, minWidth: headCell.minWidth }}
                 colSpan={3}
             >
               { onSort ? (
                 <TableSortLabel
                 hideSortIcon
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : 'asc'}
-                onClick={() => onSort(headCell.id)}
+                active={orderBy === headCell._id}
+                direction={orderBy === headCell._id ? order : 'asc'}
+                onClick={() => onSort(headCell._id)}
                 
                 sx={{ textTransform: 'capitalize', paddingRight: '29px'}}
                 >
                   {headCell.label}
 
-                  {orderBy === headCell.id ? (
+                  {orderBy === headCell._id ? (
                   <Box sx={{ ...visuallyHidden }}>
                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                   </Box>

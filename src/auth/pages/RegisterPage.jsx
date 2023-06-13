@@ -16,12 +16,12 @@ export const RegisterPage = () => {
   const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
 
-  const { errorMessage } = useSelector( state => state.auth )
+  const { errorMessage } = useSelector( state => state.authStore )
 
   const dispatch = useDispatch()
 
   useEffect(() => {
-    if (errorMessage !== undefined) {
+    if ( errorMessage !== undefined ) {
 
       reset()
       setError('afterSubmit', {
@@ -30,12 +30,12 @@ export const RegisterPage = () => {
       
     }
 
-    console.log(errors)
+
   }, [errorMessage])
 
   const defaultValues = {
     name: '',
-    surmame: '',
+    surname: '',
     email: '',
     password: ''
   }

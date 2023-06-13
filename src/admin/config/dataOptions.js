@@ -1,6 +1,6 @@
 export const dataOptions = [
-    { id: 1, name: 'rol' , label: 'Rol' },
-    { id: 2, name: 'knowledge', label: 'Conocimiento' },
-    { id: 3, name: 'technology', label: 'Tecnología' }
+    { _id: 1, name: 'rol' , label: 'Rol' },
+    { _id: 2, name: 'knowledge', label: 'Conocimiento' },
+    { _id: 3, name: 'technology', label: 'Tecnología' }
 
   ];

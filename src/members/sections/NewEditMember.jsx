@@ -1,6 +1,6 @@
 
 // @mui
-import { Card, Container, Divider, MenuItem, Select, Stack, TextField, Typography } from "@mui/material"
+import { Autocomplete, Card, Container, Divider, MenuItem, Select, Stack, TextField, Typography } from "@mui/material"
 
 // Config
 import { dataRolesBelbin } from '../config/configTableMembers'
@@ -14,9 +14,10 @@ import { CustomSelect } from "../../common/components/Form/CustomSelect";
 import { ScoreColleagues } from "../sections/score/ScoreColleagues";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PATH_MEMBER } from "../../home/routes/paths"
 import { createMember } from "../../redux/store/members/memberThunk";
+import { filterMembersList } from "../utils/filterMembersList";
 
 export const NewEditMember = ({ isEdit=false , currentMember }) => {
    
@@ -26,7 +27,7 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
     const defaultValues = useMemo(
         () => ({
           user: currentMember?.user || '',
-          profiles: currentMember?.profiles || [],
+          profile: currentMember?.profile || null,
           expertise: currentMember?.expertise || [],
           colleagues: currentMember?.colleagues || [],
           knowledges: currentMember?.knowledges || [],
@@ -41,11 +42,16 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
     const { users } = useSelector( state => state.userStore )
     const { tools, knowledges } = useSelector( state => state.dataStore )
     const { profiles } = useSelector( state => state.profileStore )
+    const { members } = useSelector( state => state.memberStore )
     
+    
+    const [listTools, setListTools] = useState(tools)
   
     const { reset, watch, setValue, handleSubmit , formState: { isSubmitting } } = methodsForm
   
     const values = watch()
+
+    const filterListmember = filterMembersList(members)
 
     useEffect(() => {
         if (isEdit && currentMember) {
@@ -55,6 +61,15 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
           reset(defaultValues);
         }
       }, [isEdit, currentMember]) 
+
+
+    useEffect(() => {
+    if (values?.profile != null) {
+        const profile = profiles.find( (profile) => profile._id === values.profile._id)
+        setListTools( profile.tools )
+      } 
+      }, [values.profile]) 
+
 
     const onSubmit = (data) => {
       reset();
@@ -75,8 +90,9 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
                 label="Selecciona un usuario activo" sx={{ width: '450px' }}>
                 <option value="" />
                     {users.map((usr) => (
-                    <option key={usr.id} label={usr.name + ' ' +  usr.surname}>{usr.id}</option>
-                    ))}
+                      <option key={usr._id} label={usr.name + ' ' +  usr.surname} disabled={ filterListmember.find( fl => fl._id === usr._id ) ? true : false }>{usr._id}</option>
+                    )
+                )}
             </CustomSelect>
         </Stack>
 
@@ -91,52 +107,54 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
                 }
                 sx={{ p: 2 }}>
                 <Stack sx={{ width: 1 }}>
-                <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
-                    <Typography variant="title" sx={{ color: 'text.secondary' }}>
-                            Añadir Perfil/es
-                    </Typography>
-                    < CustomAutocomplete
-                        name="profiles"
-                        label="Selecciona uno o varios perfiles"
-                        multiple
-                        options={profiles}
-                        getOptionLabel={(option) => option.name}
-                        sx={{ width: '350px' }}
-                    />
-                </Stack>
+                  <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
+                      <Typography variant="title" sx={{ color: 'text.secondary' }}>
+                              Añadir Perfil
+                      </Typography>
+                      <CustomAutocomplete
+                              name="profile"
+                              label="Selecciona un perfil"
+                              options={profiles}
+                              getOptionLabel={(option)=>(option.name?option.name:'')}
+                              isOptionEqualToValue={(option, value) => option._id === value._id}
+                              sx={{ width: '350px' }}
+                          />
+                  </Stack>
                 </Stack> 
 
                 <Stack sx={{ width: 1 }}>
                     <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
                         <Typography variant="title" sx={{ color: 'text.secondary' }}>
-                        Añadir Conocimiento/s
+                            Añadir Conocimiento/s
                         </Typography>
-                        < CustomAutocomplete
-                        name="knowledges"
-                        label="Selecciona uno o varios conocimientos"
-                        multiple
-                        options={knowledges}
-                        getOptionLabel={(option) => option.name}
-                        sx={{ width: '350px' }}
+                        <CustomAutocomplete
+                            name="knowledges"
+                            label="Selecciona uno o varios conocimientos"
+                            multiple
+                            options={knowledges}
+                            getOptionLabel={(option)=>(option.name?option.name:'')}
+                            isOptionEqualToValue={(option, value) => option._id === value._id}
+                            sx={{ width: '350px' }}
                         />
                     </Stack>
                 </Stack> 
         </Stack> 
 
-        < ScoreTools tools={tools}/>
+        < ScoreTools tools={listTools} />
         
         <Stack sx={{ p: 3 , m: 4 , display: 'flex' , flexDirection: 'row' ,  justifyContent: 'space-around'}}>
             <Typography variant="title" sx={{ color: 'text.secondary' }}>
                     Añadir Roles de Belbin
             </Typography>
             < CustomAutocomplete
-            name="belbinRol"
-            label="Selecciona uno o varios roles"
-            multiple
-            options={dataRolesBelbin}
-            getOptionLabel={(option) => option.name}
-            groupBy={ ( option ) => option.group }
-            sx={{ width: '450px' }}
+                name="belbinRol"
+                label="Selecciona uno o varios roles"
+                multiple
+                options={dataRolesBelbin }
+                getOptionLabel={(option)=>(option.name?option.name:'')}
+                isOptionEqualToValue={(option, value) => option._id === value._id}
+                groupBy={ ( option ) => option.group }
+                sx={{ width: '450px' }}
             />
         </Stack>
 
@@ -147,12 +165,13 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
                     Añadir Idioma/s
             </Typography>
             < CustomAutocomplete
-            name="language"
-            label="Selecciona uno o varios idiomas"
-            multiple
-            options={dataCountries}
-            getOptionLabel={(option) => option.name}
-            sx={{ width: '450px' }}
+                name="language"
+                label="Selecciona uno o varios idiomas"
+                filterSelectedOptions
+                multiple
+                options={dataCountries}
+                getOptionLabel={(option)=>(option.name?option.name:'')}
+                sx={{ width: '450px' }}
             />
         </Stack>
     </Card>

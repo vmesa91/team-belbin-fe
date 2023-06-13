@@ -14,7 +14,7 @@ import {
   FormHelperText,
 } from '@mui/material';
 
-export const CustomSelect = ({ name, native, children, helperText, maxHeight = 220, ...other }) => {
+export const CustomSelect = ({ name, native, children, helperText, maxHeight = 400, ...other }) => {
 
   const { control } = useFormContext();
 
@@ -34,7 +34,7 @@ export const CustomSelect = ({ name, native, children, helperText, maxHeight = 2
                     sx: {
                         ...(!native && {
                         px: 1,
-                        maxHeight: maxHeight === 'number' ? maxHeight : 'unset',
+                        maxHeight: maxHeight ,
                         '& .MuiMenuItem-root': {
                             px: 1,
                             borderRadius: 0.75,

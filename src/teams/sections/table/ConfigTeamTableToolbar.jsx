@@ -6,9 +6,6 @@ import { Iconify } from '../../../common/components/Iconify/Iconify'
 export const ConfigTeamTableToolbar = ({
     filterName,
     filterSympathy,
-    filterRole,
-    filterKnowledge,
-    filterTool,
     onFilterByName,
     optionsRoles,
     optionsKnowledges,
@@ -46,10 +43,10 @@ export const ConfigTeamTableToolbar = ({
         freeSolo
         readOnly
         options={optionsRoles}
-        defaultValue={optionsRoles.map((role) => role.name)}
+        defaultValue={optionsRoles.map((rol) => rol.name)}
         sx={{ maxHeight: 120 , width: '500px'}}
         renderInput={(params) => (
-          <TextField {...params} label="Perfiles" placeholder="Perfiles" sx={{textTransform: 'capitalize'}}/>
+          <TextField {...params} label="Roles" placeholder="Roles" sx={{textTransform: 'capitalize'}}/>
         )}
       />
       <Autocomplete

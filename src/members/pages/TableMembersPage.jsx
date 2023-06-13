@@ -145,7 +145,7 @@ export function TableMembersPage() {
   }
 
   const handleDeleteRow = (id) => {
-    const deleteRow = tableData.filter((row) => row.id !== id);
+    const deleteRow = tableData.filter((row) => row._id !== id);
     setSelected([]);
     dispatch( deleteMember( id ) )
     setTableData(deleteRow);
@@ -158,7 +158,7 @@ export function TableMembersPage() {
   }
 
   const handleDeleteRows = (selectedRows) => {
-    const deleteRows = tableData.filter((row) => !selectedRows.includes(row.id));
+    const deleteRows = tableData.filter((row) => !selectedRows.includes(row._id));
     setSelected([]);
     dispatch( deleteMembers( selectedRows ) )
     setTableData(deleteRows);
@@ -234,7 +234,7 @@ export function TableMembersPage() {
             onFilterByName={handleFilterByName}
             onFilterByProfile={handleFilterByProfile}
             onFilterByTeam={handleFilterByTeam}
-            onFilterLanguage={handleFilterByLanguage}
+            onFilterByLanguage={handleFilterByLanguage}
             onResetFilter={handleResetFilter}
             optionsProfiles={profiles}
             optionsTeams={teams}
@@ -248,7 +248,7 @@ export function TableMembersPage() {
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,
-                        tableData.map((row) => row.id)
+                        tableData.map((row) => row._id)
                       )
                     }
                     action={
@@ -270,7 +270,7 @@ export function TableMembersPage() {
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,
-                        tableData.map((row) => row.id)
+                        tableData.map((row) => row._id)
                       )
                     }
                   /> 
@@ -281,13 +281,13 @@ export function TableMembersPage() {
                        .slice( page * rowsPerPage, page * rowsPerPage + rowsPerPage )
                        .map( (row) => (
                           <MemberTableRow 
-                              key={row.id}
+                              key={row._id}
                               row={row}
-                              selected={selected.includes(row.id)}
-                              onSelectRow={() => onSelectRow(row.id)}
-                              onViewRow={() => handleViewRow(row.id)}
-                              onEditRow={() => handleEditRow(row.id)}
-                              onDeleteRow={() => handleDeleteRow(row.id)}
+                              selected={selected.includes(row._id)}
+                              onSelectRow={() => onSelectRow(row._id)}
+                              onViewRow={() => handleViewRow(row._id)}
+                              onEditRow={() => handleEditRow(row._id)}
+                              onDeleteRow={() => handleDeleteRow(row._id)}
                           />
                        ))
                     }

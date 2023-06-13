@@ -57,12 +57,6 @@ export const NewEditTeam = ({ isEdit, currentTeam }) => {
     dispatch( configureTeam( data ) )
     navigate(PATH_TEAM.configTeam)
   }
-
-
-
-  const handleClickTeamLead = (data) => {
-    console.log(data)
-}
   
   return (
 
@@ -107,9 +101,9 @@ export const NewEditTeam = ({ isEdit, currentTeam }) => {
                         >
                         {members.map((member) => (
                             <MenuItem
-                                key={member.user._id}
-                                value={member.user._id}
-                                onClick={handleClickTeamLead}
+                                key={member._id}
+                                value={member._id}
+            
                             >
                                 { member.user.name + ' ' + member.user.surname }
                             </MenuItem>

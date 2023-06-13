@@ -4,7 +4,6 @@ import { MenuPopover } from "../../../common/components/MenuPopover/MenuPopover"
 import { useState } from "react"
 import { ConfirmDialog } from "../../../common/components/ConfirmDialog/ConfirmDialog"
 
-
 export const TeamTableRow = ({
     row,
     selected,
@@ -45,7 +44,7 @@ export const TeamTableRow = ({
 
         <TableCell>
         <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar name={name} />
+            <Iconify width={40} icon="flat-color-icons:opened-folder"/>
 
             <div>
               <Link

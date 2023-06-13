@@ -1,19 +1,19 @@
 
 export const dataTableConfigTeam = 
     [
-        { id: 'members', label: 'Nombre y Apellido', align: 'center' },
-        { id: 'roles', label: 'Roles', align: 'center' },
-        { id: 'teams', label: 'Equipos', align: 'center' },
-        { id: 'language', label: 'Idiomas', align: 'center' },
-        { id: '' }
+        { _id: 'members', label: 'Nombre y Apellido', align: 'center' },
+        { _id: 'profiles', label: 'Perfiles', align: 'center' },
+        { _id: 'teams', label: 'Equipos', align: 'center' },
+        { _id: 'language', label: 'Idiomas', align: 'center' },
+        { _id: '' }
     ]
 
 
 export const dataTableTeams = 
     [
-        { id: 'team', label: 'Equipo', align: 'center' },
-        { id: 'profile', label: 'Perfiles', align: 'center' },
-        { id: 'member', label: 'Miembros', align: 'center' },
-        { id: 'language', label: 'Idiomas', align: 'center' },
-        { id: '' }
+        { _id: 'team', label: 'Equipo', align: 'center' },
+        { _id: 'profile', label: 'Perfiles', align: 'center' },
+        { _id: 'member', label: 'Miembros', align: 'center' },
+        { _id: 'language', label: 'Idiomas', align: 'center' },
+        { _id: '' }
     ]

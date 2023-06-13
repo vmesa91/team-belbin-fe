@@ -30,7 +30,6 @@ export const LoginPage = () => {
       
     }
 
-    console.log(errors)
   }, [errorMessage])
   
 

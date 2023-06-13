@@ -14,6 +14,7 @@ export const getTeams = () => {
 }
 
 export const configureTeam = ( value ) => {
+    console.log("🚀 ~ file: teamThunk.js:17 ~ configureTeam ~ value:", value)
 
     return ( dispatch ) => {
            
@@ -30,6 +31,25 @@ export const configureTeam = ( value ) => {
         dispatch( onSetTeam( { type: 'configureTeam' , value  } ))
 
     }
+}
+
+export const addMembersConfigureTeam = ( value ) => {
+
+    return ( dispatch, getState ) => {
+        
+        const { teamStore } = getState()
+        
+        const { configureTeam } = teamStore
+
+        const actualState = {
+            ...configureTeam,
+            members: value
+        }
+
+        dispatch( onSetTeam( { type: 'configureTeam' , value: actualState  } ))
+    
+    }
+
 }
 
 export const createTeam = ( value ) => {
@@ -55,4 +75,4 @@ export const createTeam = ( value ) => {
 }
 
 // Extract ID
-const getID = ( list ) => list.map( li => li.id )
+const getID = ( list ) => list.map( li => li._id )

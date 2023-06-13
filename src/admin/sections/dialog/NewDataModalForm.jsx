@@ -51,7 +51,7 @@ export const NewDataModalForm = ({ onCancel }) => {
                 sx={{ maxWidth: { md: 160 } }}>
                 {dataOptions.map((option) => (
                     <MenuItem
-                    key={option.id}
+                    key={option._id}
                     value={option.label}
                     >
                       {option.label}

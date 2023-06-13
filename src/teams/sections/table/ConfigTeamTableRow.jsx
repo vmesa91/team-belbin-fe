@@ -15,7 +15,7 @@ export const ConfigTeamTableRow = ({
     onDeleteRow,
 }) => {
 
-  const { user, profiles, expertise, colleagues, knowledges, language, belbinRol, team } = row
+  const { user, profile, expertise, colleagues, knowledges, language, belbinRol, team } = row
 
   const [openConfirm, setOpenConfirm] = useState(false)
 
@@ -46,7 +46,7 @@ export const ConfigTeamTableRow = ({
 
         <TableCell>
         <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar name={user.name} />
+            <Avatar name={user.name} src={user.image}/>
 
             <div>
               <Link
@@ -61,9 +61,9 @@ export const ConfigTeamTableRow = ({
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{summaryOptions( profiles )}</TableCell>
-        <TableCell align="left">{summaryOptions( team )}</TableCell>
-        <TableCell align="left">{summaryOptions( language )}</TableCell>
+        <TableCell align="left">{summaryOptions( 'profile', profile )}</TableCell>
+        <TableCell align="left">{summaryOptions( 'team', team )}</TableCell>
+        <TableCell align="left">{summaryOptions( 'language', language )}</TableCell>
       </TableRow>
 
    </>

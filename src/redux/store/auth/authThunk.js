@@ -1,5 +1,6 @@
 import api from "../../../api/config"
 import { useApi } from "../../../api/hooks/useApi"
+import { sessionActive } from "../../../api/utils/sessionActive"
 import { onSetAuth } from "./authSlice"
 
 
@@ -9,21 +10,20 @@ export const login = ( value ) => {
 
         dispatch(onSetAuth ( { type: 'status' , value: 'checking' } ))
         try {
-            //const { data } = await useApiWithToken( POST , value , '/auth')
 
             const { data } = await api.post( '/auth' , value)
-            
+
             const user = { 
                     name: data.name,
                     surname: data.surname,
                     email: data.email,
-                    uid: data.uid
+                    uid: data.uid,
+                    image: data.image
                 } 
         
             dispatch(onSetAuth ( { type: 'status' , value: 'authorized' } ))
             dispatch(onSetAuth ( { type: 'user' , value: user } ))
-            localStorage.setItem('token',  data.token)
-            localStorage.setItem('token-init-date',  new Date().getTime())
+            sessionActive( 'login' , data )
         }
         catch (error) {
             dispatch(onSetAuth ( { type: 'status' , value: 'not-authorized' } ))
@@ -53,13 +53,13 @@ export const register = (value) => {
                 name: data.name,
                 surname: data.surname,
                 email: data.email,
-                uid: data.uid
+                uid: data.uid,
+                image: data.image
             } 
 
             dispatch(onSetAuth ( { type: 'status' , value: 'authorized' } ))
             dispatch(onSetAuth ( { type: 'user' , value: user } ))
-            localStorage.setItem('token',  data.token)
-            localStorage.setItem('token-init-date',  new Date().getTime())
+            sessionActive( 'register' , data )
         }
         catch (error) {
             dispatch(onSetAuth ( { type: 'status' , value: 'not-authorized' } ))
@@ -73,7 +73,7 @@ export const checkAuthToken = () => {
 
     const token = localStorage.getItem('token')
 
-    return async (dispatch) => {
+    return async ( dispatch ) => {
         
         if (!token) return
         {
@@ -82,19 +82,22 @@ export const checkAuthToken = () => {
         }
 
         try{
-            const { data } = await api.get('/auth/refreshToken')
 
             const user = { 
-                name: data.name,
-                surname: data.surname,
-                email: data.email,
-                uid: data.uid
-            }
+                name: localStorage.getItem('name'),
+                surname: localStorage.getItem('surname'),
+                email: localStorage.getItem('email'),
+                uid: localStorage.getItem('uid'),
+                image:localStorage.getItem('image')
+            } 
+
+            const { data } = await api.get('/auth/refreshToken')
+
             localStorage.setItem('token' , data.token)
+
             dispatch(onSetAuth ( { type: 'status' , value: 'authorized' } ))
             dispatch(onSetAuth ( { type: 'user' , value: user } ))
-            localStorage.setItem('token',  data.token)
-            localStorage.setItem('token-init-date',  new Date().getTime())
+            sessionActive( 'refreshToken' , data )
         } 
         catch (error){
             localStorage.clear()

@@ -7,16 +7,15 @@ import { CustomSelect } from '../../../common/components/Form/CustomSelect';
 // mocks
 import { members } from '../../../_mock/dataMembers'
 import { CustomRating } from '../../../common/components/Rating/CustomRating';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { filterMembersList } from '../../utils/filterMembersList';
 
 
 export const ScoreColleagues = ( { users } ) => {
 
 
-    const [ newUsers, setNewUser ] = useState(users)
-    const [ selectUsers, setSelecetUsers ] = useState([])
-
     const { control, setValue, watch, resetField } = useFormContext();
+
 
     const { fields, append, remove } = useFieldArray({
       control,
@@ -24,6 +23,8 @@ export const ScoreColleagues = ( { users } ) => {
     });
 
     const values = watch();
+
+    const [listUser, setlistUser] = useState([values.colleagues])
 
     const handleAdd = () => {
          append({
@@ -46,31 +47,25 @@ export const ScoreColleagues = ( { users } ) => {
     
     const handleSelectColleague = useCallback(
         (index, option) => {
-            let updatedUsers = [...newUsers]
-            let selectedUser = updatedUsers.find(user => user.id === option)
-            selectedUser = { ...selectedUser, rating: 0 } // rating initial set to 0
-    
-            const selectedIndex = updatedUsers.findIndex(user => option === user.id)
-            updatedUsers.splice(selectedIndex,1)
-    
-            setNewUser(updatedUsers)
-            setSelecetUsers([...selectUsers, selectedUser])
-    
-            setValue(`colleagues[${index}].user`, selectedUser);
+            const user = users.find(user => user._id === option._id)
+            setValue(`colleagues[${index}].user`, 
+            user
+            );
         },
-        [setValue, newUsers, selectUsers]
+        [setValue, values.colleagues]
     );
+
+    useEffect(() => {
+        setlistUser(values.colleagues)
+    }, [values.colleagues])
+    
 
     const handleSelectScore = useCallback(
         (index, { target }) => {
-            const selectedUsersCopy = [...selectUsers];
-            selectedUsersCopy[index].rating = target.value;
-    
-            setSelecetUsers(selectedUsersCopy);
-    
-            setValue(`colleagues[${index}].score`, target.value);
+            setValue(`colleagues[${index}].score`,
+             target.value);
         },
-        [setValue, selectUsers]
+        [setValue, values.colleagues]
     );
       
     return (
@@ -83,14 +78,14 @@ export const ScoreColleagues = ( { users } ) => {
 
         <Stack divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={3}>
             { fields.map((item, index) => (
-                <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
+                <Stack key={item._id} alignItems="flex-end" spacing={1.5}>
                     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
                         <CustomSelect
                             name={`colleagues[${index}].user`}
                             size="small"
                             label="Añade una red de compañeros/as"
                             InputLabelProps={{ shrink: true }}
-                            sx={{ maxWidth: { md: 160 } }}
+                            sx={{ minWidth: { md: 160 } , maxHeight: {md: 30} }}
                         >
                                 <MenuItem
                                     value=""
@@ -102,15 +97,18 @@ export const ScoreColleagues = ( { users } ) => {
 
                                 <Divider />
 
-                                {users.map((user) => (
+                                {users.map((user) =>
+                                 (
                                     <MenuItem
-                                        key={user.id}
-                                        value={user.id}
-                                        onClick={() => handleSelectColleague(index, user.id)}
+                                        key={user._id}
+                                        value={user._id}
+                                        disabled={ listUser.find( fl => fl.user === user._id ) ? true : false }
+                                        onClick={() => handleSelectColleague(index, user)}
                                     >
                                         {user.name + ' ' + user.surname}
                                     </MenuItem>
-                                ))}
+                                )
+                                )}
 
                         </CustomSelect>
 

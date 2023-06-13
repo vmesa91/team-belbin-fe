@@ -61,7 +61,7 @@ export const TeamCarouselMembers = ({ title, subheader, list, sx, ...other }) =>
 
         <Carousel ref={carouselRef} {...carouselSettings}>
             {list.map((item) => (
-            <CarouselItem key={item.id} item={item} />
+            <CarouselItem key={item._id} item={item} />
             ))}
       </Carousel>
      </Card>
@@ -72,23 +72,30 @@ export const TeamCarouselMembers = ({ title, subheader, list, sx, ...other }) =>
 
 const CarouselItem = ({ item }) => {
 
-    const { avatarUrl, expertise, name, language, profile } = item;
+    const { user , profiles , belbinRol } = item;
+    const { name , surname } = user
 
     return (
         <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
             <Stack spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
                 <Stack direction="row" alignItems="center" spacing={2}>
 
-                        <Avatar src={avatarUrl} alt="photoURL"/>
+                        <Avatar src={'avatarURL'} alt="photoURL"/>
                         
                         <div>
-                            <Typography variant="subtitle2">{name}</Typography>
+                            <Typography variant="subtitle2">{name + ' ' + surname}</Typography>
 
                             <Typography
                             variant="caption"
                             sx={{ color: 'text.disabled', mt: 0.5, display: 'block' }}
                             >
-                                {profile}
+                                {profiles[0].name}
+                            </Typography>
+                            <Typography
+                            variant="caption"
+                            sx={{ color: 'text.disabled', mt: 0.5, display: 'block' }}
+                            >
+                                {belbinRol[0]}
                             </Typography>
                         </div>
                 </Stack>

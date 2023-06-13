@@ -44,7 +44,7 @@ export const MemberTableToolbar = ({
       <Autocomplete
         multiple
         limitTags={3}
-        id="profiles"
+        id="profile"
         filterSelectedOptions
         onChange={onFilterByProfile}
         options={optionsProfiles}
@@ -72,7 +72,7 @@ export const MemberTableToolbar = ({
       <Autocomplete
         multiple
         limitTags={3}
-        id="languages"
+        id="language"
         filterSelectedOptions
         onChange={onFilterByLanguage}
         options={optionsLanguages}

@@ -64,7 +64,7 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
 
   const handleDeleteRow = (id) => {
 
-    const deleteRow = tableData.filter((row) => row.id !== id);
+    const deleteRow = tableData.filter((row) => row._id !== id);
     setSelected([]);
     dispatch( deleteData( deleteRow , typeData ) )
     setTableData(deleteRow)
@@ -78,7 +78,7 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
 
   const handleDeleteRows = (selectedRows) => {
     
-    const deleteRows = tableData.filter((row) => selectedRows.includes(row.id));
+    const deleteRows = tableData.filter((row) => selectedRows.includes(row._id));
     setSelected([]);
     dispatch( deleteData( deleteRows , typeData ) )
     setTableData(deleteRows)
@@ -128,7 +128,7 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
                     onSelectAllRows={(checked) =>
                     onSelectAllRows(
                         checked,
-                        tableData.map((row) => row.id)
+                        tableData.map((row) => row._id)
                     )
                     }
                     action={
@@ -150,7 +150,7 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
                         onSelectAllRows={(checked) =>
                             onSelectAllRows(
                             checked,
-                            tableData.map((row) => row.id)
+                            tableData.map((row) => row._id)
                             )
                         }
                     />
@@ -162,11 +162,11 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
                             .map((row, index) => (
                             row ? (
                                 <DataTableRow 
-                                    key={row.id}
+                                    key={row._id}
                                     row={row}
-                                    selected={selected.includes(row.id)}
-                                    onSelectRow={() => onSelectRow(row.id)}
-                                    onDeleteRow={() => handleDeleteRow(row.id)}
+                                    selected={selected.includes(row._id)}
+                                    onSelectRow={() => onSelectRow(row._id)}
+                                    onDeleteRow={() => handleDeleteRow(row._id)}
                                 />
                             ) : (
                                 !isNotFound && <TableSkeleton key={index} sx={{ height: 60 }} />

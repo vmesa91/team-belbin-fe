@@ -5,22 +5,32 @@ import { Stack, Button, Divider, Typography, InputAdornment, MenuItem, Rating } 
 import { Iconify } from '../../../common/components/Iconify/Iconify'
 import { CustomSelect } from '../../../common/components/Form/CustomSelect';
 // mocks
-import { dataTechnologies } from '../../../_mock/dataTechnologies'
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 
 export const ScoreTools = ( { tools } ) => {
 
 
     const { control, setValue, watch, resetField } = useFormContext();
+    const [disabledTools, setDisabledTools] = useState([''])
 
     const { fields, append, remove } = useFieldArray({
       control,
       name: 'expertise',
     });
 
-
     const values = watch();
+
+    const [listTool, setlistTool] = useState([values.expertise])
+    
+    useEffect(() => {
+        if (values.expertise.length > 0) {
+            values.expertise.map( ( exp ) => {
+                const { tool } = exp
+                setDisabledTools( [...disabledTools], tool )
+            } )
+        }
+        }, [values.expertise]) 
 
     const handleAdd = () => {
          append({
@@ -43,13 +53,18 @@ export const ScoreTools = ( { tools } ) => {
     
     const handleSelectTecnology = useCallback(
         (index, option) => {
+            const tool = tools.find((tool) => tool.name === option.name)
           setValue(
             `expertise[${index}].tool`,
-            tools.find((tool) => tool.name === option)
+            tool
           );
         },
-        [setValue, values.tools]
+        [setValue, values.expertise]
       );
+
+    useEffect(() => {
+        setlistTool(values.expertise)
+    }, [values.expertise])
 
     const handleSelectScore = useCallback(
         ( index, { target } ) => {
@@ -58,7 +73,7 @@ export const ScoreTools = ( { tools } ) => {
                 target.value
             ); 
         },
-        [setValue, values.tools]
+        [setValue, values.expertise]
     );
     
       
@@ -72,17 +87,18 @@ export const ScoreTools = ( { tools } ) => {
 
         <Stack divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={3}>
             { fields.map((item, index) => (
-                <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
+                <Stack key={item._id} alignItems="flex-end" spacing={1.5}>
                     <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
                         <CustomSelect
                             name={`expertise[${index}].tool`}
                             size="small"
                             label="Selecciona una o varias tecnologías"
                             InputLabelProps={{ shrink: true }}
-                            sx={{ maxWidth: { md: 160 } }}
-                        >
+                            sx={{ minWidth: { md: 160 } }}
+                            >
                                 <MenuItem
-                                    value=""
+                                    key={0}
+                                    value="None"
                                     onClick={() => handleClearTecnology(index)}
                                     sx={{ fontStyle: 'italic', color: 'text.secondary' }}
                                 >
@@ -93,9 +109,10 @@ export const ScoreTools = ( { tools } ) => {
 
                                 {tools.map((tool) => (
                                     <MenuItem
-                                        key={tool.id}
-                                        value={tool.id}
-                                        onClick={() => handleSelectTecnology(index, tool.name)}
+                                        key={tool._id}
+                                        value={tool._id}
+                                        disabled={ listTool.find( fl => fl.tool === tool._id ) ? true : false }
+                                        onClick={() => handleSelectTecnology(index, tool)}
                                     >
                                         {tool.name}
                                     </MenuItem>

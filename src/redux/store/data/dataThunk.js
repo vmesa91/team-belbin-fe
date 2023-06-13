@@ -125,7 +125,7 @@ export const deleteData = ( value , type ) => {
        
         try{
             // llamada al backend
-           //value.map((val) => { api.delete(`/${method}:${val.id}`)} )
+           //value.map((val) => { api.delete(`/${method}:${val._id}`)} )
            dispatch(onSetData ( { type: typeOption , value : newState  } ))
 
         } catch( error ) {

@@ -7,7 +7,6 @@ export function applyFilter({
     filterLanguage
   }) {
 
-
     if (filterName) {
       inputData = inputData.filter(
         (member) => { 
@@ -19,8 +18,8 @@ export function applyFilter({
 
     if (filterProfile.length > 0) {
        inputData = inputData.filter((member) => {
-          const { profiles } = member
-          return profiles.find( (profile) => filterProfile.find(( fp ) => (fp === profile.name) ? true : false) )
+          const { profile } = member
+          return filterProfile.find(( fp ) => (fp === profile.name) ? true : false) 
         } 
       );
     }
@@ -28,7 +27,7 @@ export function applyFilter({
     if (filterTeam.length > 0) {
        inputData = inputData.filter((member) => {
           const { teams } = member
-          return teams.find( (team) => filterTeam.find(( ft ) => (ft === team.name) ? true : false) )
+          return teams?.find( (team) => filterTeam.find(( ft ) => (ft === team.name) ? true : false) )
         } 
       );
     }
@@ -36,8 +35,9 @@ export function applyFilter({
     if (filterLanguage.length > 0) {
 
       inputData = inputData.filter((member) => {
-          const { languages } = member
-          return languages.find( (language) => filterLanguage.find(( fl ) => (fl === language.name) ? true : false) )
+          const { language } = member
+          
+          return language.find( (l) => filterLanguage.find(( fl ) => (fl === l.name) ? true : false) )
         } 
       ); 
     }

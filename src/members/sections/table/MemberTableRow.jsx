@@ -4,6 +4,9 @@ import { MenuPopover } from "../../../common/components/MenuPopover/MenuPopover"
 import { useState } from "react"
 import { ConfirmDialog } from "../../../common/components/ConfirmDialog/ConfirmDialog"
 import { summaryOptions } from "../../../common/utils/summaryOptions"
+import { useSelector } from "react-redux"
+
+// ----------------------------------------------------------------------
 
 
 export const MemberTableRow = ({
@@ -15,9 +18,11 @@ export const MemberTableRow = ({
     onDeleteRow,
 }) => {
 
-  const { user, profiles, language, teams } = row
 
-  const { name , surname, email } = user 
+
+  const { user, profile, language, teams } = row
+
+  const { name , surname, image} = user 
 
   const [openConfirm, setOpenConfirm] = useState(false)
 
@@ -48,16 +53,16 @@ export const MemberTableRow = ({
 
         <TableCell>
         <Stack direction="row" alignItems="center" spacing={2}>
-            <Avatar name={name} src={''}/>
+            <Avatar name={name} src={image}/>
             <Typography variant="subtitle2" color="common.blue" noWrap>
               {name + ' ' + surname}
             </Typography>
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{ summaryOptions(profiles) }</TableCell>
-        <TableCell align="left">{ summaryOptions(teams) }</TableCell>
-        <TableCell align="left">{summaryOptions(language)}</TableCell>
+        <TableCell align="left">{ summaryOptions('profile', profile) }</TableCell>
+        <TableCell align="left">{ summaryOptions('teams', teams) }</TableCell>
+        <TableCell align="left">{ summaryOptions('language', language) }</TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>

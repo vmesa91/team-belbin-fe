@@ -2,6 +2,7 @@
 import { Avatar, Box, Card, Typography } from '@mui/material'
 import { Image } from '../../../common/components/Image/Image'
 import { styled, alpha } from '@mui/material/styles';
+import { useSelector } from 'react-redux';
 
 
 const StyledDropZone = styled('div')(({ theme }) => ({
@@ -20,8 +21,11 @@ const StyledDropZone = styled('div')(({ theme }) => ({
 
 export const TeamWidgetSummary = ({ title, total, description, icon, teamlead, sx, ...other }) => {
 
-  console.log(teamlead)
-  const { name, avatarUrl, profile } = teamlead
+  const { members } = useSelector( state => state.memberStore )
+
+  const leaderInfo = members.find( ( member ) => member._id === teamlead )
+  
+  const { user } = leaderInfo
   return (
     <>
     
@@ -73,20 +77,20 @@ export const TeamWidgetSummary = ({ title, total, description, icon, teamlead, s
         {...other}
     >
         <div>
-        <Typography variant="h4"> { name } </Typography>
+        <Typography variant="h4"> { user.name } </Typography>
 
         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
           TEAM LEAD 
         </Typography>
 
         <Typography variant="h8" sx={{ color: 'text.secondary' }}>
-           { profile }
+           { user.email }
         </Typography>
         </div>
         <StyledDropZone>
             <Image
                 alt="avatar"
-                src={ avatarUrl }
+                src={ 'avatarUrl' }
                 sx={{
                     zIndex: 8,
                     overflow: 'hidden',

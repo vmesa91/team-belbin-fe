@@ -12,7 +12,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo } from "react";
 import { useDispatch , useSelector } from "react-redux";
-import { createProfile } from "../../redux/store/profiles/profileThunk";
+import { createProfile , getProfiles } from "../../redux/store/profiles/profileThunk";
 import { PATH_PROFILE } from "../../home/routes/paths"
 
 

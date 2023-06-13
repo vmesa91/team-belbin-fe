@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 import account from '../../../_mock/account'
 import { NavBarSection } from '../NavSection/NavBarSection'
 import { navTabs } from './navTabs'
+import { useSelector } from 'react-redux'
 
 const NAV_WIDTH = 280
 
@@ -25,6 +26,7 @@ const StyledAccount = styled('div')(({ theme }) => ({
 export const NavBar = ({ openNav, onCloseNav }) => {
     const { pathname } = useLocation()
     const isDesktop = useResponsive('up', 'lg')
+    const { user } = useSelector( state => state.authStore )
 
     useEffect(() => {
         if (openNav) {
@@ -39,19 +41,19 @@ export const NavBar = ({ openNav, onCloseNav }) => {
             <Box sx={{ mb: 5, mx: 2.5 }}>
                 <Link underline="none">
                     <StyledAccount>
-                        <Avatar src={account.photoURL} alt="photoURL" />
+                        <Avatar src={user.image} alt="photoURL" />
                         <Box sx={{ ml: 2 }}>
                             <Typography
                                 variant="subtitle2"
                                 sx={{ color: 'text.primary' }}
                             >
-                                {account.displayName}
+                                {user.name + ' ' + user.surname}
                             </Typography>
                             <Typography
                                 variant="body2"
                                 sx={{ color: 'text.secondary' }}
                             >
-                                {account.role}
+                                { user.tittle && user.tittle }
                             </Typography>
                         </Box>
                     </StyledAccount>

@@ -1,9 +1,9 @@
 
 export const dataTableProfiles = [
-        { id: 'profile', label: 'Perfiles', align: 'left' },
-        { id: 'role', label: 'Roles', align: 'left' },
-        { id: 'member', label: 'Miembros', align: 'left' },
-        { id: 'technologies', label: 'Tecnologías / Herramientas', align: 'left' },
-        { id: '' },
+        { _id: 'profile', label: 'Perfiles', align: 'left' },
+        { _id: 'role', label: 'Roles', align: 'left' },
+        { _id: 'member', label: 'Miembros', align: 'left' },
+        { _id: 'technologies', label: 'Tecnologías / Herramientas', align: 'left' },
+        { _id: '' },
     ]
 

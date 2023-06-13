@@ -10,12 +10,15 @@ import { members } from '../../_mock/dataMembers'
 import { TeamWidgetExpertise } from "../sections/summary/TeamWidgetExpertise"
 import { TeamCarouselMembers } from "../sections/summary/TeamCarouselMembers"
 import { LoadingButton } from "@mui/lab"
+import { useSelector } from "react-redux"
 
 
 export const SummaryTeamPage = () => {
 
   const  methodsForm = useForm() 
-  const { reset, watch, setValue, handleSubmit , formState: { isSubmitting } } = methodsForm
+
+  const { configureTeam } = useSelector( state => state.teamStore )
+  const { name, description, leader, roles, tools, knowledges, members } = configureTeam 
 
   const onSubmit = () => {
     console.log('On Submit')
@@ -23,7 +26,7 @@ export const SummaryTeamPage = () => {
 
   return (
    
-    <FormProvider methods={methodsForm} onSubmit={handleSubmit(onSubmit)}>
+    <>
         <Helmet>
           <title>  Equipos | Resumen Equipo Creado  </title>
       </Helmet>
@@ -42,11 +45,11 @@ export const SummaryTeamPage = () => {
       <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <TeamWidgetSummary
-              title="Team 10"
-              total={10}
-              description={' '}
+              title={ name }
+              total={ members.length }
+              description={ description }
               icon={<TeamIllustration />}
-              teamlead={ members[2] }
+              teamlead={ leader }
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -56,7 +59,7 @@ export const SummaryTeamPage = () => {
       <Grid item xs={12}>
         <TeamCarouselMembers
           title="Miembros del Equipo"
-          subheader=""
+          subheader={ name }
           list={members}
         />
       </Grid>
@@ -71,7 +74,7 @@ export const SummaryTeamPage = () => {
         </Stack>
 
       </Container>
-    </FormProvider>
+    </>
    
 
   )

@@ -42,7 +42,7 @@ import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBre
 // UTILS Methods
 import { getComparator } from '../../common/utils/comparatorMethods'
 import { applySortFilter } from '../../common/utils/filterMethods'
-import {  applyFilter } from '../utils/applyFilter'
+import {  applyFilter } from '../utils/applyConfigFilter'
 import { useTable } from '../../hooks/useTable';
 import { TeamTableToolbar } from '../sections/table/TeamTableToolbar';
 import { TableSelectedAction } from '../../common/sections/table/TableSelectedAction';
@@ -51,6 +51,7 @@ import { LoadingButton } from '@mui/lab';
 import { ConfigTeamTableToolbar } from '../sections/table/ConfigTeamTableToolbar';
 import { ConfirmDialog } from '../../common/components/ConfirmDialog/ConfirmDialog';
 import { useDispatch, useSelector } from 'react-redux';
+import { addMembersConfigureTeam } from '../../redux/store/teams/teamThunk';
 
 // ----------------------------------------------------------------------
 
@@ -76,9 +77,8 @@ export function ConfigTeamPage() {
 
   const { configureTeam } = useSelector( state => state.teamStore )
   const { members } = useSelector( state => state.memberStore )
-  const { roles, knowledges, tools } = configureTeam
-
-  console.log(roles)
+  const { knowledges, tools , roles, leader } = configureTeam
+  const dataLeader = members.filter(  (member) => member._id === leader )
 
   const [tableData, setTableData] = useState(members)
   
@@ -98,18 +98,30 @@ export function ConfigTeamPage() {
     filterTools: tools
   })
 
-  const getLengthBySympathy = (status) => {
+
+  const getLengthBySympathy = (value) => {
+      
+    const { colleagues } = dataLeader
    
-      /* tableData.filter((item) => {
-      item.status === status}) */
-    }
+    console.log("🚀 ~ file: ConfigTeamPage.jsx:104 ~ getLengthBySympathy ~ colleagues:", colleagues)
+  
+    //const filterColleagues = colleagues.filter( ( colleague ) => colleague.score === value )
+    
+    //console.log(filterColleagues)
+    dataFiltered.filter((item) => {
+      console.log(item.colleagues)
+    
+    })
+
+  }
 
   const TABS = [
-    { value: ':D', label: 'Super Happy', color: 'success', count: getLengthBySympathy(':D') },
-    { value: ':)', label: 'Happy', color: 'warning', count: getLengthBySympathy(':)') },
-    { value: ':|', label: 'Not working', color: 'default', count: getLengthBySympathy(':|') },
-    { value: ':/', label: 'Regular', color: 'info', count: getLengthBySympathy(':|') },
-    { value: ':(', label: 'Bad', color: 'error', count: getLengthBySympathy(':(') },
+    { value: 'Todos', label: 'Todos', color: 'primary', count: dataFiltered.length },
+    { value: 5, label: 'Super Happy', color: 'success', count: getLengthBySympathy(5) },
+    { value: 4, label: 'Happy', color: 'warning', count: getLengthBySympathy(4) },
+    { value: 3, label: 'Not working', color: 'default', count: getLengthBySympathy(3) },
+    { value: 2, label: 'Regular', color: 'info', count: getLengthBySympathy(2) },
+    { value: 1, label: 'Bad', color: 'error', count: getLengthBySympathy(1) },
   ]
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -142,9 +154,12 @@ export function ConfigTeamPage() {
   }
 
 
-  const handleClickItem = (path) => {
-    navigate(path);
-  }; 
+  const handleClickItem = () => 
+    {
+      navigate( "/team/summaryTeam")
+      dispatch(addMembersConfigureTeam( selected ))
+
+    }; 
 
   return (
     <>
@@ -198,12 +213,7 @@ export function ConfigTeamPage() {
 
           < ConfigTeamTableToolbar 
             filterName={filterName}
-            filterSympathy={filterSympathy}
-            filterRole={roles}
-            filterKnowledge={knowledges}
-            filterTool={tools}
             onFilterByName={handleFilterByName}
-            optionsSympathies={members} 
             optionsRoles={roles}
             optionsKnowledges={knowledges}
             optionsTools={tools}
@@ -216,7 +226,7 @@ export function ConfigTeamPage() {
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,
-                        tableData.map((row) => row.id)
+                        tableData.map((row) => row)
                       )
                     }
                     action={
@@ -238,7 +248,7 @@ export function ConfigTeamPage() {
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,
-                        tableData.map((row) => row.id)
+                        tableData.map((row) => row)
                       )
                     }
                   />
@@ -249,13 +259,13 @@ export function ConfigTeamPage() {
                        .slice( page * rowsPerPage, page * rowsPerPage + rowsPerPage )
                        .map( (row) => (
                           <ConfigTeamTableRow 
-                              key={row.id}
+                              key={row._id}
                               row={row}
-                              selected={selected.includes(row.id)}
-                              onSelectRow={() => onSelectRow(row.id)}
-/*                               onViewRow={() => handleViewRow(row.id)}
-                              onEditRow={() => handleEditRow(row.id)}
-                              onDeleteRow={() => handleDeleteRow(row.id)} */
+                              selected={selected.includes(row)}
+                              onSelectRow={() => onSelectRow(row)}
+/*                               onViewRow={() => handleViewRow(row._id)}
+                              onEditRow={() => handleEditRow(row._id)}
+                              onDeleteRow={() => handleDeleteRow(row._id)} */
                           />
                        ))
                     }
@@ -282,7 +292,7 @@ export function ConfigTeamPage() {
           <LoadingButton type="submit" variant="contained">
               {'Cancelar'}
           </LoadingButton>
-          <LoadingButton onClick={ () => handleClickItem( "/team/summaryTeam" ) } type="submit" variant="outlined">
+          <LoadingButton onClick={ handleClickItem } type="submit" variant="outlined">
               {'Siguiente'}
           </LoadingButton>
       </Stack>

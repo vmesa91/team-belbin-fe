@@ -3,7 +3,7 @@ import account from '../../../_mock/account'
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../auth/context/AuthContext";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../../redux/store/auth/authThunk";
 
 
@@ -11,6 +11,7 @@ export const AccountPopover = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch()
+    const { user } = useSelector( state => state.authStore )
 
     const [open, setOpen] = useState(null);
 
@@ -55,7 +56,7 @@ export const AccountPopover = () => {
                     },
                 }),
             }}>
-               <Avatar src={account.photoURL} alt="photoURL"/>
+               <Avatar src={user.image} alt="photoURL"/>
             </IconButton>
 
             <Popover 
@@ -79,10 +80,10 @@ export const AccountPopover = () => {
             >
                 <Box sx={{ my: 1.5, px: 2.5 }}>
                     <Typography variant="subtitle2" noWrap>
-                        {account.displayName}
+                        {user.name + ' ' + user.surname }
                     </Typography>
                     <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                        {account.email}
+                        {user.email}
                     </Typography>
                 </Box>
 
