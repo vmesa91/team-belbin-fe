@@ -52,6 +52,7 @@ import { ConfigTeamTableToolbar } from '../sections/table/ConfigTeamTableToolbar
 import { ConfirmDialog } from '../../common/components/ConfirmDialog/ConfirmDialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { addMembersConfigureTeam } from '../../redux/store/teams/teamThunk';
+import { dataRolesBelbin } from '../../members/config/configTableMembers';
 
 // ----------------------------------------------------------------------
 
@@ -84,14 +85,14 @@ export function ConfigTeamPage() {
   
   const [openConfirm, setOpenConfirm] = useState(false);
  
-  const [filterName, setFilterName] = useState('');
+  const [filterRol, setFilterRol] = useState(dataRolesBelbin);
   const [filterSympathy, setFilterSympathy] = useState(':D')
 
 
 
   const dataFiltered = applyFilter({
     inputData: tableData,
-    filterName,
+    filterRol,
     filterSympathy,
     filterRoles: roles,
     filterKnowledges: knowledges,
@@ -127,7 +128,7 @@ export function ConfigTeamPage() {
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 
   const isNotFound =
-  (!dataFiltered.length && !!filterName) ||
+  (!dataFiltered.length && !!filterRol) ||
   (!dataFiltered.length && !!filterSympathy) ||
   (!dataFiltered.length && !!roles) ||
   (!dataFiltered.length && !!knowledges) ||
@@ -148,9 +149,9 @@ export function ConfigTeamPage() {
     setFilterSympathy(newValue);
   }
 
-  const handleFilterByName = (event) => {
+  const handleFilterRolBelbin = ({ target }) => {
     setPage(0);
-    setFilterName(event.target.value);
+    (target.innerText === undefined ) ? handleResetFilter() : setFilterRol([ ...filterRol , target.innerText ])
   }
 
 
@@ -212,11 +213,12 @@ export function ConfigTeamPage() {
           <Divider />
 
           < ConfigTeamTableToolbar 
-            filterName={filterName}
-            onFilterByName={handleFilterByName}
+            filterRol={filterRol}
+            onFilterRolesBelbin={handleFilterRolBelbin}
             optionsRoles={roles}
             optionsKnowledges={knowledges}
             optionsTools={tools}
+            optionsRolBelbin={dataRolesBelbin}
             />
 
             <TableContainer sx={{ minWidth: 800 }}>

@@ -32,7 +32,7 @@ export const PATH_HOME = {
 export const PATH_PROFILE = {
     root: ROOT_PROFILE,
     createProfile: paths(ROOT_PROFILE, '/createProfile'),
-    editProfile: paths(ROOT_PROFILE, '/editProfile'),
+    editProfile: (id) => paths(ROOT_PROFILE, `/editProfile/${id}`),
     manageProfiles: paths(ROOT_PROFILE, '/tableProfiles')
 }
 
@@ -42,6 +42,7 @@ export const PATH_PROFILE = {
 export const PATH_MEMBER = {
     root: ROOT_MEMBER,
     createMember: paths(ROOT_MEMBER, '/createMember'),
+    editMember: (id) => paths(ROOT_MEMBER, `/editMember/${id}`),
     manageMembers: paths(ROOT_MEMBER, '/tableMembers')
 }
 

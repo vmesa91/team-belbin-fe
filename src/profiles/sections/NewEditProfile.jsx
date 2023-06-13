@@ -18,6 +18,8 @@ import { PATH_PROFILE } from "../../home/routes/paths"
 
 export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
 
+  console.log(currentProfile)
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
@@ -31,28 +33,30 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
   })
  */
 
+  const { tools , roles, knowledges , errorMessage } = useSelector( state => state.dataStore )
+
   const defaultValues = useMemo(
     () => ({
       name: currentProfile?.name || '',
       description: currentProfile?.description || '',
-      roles: currentProfile?.role || [],
+      roles: currentProfile?.roles || [],
       tools: currentProfile?.tools || [],
     }),
     [ currentProfile ] 
   )
+
+  const  methodsForm = useForm({ defaultValues })
+
+  const { reset, watch, setValue, handleSubmit , formState: { isSubmitting } } = methodsForm
+
+  const values = watch()
  /*
   const  methodsForm = useForm({  
     resolver: yupResolver(NewProfileSchema),
     defaultValues
   })  */
 
-  const  methodsForm = useForm({ defaultValues })
-
-  const { tools , roles, knowledges , errorMessage } = useSelector( state => state.dataStore )
-
-  const { reset, watch, setValue, handleSubmit , formState: { isSubmitting } } = methodsForm
-
-  const values = watch()
+  
 
 
  useEffect(() => {
@@ -105,7 +109,8 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
               name="roles"
               label="Selecciona Rol"
               multiple
-              options={roles.map((rol) => rol.name)}
+              options={roles}
+              getOptionLabel={(option) => option.name}
               sx={{ width: '450px' }}
               />
 
@@ -113,7 +118,8 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
               name="tools"
               label="Selecciona Tecnología" 
               multiple
-              options={tools.map((tool) => tool.name)}
+              options={tools}
+              getOptionLabel={(option) => option.name}
               sx={{ width: '450px' }}
               />
         </Stack>

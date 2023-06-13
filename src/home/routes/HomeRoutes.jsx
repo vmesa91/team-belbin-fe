@@ -13,6 +13,7 @@ import { DataPage } from '../../admin/pages/DataPage'
 import { ConfigTeamPage } from '../../teams/pages/ConfigTeamPage'
 import { SummaryTeamPage } from '../../teams/pages/SummaryTeamPage'
 import { EditProfilePage } from '../../profiles/pages/EditProfilePage'
+import { EditMemberPage } from '../../members/pages/EditMemberPage'
 
 export const HomeRoutes = () => {
     return (
@@ -27,7 +28,7 @@ export const HomeRoutes = () => {
                         element={<CreateProfilePage />}
                     ></Route>
                     <Route
-                        path="/profile/editProfile"
+                        path="/profile/editProfile/:id"
                         element={<EditProfilePage />}
                     ></Route>
                     <Route
@@ -39,6 +40,10 @@ export const HomeRoutes = () => {
                     <Route
                         path="/member/createMember"
                         element={<CreateMemberPage />}
+                    ></Route>
+                    <Route
+                        path="/member/editMember/:id"
+                        element={<EditMemberPage />}
                     ></Route>
                     <Route
                         path="/member/tableMembers"

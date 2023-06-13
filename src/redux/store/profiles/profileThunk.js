@@ -4,6 +4,15 @@ import api from "../../../api/config"
 
 
 
+export const getProfileId = (id) => {
+    
+    return async (dispatch) => {
+    
+        const { data } = await api.get(`/profile/${id}`)
+        dispatch(onSetProfile ( { type: 'activeProfile' , value : data.profile  } ))
+    }
+}
+
 export const getProfiles = () => {
     
     return async (dispatch) => {
@@ -18,25 +27,19 @@ export const createProfile = ( value ) => {
 
     return async (dispatch, getState) => {
 
-        const { profileStore , dataStore } = getState()
-        const { tools:toolsStore , roles:rolesStore } = dataStore
-        const { roles:rolesNewValue , tools:toolsNewValue } = value
+        const { profileStore } = getState()
 
         // To dispatch
         const { profiles } = profileStore
-
         const actualState = profiles
 
         try {
-            // Buscar IDs
-            const idRoles = rolesNewValue.map( (role) => searchID( role , rolesStore ))
-            const idTools = toolsNewValue.map( (tool) => searchID( tool , toolsStore ))
 
             const newData = {
                 name: value.name,
                 description: value.description,
-                roles: idRoles,
-                tools: idTools
+                roles: getID(value.roles),
+                tools: getID(value.tools)
             }
 
             const { data } = await api.post('/profile' , newData)
@@ -100,9 +103,5 @@ export const deleteProfiles = ( value ) => {
 
 
 
-// ***  Methods to get ID 
-
-const searchID = ( value , store  ) => {
-    const { _id } = store.find( data => data.name === value )
-    return _id;
-}
+// Extract ID
+const getID = ( list ) => list.map( li => li._id )

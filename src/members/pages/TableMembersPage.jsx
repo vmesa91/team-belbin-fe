@@ -176,7 +176,7 @@ export function TableMembersPage() {
   }
 
   const handleEditRow = (id) => {
-    // navigate(PATH_DASHBOARD.invoice.edit(id));
+    navigate(PATH_MEMBER.editMember(id));
   }
 
 

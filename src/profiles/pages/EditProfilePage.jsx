@@ -17,15 +17,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { CustomSnackbar } from "../../common/components/SnackBar/CustomSnackbar";
 import { useEffect, useMemo } from "react";
 import { NewEditProfile } from "../sections/NewEditProfile";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 
 export const EditProfilePage = () => {
 
-    const { name } = useParams();
-    useSelector(  )
+    const { id } = useParams();
+   
+    const { profiles } = useSelector( state => state.profileStore )
 
-    const currentProfile = profiles.find((profile) => paramCase(profile.name) === name);
+    const currentProfile = profiles.find((profile) => profile._id === id);
+    
 
   return (
 
@@ -45,7 +47,7 @@ export const EditProfilePage = () => {
          ]}
        />
           
-      < NewEditProfile isEdit currentProfile={currentProfile}/>
+      < NewEditProfile isEdit currentProfile={currentProfile}/> 
 
      </Container>
   </>

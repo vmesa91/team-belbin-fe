@@ -4,12 +4,12 @@ import { CustomAutocomplete } from '../../../common/components/Form/CustomAutoco
 import { Iconify } from '../../../common/components/Iconify/Iconify'
 
 export const ConfigTeamTableToolbar = ({
-    filterName,
-    filterSympathy,
-    onFilterByName,
-    optionsRoles,
-    optionsKnowledges,
-    optionsTools
+  filterRol,
+  onFilterRolesBelbin,
+  optionsRoles,
+  optionsKnowledges,
+  optionsTools,
+  optionsRolBelbin,
 }) => {
 
 
@@ -23,19 +23,19 @@ export const ConfigTeamTableToolbar = ({
     }}
     sx={{ px: 2.5, py: 3 }}
     >
-      <TextField
-        fullWidth
-        value={filterName}
-        onChange={onFilterByName}
-        placeholder="Buscar..."
-        InputProps={{
-          startAdornment: (
-            <InputAdornment position="start">
-              <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
-            </InputAdornment>
-          ),
-        }}
-      />
+      <Autocomplete
+        multiple
+        limitTags={3}
+        id="belbinRol"
+        options={optionsRolBelbin }
+        getOptionLabel={(option)=>(option.name?option.name:'')}
+        isOptionEqualToValue={(option, value) => option._id === value._id}
+        groupBy={ ( option ) => option.group }
+        sx={{ width: '450px' }}
+        renderInput={(params) => (
+          <TextField {...params} label="Roles de Belbin" placeholder="Roles de Belbin" sx={{textTransform: 'capitalize'}}/>
+        )}
+          />
       <Autocomplete
         multiple
         limitTags={3}

@@ -20,15 +20,18 @@ import { CustomSelect } from "../../common/components/Form/CustomSelect";
 import { ScoreColleagues } from "../sections/score/ScoreColleagues";
 import { useSelector } from "react-redux";
 import { NewEditMember } from "../sections/NewEditMember";
+import { useParams } from "react-router-dom";
+import { paramCase } from "change-case";
 
 
 
 
 export const EditMemberPage = () => {
 
-  const { name } = useParams();
+  const { id } = useParams();
+  const { members } = useSelector( state => state.memberStore )
 
-  const currentMember = profiles.find((profile) => paramCase(profile.name) === name);
+  const currentMember = members.find((member) => paramCase(member._id) === id);
   
   return (
     <>

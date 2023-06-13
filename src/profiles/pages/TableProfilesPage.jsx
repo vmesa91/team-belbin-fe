@@ -171,8 +171,8 @@ export function TableProfilesPage() {
     }
   }
 
-  const handleEditRow = (id) => {
-    // navigate(PATH_DASHBOARD.invoice.edit(id));
+  const handleEditRow = (_id) => {
+    navigate(PATH_PROFILE.editProfile(_id));
   }
 
 
