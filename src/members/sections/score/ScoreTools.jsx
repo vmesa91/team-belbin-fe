@@ -21,6 +21,8 @@ export const ScoreTools = ( { tools } ) => {
 
     const values = watch();
 
+    console.log(fields)
+
     const [listTool, setlistTool] = useState([values.expertise])
     
     useEffect(() => {
@@ -120,7 +122,7 @@ export const ScoreTools = ( { tools } ) => {
 
                         </CustomSelect>
 
-                        <Rating size="large" onChange={ (data) => handleSelectScore(index, data)}/>
+                        <Rating name={`expertise[${index}].score`} size="large" defaultValue={item.score} onChange={ (data) => handleSelectScore(index, data)}/>
 
                         <Button
                             size="small"

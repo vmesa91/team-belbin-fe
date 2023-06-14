@@ -103,7 +103,6 @@ export const NewEditTeam = ({ isEdit, currentTeam }) => {
                             <MenuItem
                                 key={member._id}
                                 value={member._id}
-            
                             >
                                 { member.user.name + ' ' + member.user.surname }
                             </MenuItem>

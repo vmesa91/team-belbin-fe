@@ -20,12 +20,8 @@ const StyledDropZone = styled('div')(({ theme }) => ({
 }));
 
 export const TeamWidgetSummary = ({ title, total, description, icon, teamlead, sx, ...other }) => {
-
-  const { members } = useSelector( state => state.memberStore )
-
-  const leaderInfo = members.find( ( member ) => member._id === teamlead )
   
-  const { user } = leaderInfo
+  const { user } = teamlead
   return (
     <>
     
@@ -90,7 +86,7 @@ export const TeamWidgetSummary = ({ title, total, description, icon, teamlead, s
         <StyledDropZone>
             <Image
                 alt="avatar"
-                src={ 'avatarUrl' }
+                src={ user.image }
                 sx={{
                     zIndex: 8,
                     overflow: 'hidden',

@@ -1,31 +1,24 @@
 // Aplicar filtro
 export function applyFilter({
   inputData,
-  filterName,
+  filterRol,
+  optionsRolBelbin,
   filterSympathy,
+  leader,
   filterRoles,
   filterKnowledges,
   filterTools
   }) {
-  
-    let inputDatafilterName = [];
+
+
     let inputDatafilterRoles = [];
     let inputDatafilterKnowledges = [];
     let inputDatafilterTools = [];
-
-    if (filterName) {
-      inputDatafilterName = inputData.filter(
-        (member) => { 
-          const { user } = member
-          return user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-        }
-      );
-    }
   
     if (filterRoles.length > 0) {
         inputDatafilterRoles = inputData.filter((member) => {
           const filterRolesId = getID(filterRoles)
-          const roles = member.profile.roles;
+          const roles = member.profile?.roles;
           return roles?.some((role) => filterRolesId.includes(role));
       })
     }
@@ -33,19 +26,63 @@ export function applyFilter({
     if (filterKnowledges.length > 0) {
       inputDatafilterKnowledges = inputData.filter((member) => {
          const { knowledges } = member
-         return knowledges?.find( (knowledge) => filterKnowledges.find(( fk ) => (fk === knowledge.name) ? true : false) )
-       })
-    }
+          return knowledges?.find( (knowledge) => filterKnowledges.find(( fk ) => (fk.name === knowledge.name) ? true : false) )
+          
+         })
+
+       }
 
     if (filterTools.length > 0) {
       inputDatafilterTools = inputData.filter((member) => {
          const filterToolsId = getID(filterTools)
-         const tools = member.profiles?.flatMap((profile) => profile.tools);
+         const tools = member.profile?.tools;
          return tools?.some((tool) => filterToolsId.includes(tool));
        })
     }
-  
-    inputData = [ ...inputDatafilterName, ...inputDatafilterRoles, ...inputDatafilterKnowledges, ...inputDatafilterTools  ]
+
+    const inputDataAll = [ ...inputDatafilterRoles, ...inputDatafilterKnowledges, ...inputDatafilterTools  ]
+    inputData = [ ... new Set(inputDataAll) ]
+
+    if (filterRol.length > 0) {
+      inputData = inputData.filter(
+        (member) => { 
+          const { belbinRol } = member
+          const mappeo = mapperRoles(belbinRol, optionsRolBelbin)
+          return  mappeo.some(( rol ) => filterRol.includes(rol.name))
+        }
+      );
+    }
+        
+
+    if (filterSympathy !== 'Todos') {
+      console.log("🚀 ~ file: applyConfigFilter.js:58 ~ filterSympathy:", filterSympathy)
+      const { colleagues } = leader
+      const listFive = colleagues.filter( (coll) =>  coll.score === 5)
+      const listFour = colleagues.filter( (coll) =>  coll.score === 4)
+      const listThree = colleagues.filter( (coll) =>  coll.score === 3)
+      const listTwo = colleagues.filter( (coll) =>  coll.score === 2)
+      const listOne = colleagues.filter( (coll) =>  coll.score === 1)
+
+      inputData = inputData.filter((item) => {
+        console.log("🚀 ~ file: applyConfigFilter.js:66 ~ inputData=inputData.filter ~ item:", item)
+        switch (filterSympathy) {
+          case '5':
+            return listFive.find( ( listuser ) => listuser.user._id === item.user._id ) ? true : false
+          case '4':
+            return listFour.find( ( listuser ) => listuser.user._id === item.user._id ) ? true : false
+          case '3':
+            return listThree.find( ( listuser ) => listuser.user._id === item.user._id ) ? true : false
+          case '2':
+            return listTwo.find( ( listuser ) => listuser.user._id === item.user._id ) ? true : false
+          case '1':
+            return listOne.find( ( listuser ) => listuser.user._id === item.user._id ) ? true : false
+          default:
+            break;
+        }
+      })
+
+      console.log(inputData)
+    } 
 
     return inputData;
   }
@@ -53,3 +90,8 @@ export function applyFilter({
 
 // Extract ID
 const getID = ( list ) => list.map( li => li._id ) 
+
+
+const mapperRoles = ( listBelbin , optionsRolBelbin) => {
+  return listBelbin.map(( idBelbin ) => optionsRolBelbin.find( (opt) => opt._id === idBelbin ))
+} 

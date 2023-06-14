@@ -13,7 +13,7 @@ export const TeamCarouselMembers = ({ title, subheader, list, sx, ...other }) =>
   const carouselSettings = {
     dots: false,
     arrows: false,
-    slidesToShow: 4,
+    slidesToShow: list.length % 2 === 0 ? 4 : 3,
     slidesToScroll: 1,
     rtl: Boolean(theme.direction === 'rtl'),
     responsive: [
@@ -72,15 +72,15 @@ export const TeamCarouselMembers = ({ title, subheader, list, sx, ...other }) =>
 
 const CarouselItem = ({ item }) => {
 
-    const { user , profiles , belbinRol } = item;
-    const { name , surname } = user
+    const { user , profile , belbinRol, language} = item;
+    const { name , surname, image } = user
 
     return (
         <Paper sx={{ mx: 1.5, borderRadius: 2, bgcolor: 'background.neutral' }}>
             <Stack spacing={2.5} sx={{ p: 3, pb: 2.5 }}>
                 <Stack direction="row" alignItems="center" spacing={2}>
 
-                        <Avatar src={'avatarURL'} alt="photoURL"/>
+                        <Avatar src={image} alt="photoURL"/>
                         
                         <div>
                             <Typography variant="subtitle2">{name + ' ' + surname}</Typography>
@@ -89,13 +89,13 @@ const CarouselItem = ({ item }) => {
                             variant="caption"
                             sx={{ color: 'text.disabled', mt: 0.5, display: 'block' }}
                             >
-                                {profiles[0].name}
+                                {profile.name}
                             </Typography>
                             <Typography
                             variant="caption"
                             sx={{ color: 'text.disabled', mt: 0.5, display: 'block' }}
                             >
-                                {belbinRol[0]}
+                                {language[0].name}
                             </Typography>
                         </div>
                 </Stack>

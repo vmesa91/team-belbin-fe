@@ -112,7 +112,7 @@ export const ScoreColleagues = ( { users } ) => {
 
                         </CustomSelect>
 
-                        <CustomRating onChange={ (data) => handleSelectScore(index, data) }/>
+                        <CustomRating name={`colleagues[${index}].score`} defaultValue={item.score} onChange={ (data) => handleSelectScore(index, data) }/>
 
                         <Button
                             size="small"

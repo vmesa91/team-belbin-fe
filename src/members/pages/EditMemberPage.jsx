@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { NewEditMember } from "../sections/NewEditMember";
 import { useParams } from "react-router-dom";
 import { paramCase } from "change-case";
+import { mappingMember } from "../utils/mappingMember";
 
 
 
@@ -31,8 +32,10 @@ export const EditMemberPage = () => {
   const { id } = useParams();
   const { members } = useSelector( state => state.memberStore )
 
-  const currentMember = members.find((member) => paramCase(member._id) === id);
-  
+  let currentMember = members.find((member) => paramCase(member._id) === id);
+  currentMember = mappingMember(currentMember)
+  console.log(currentMember)
+
   return (
     <>
       <Helmet>

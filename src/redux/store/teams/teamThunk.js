@@ -14,9 +14,15 @@ export const getTeams = () => {
 }
 
 export const configureTeam = ( value ) => {
-    console.log("🚀 ~ file: teamThunk.js:17 ~ configureTeam ~ value:", value)
+console.log("🚀 ~ file: teamThunk.js:17 ~ configureTeam ~ value:", value)
 
-    return ( dispatch ) => {
+     const { leader } = value
+
+    return ( dispatch , getState ) => {
+
+        const { memberStore } = getState()
+        const { members } = memberStore
+        const dataLeader = members.find( (member) => member._id === leader  )
            
  /*        const data = {
             name,
@@ -28,7 +34,7 @@ export const configureTeam = ( value ) => {
             language
         } */
 
-        dispatch( onSetTeam( { type: 'configureTeam' , value  } ))
+        dispatch( onSetTeam( { type: 'configureTeam' , value: { ...value, leader: dataLeader }  } ))
 
     }
 }

@@ -52,17 +52,17 @@ export const SummaryTeamPage = () => {
               teamlead={ leader }
             />
           </Grid>
-          <Grid item xs={12} md={6}>
-                <TeamWidgetExpertise title="Experiencia del equipo" data={expertiseSummary} />
-          </Grid>
+         <Grid item xs={12} md={6}>
+                <TeamWidgetExpertise title="Roles de Belbin en el equipo" data={members}/>
+          </Grid> 
 
       <Grid item xs={12}>
         <TeamCarouselMembers
           title="Miembros del Equipo"
           subheader={ name }
           list={members}
-        />
-      </Grid>
+       />
+      </Grid> 
       </Grid>
         <Stack spacing={3} sx={{ mt: 3 , display:"flex", flexDirection:'row', justifyContent:'center', gap:'20px'}}>
             <LoadingButton type="submit" variant="contained">

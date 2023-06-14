@@ -1,20 +1,29 @@
 import { Box, Card, CardHeader, LinearProgress, Stack, Typography, alpha } from "@mui/material"
+import { dataRolesBelbin } from "../../../members/config/configTableMembers"
 
 
-export const TeamWidgetExpertise = ({ title, subheader, data, ...other }) => {
+export const TeamWidgetExpertise = ({ title, subheader, data, ...other }) => { 
+
+    const groupRoles = [
+        { group : 'Roles de Acción' , id: 1,  value: calculateValue('Roles de Acción', data)},
+        { group: 'Roles Mentales' , id: 2, value: calculateValue('Roles Mentales', data)}, 
+        { group: 'Roles Sociales' , id: 3, value: calculateValue('Roles Sociales', data)}
+    ]
+
+
   return (
     <Card { ...other }>
         <CardHeader  title={title} subheader={subheader} />
 
         <Stack spacing={3} sx={{ px: 3, my: 5 }}>
-            { data.map(( value ) => (
+            { groupRoles.map(( dataRol ) => (
                 <LinearProgress 
                     variant="determinate"
-                    key={value.expertise}
-                    value={value.value}
+                    key={dataRol.id}
+                    value={dataRol.value}
                     color={
-                        (value.value === '3' && 'warning') ||
-                        (value.value === '2' && 'error') ||
+                        (dataRol.group === 'Roles de Acción' && 'warning') ||
+                        (dataRol.group === 'Roles Mentales' && 'error') ||
                         'success'
                       }
 
@@ -23,9 +32,11 @@ export const TeamWidgetExpertise = ({ title, subheader, data, ...other }) => {
             ))}
         </Stack> 
 
-       <Stack direction="row" justifyContent="space-between" sx={{ px: 3, pb: 3 }}>
-            { data.map(( value ) => (
-                <Stack key={value.expertise} alignItems="center">
+
+        {/* Leyenda */}
+        <Stack direction="row" justifyContent="space-between" sx={{ px: 3, pb: 3 }}>
+            { groupRoles.map(( dataRol ) => (
+                <Stack key={dataRol.id} alignItems="center">
                     <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
                     <Box
                         sx={{
@@ -33,12 +44,12 @@ export const TeamWidgetExpertise = ({ title, subheader, data, ...other }) => {
                         height: 12,
                         borderRadius: 0.5,
                         bgcolor: 'success.main',
-                        ...(value.value === '3' && { bgcolor: 'warning.main' }),
-                        ...(value.value === '2' && { bgcolor: 'error.main' }),
+                         ...(dataRol.group === 'Roles de Acción' && { bgcolor: 'warning.main' }),
+                        ...(dataRol.group === 'Roles Mentales' && { bgcolor: 'error.main' }), 
                         }}
                     />
                     <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-                            {value.expertise}
+                            {dataRol.group}
                     </Typography>
                     </Stack>
                 </Stack>
@@ -46,4 +57,32 @@ export const TeamWidgetExpertise = ({ title, subheader, data, ...other }) => {
        </Stack>
     </Card>
   )
+}
+
+const calculateValue = (group, data) => {
+    
+    const numRolesBelbin = data.filter(( member ) => {
+        const { belbinRol } = member
+
+        // Buscar la categoría del miembro
+        for (let i = 0; i < belbinRol.length; i++) {
+            const rolMiembro = belbinRol[i];
+
+            // Buscar el rol en la lista de roles de Belbin
+            const rolBelbin = dataRolesBelbin.find((rol) => rol._id === rolMiembro);
+
+            // Si se encuentra el rol, devolver la categoría
+            if (rolBelbin) {
+            return rolBelbin.group;
+            }
+        }
+
+        return null
+    })
+
+   return (numRolesBelbin / data.length) * 100
+    
+
+    
+ 
 }

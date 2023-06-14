@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // @mui
 import {
   Card,
@@ -54,6 +54,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addMembersConfigureTeam } from '../../redux/store/teams/teamThunk';
 import { dataRolesBelbin } from '../../members/config/configTableMembers';
 
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
+import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
+import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
+import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
+
 // ----------------------------------------------------------------------
 
 
@@ -79,50 +85,78 @@ export function ConfigTeamPage() {
   const { configureTeam } = useSelector( state => state.teamStore )
   const { members } = useSelector( state => state.memberStore )
   const { knowledges, tools , roles, leader } = configureTeam
-  const dataLeader = members.filter(  (member) => member._id === leader )
 
   const [tableData, setTableData] = useState(members)
   
   const [openConfirm, setOpenConfirm] = useState(false);
  
-  const [filterRol, setFilterRol] = useState(dataRolesBelbin);
-  const [filterSympathy, setFilterSympathy] = useState(':D')
+  const [filterRol, setFilterRol] = useState([]);
+  const [filterSympathy, setFilterSympathy] = useState('Todos')
 
+ const [membersFiltered, setmembersFiltered] = useState()
 
 
   const dataFiltered = applyFilter({
     inputData: tableData,
     filterRol,
+    optionsRolBelbin:dataRolesBelbin,
     filterSympathy,
+    leader,
     filterRoles: roles,
     filterKnowledges: knowledges,
     filterTools: tools
   })
 
+  useEffect(() => {
+    setmembersFiltered(dataFiltered)
+  }, [])
 
   const getLengthBySympathy = (value) => {
-      
-    const { colleagues } = dataLeader
-   
-    console.log("🚀 ~ file: ConfigTeamPage.jsx:104 ~ getLengthBySympathy ~ colleagues:", colleagues)
+
+    const { colleagues } = leader
+    console.log(colleagues)
+    const listFive = colleagues.filter( (coll) =>  coll.score === 5)
+    const listFour = colleagues.filter( (coll) =>  coll.score === 4)
+    const listThree = colleagues.filter( (coll) =>  coll.score === 3)
+    const listTwo = colleagues.filter( (coll) =>  coll.score === 2)
+    const listOne = colleagues.filter( (coll) =>  coll.score === 1)
+
+    console.log('five =>', listFive)
+    console.log('four =>', listFour)
+ 
+    console.log(membersFiltered)
+    const sumBySympathy = membersFiltered?.filter((item) => {
   
-    //const filterColleagues = colleagues.filter( ( colleague ) => colleague.score === value )
-    
-    //console.log(filterColleagues)
-    dataFiltered.filter((item) => {
-      console.log(item.colleagues)
-    
+      switch (value) {
+        case 5:
+          return listFive.find( ( listuser ) => listuser.user._id === item.user._id ) ? true : false
+        case 4:
+          return listFour.find( ( listuser ) => listuser.user._id === item.user._id ) ? true : false
+        case 3:
+          return listThree.find( ( listuser ) => listuser.user._id === item.user._id ) ? true : false
+        case 2:
+          return listTwo.find( ( listuser ) => listuser.user._id === item.user._id ) ? true : false
+        case 1:
+          return listOne.find( ( listuser ) => listuser.user._id === item.user._id ) ? true : false
+        default:
+           return 5
+          break;
+      }
     })
 
+    console.log('sumBySympathy', sumBySympathy)
+
+    return sumBySympathy?.length
+  
   }
 
   const TABS = [
-    { value: 'Todos', label: 'Todos', color: 'primary', count: dataFiltered.length },
-    { value: 5, label: 'Super Happy', color: 'success', count: getLengthBySympathy(5) },
-    { value: 4, label: 'Happy', color: 'warning', count: getLengthBySympathy(4) },
-    { value: 3, label: 'Not working', color: 'default', count: getLengthBySympathy(3) },
-    { value: 2, label: 'Regular', color: 'info', count: getLengthBySympathy(2) },
-    { value: 1, label: 'Bad', color: 'error', count: getLengthBySympathy(1) },
+    { value: 'Todos', label: 'Todos', color: 'primary', count: membersFiltered?.length},
+    { value: '5', label: 'Super Happy', color: 'success', count: getLengthBySympathy(5) , icon: <SentimentVerySatisfiedIcon color="success" /> },
+    { value: '4', label: 'Happy', color: 'warning', count: getLengthBySympathy(4) , icon: <SentimentSatisfiedAltIcon color="success" />},
+    { value: '3', label: 'Not working', color: 'default', count: getLengthBySympathy(3) , icon: <SentimentSatisfiedIcon color="warning" />},
+    { value: '2', label: 'Regular', color: 'info', count: getLengthBySympathy(2) , icon: <SentimentDissatisfiedIcon color="error" />},
+    { value: '1', label: 'Bad', color: 'error', count: getLengthBySympathy(1) , icon: <SentimentVeryDissatisfiedIcon color="error" /> },
   ]
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
@@ -149,7 +183,11 @@ export function ConfigTeamPage() {
     setFilterSympathy(newValue);
   }
 
-  const handleFilterRolBelbin = ({ target }) => {
+  const handleResetFilter = () => {
+    setFilterRol('');
+  }
+
+  const handleFilterRolBelbin = ({target}) => {
     setPage(0);
     (target.innerText === undefined ) ? handleResetFilter() : setFilterRol([ ...filterRol , target.innerText ])
   }
@@ -196,18 +234,21 @@ export function ConfigTeamPage() {
             bgcolor: 'background.neutral',
           }}
           >
-          {TABS.map((tab) => (
-              <Tab
+          {TABS.map((tab) => {  
+            console.log(tab)
+
+            console.log(tab.count)
+              return <Tab
                 key={tab.value}
                 value={tab.value}
-                label={tab.label}
+                label={tab.icon}
                 icon={
                   <Label color={tab.color} sx={{ mr: 1 }}>
                     {tab.count}
                   </Label>
                 }
               />
-            ))}
+              })}
           </Tabs>
 
           <Divider />
@@ -282,7 +323,7 @@ export function ConfigTeamPage() {
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
-            count={members.length}
+            count={dataFiltered.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={onChangePage}

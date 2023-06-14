@@ -35,6 +35,8 @@ export const createMember = ( value ) => {
                 knowledges: getID(knowledges),
                 language: language
             }
+
+            console.log(newData)
             
             const { data } = await api.post('/member' , newData)
             

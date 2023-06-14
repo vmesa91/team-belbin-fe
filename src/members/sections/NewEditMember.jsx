@@ -72,6 +72,7 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
 
 
     const onSubmit = (data) => {
+      console.log(data)
       reset();
       dispatch(createMember(data))
       navigate(PATH_MEMBER.manageMembers);
@@ -116,7 +117,6 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
                               label="Selecciona un perfil"
                               options={profiles}
                               getOptionLabel={(option)=>(option.name?option.name:'')}
-                              isOptionEqualToValue={(option, value) => option._id === value._id}
                               sx={{ width: '350px' }}
                           />
                   </Stack>
@@ -133,7 +133,6 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
                             multiple
                             options={knowledges}
                             getOptionLabel={(option)=>(option.name?option.name:'')}
-                            isOptionEqualToValue={(option, value) => option._id === value._id}
                             sx={{ width: '350px' }}
                         />
                     </Stack>
@@ -150,10 +149,8 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
                 name="belbinRol"
                 label="Selecciona uno o varios roles"
                 multiple
-                options={dataRolesBelbin }
-                getOptionLabel={(option)=>(option.name?option.name:'')}
-                isOptionEqualToValue={(option, value) => option._id === value._id}
-                groupBy={ ( option ) => option.group }
+                options={dataRolesBelbin.map( role => ({ 'label': role.name, '_id': role._id, 'group' : role.group }))}
+                groupBy={(option) => option.group } 
                 sx={{ width: '450px' }}
             />
         </Stack>

@@ -16,23 +16,23 @@ const StyledRating = styled(Rating)(({ theme }) => ({
 const customIcons = {
   1: {
     icon: <SentimentVeryDissatisfiedIcon color="error" />,
-    label: 'Very Dissatisfied',
+    label: '1'
   },
   2: {
     icon: <SentimentDissatisfiedIcon color="error" />,
-    label: 'Dissatisfied',
+    label: '2'
   },
   3: {
     icon: <SentimentSatisfiedIcon color="warning" />,
-    label: 'Neutral',
+    label: '3'
   },
   4: {
     icon: <SentimentSatisfiedAltIcon color="success" />,
-    label: 'Satisfied',
+    label: '4'
   },
   5: {
     icon: <SentimentVerySatisfiedIcon color="success" />,
-    label: 'Very Satisfied',
+    label: '5'
   },
 };
 
@@ -41,16 +41,15 @@ function IconContainer(props) {
   return <span {...other}>{customIcons[value].icon}</span>;
 }
 
-export function CustomRating({ onChange }) {
+export function CustomRating({ onChange, defaultValue }) {
   return (
     <StyledRating
-      name="highlight-selected-only"
-      defaultValue={0}
       IconContainerComponent={IconContainer}
       getLabelText={(value) => customIcons[value].label}
       highlightSelectedOnly
       onChange={onChange}
-      size="large" 
+      size="large"
+      defaultValue={defaultValue} 
     />
   );
 }

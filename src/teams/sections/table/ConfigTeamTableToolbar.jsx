@@ -9,7 +9,7 @@ export const ConfigTeamTableToolbar = ({
   optionsRoles,
   optionsKnowledges,
   optionsTools,
-  optionsRolBelbin,
+  optionsRolBelbin
 }) => {
 
 
@@ -27,13 +27,13 @@ export const ConfigTeamTableToolbar = ({
         multiple
         limitTags={3}
         id="belbinRol"
-        options={optionsRolBelbin }
+        options={optionsRolBelbin}
+        onChange={onFilterRolesBelbin}
         getOptionLabel={(option)=>(option.name?option.name:'')}
-        isOptionEqualToValue={(option, value) => option._id === value._id}
-        groupBy={ ( option ) => option.group }
+        groupBy={(option) => option.group }
         sx={{ width: '450px' }}
         renderInput={(params) => (
-          <TextField {...params} label="Roles de Belbin" placeholder="Roles de Belbin" sx={{textTransform: 'capitalize'}}/>
+          <TextField {...params} label="Roles de Belbin"  placeholder="Roles de Belbin" value={filterRol} sx={{textTransform: 'capitalize'}}/>
         )}
           />
       <Autocomplete
