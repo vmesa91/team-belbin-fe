@@ -12,13 +12,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo } from "react";
 import { useDispatch , useSelector } from "react-redux";
-import { createProfile , getProfiles } from "../../redux/store/profiles/profileThunk";
+import { createProfile , getProfiles, updateProfile } from "../../redux/store/profiles/profileThunk";
 import { PATH_PROFILE } from "../../home/routes/paths"
 
 
 export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
-
-  console.log(currentProfile)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -70,9 +68,19 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
 
   
   const onSubmit = ( data ) => {
+
+    if (isEdit) {
+      const { _id } = currentProfile
+      reset();
+      dispatch(updateProfile(data, _id))
+      navigate(PATH_PROFILE.manageProfiles);
+
+    }else {
       reset();
       dispatch(createProfile(data))
-      navigate(PATH_PROFILE.manageProfiles);
+      navigate(PATH_PROFILE.manageProfiles); 
+
+    }   
   }
   
   return (

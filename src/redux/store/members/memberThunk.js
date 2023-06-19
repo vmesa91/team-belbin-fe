@@ -51,6 +51,42 @@ export const createMember = ( value ) => {
     }
 } 
 
+export const updateMember = ( value, id) => {
+
+    return async( dispatch, getState ) => {
+        
+        const { memberStore } = getState()
+        const { user, profile, knowledges, expertise, colleagues, belbinRol, language} = value
+        try {
+
+              // To dispatch
+            const { members } = memberStore
+            const actualState = members
+
+            const newData = {
+                user,
+                profile: profile._id,
+                belbinRol: getID(belbinRol),
+                expertise,
+                colleagues,
+                knowledges: getID(knowledges),
+                language: language
+            }
+
+            console.log(newData)
+            
+            const { data } = await api.put(`/member/${id}` , newData)
+            
+            const newState = [ ...actualState,  data.member ]
+        
+            dispatch(onSetMember ( { type: 'members' , value : newState  } ))
+
+        } catch(error){
+            console.log(error)
+        } 
+
+    }
+} 
 
 export const deleteMember = (value) => { 
 

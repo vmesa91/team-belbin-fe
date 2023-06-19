@@ -14,7 +14,6 @@ export const getTeams = () => {
 }
 
 export const configureTeam = ( value ) => {
-console.log("🚀 ~ file: teamThunk.js:17 ~ configureTeam ~ value:", value)
 
      const { leader } = value
 
@@ -24,15 +23,6 @@ console.log("🚀 ~ file: teamThunk.js:17 ~ configureTeam ~ value:", value)
         const { members } = memberStore
         const dataLeader = members.find( (member) => member._id === leader  )
            
- /*        const data = {
-            name,
-            description,
-            leader,
-            roles: getID(roles),
-            knowledges: getID(knowledges),
-            tools: getID(tools),
-            language
-        } */
 
         dispatch( onSetTeam( { type: 'configureTeam' , value: { ...value, leader: dataLeader }  } ))
 
@@ -58,18 +48,33 @@ export const addMembersConfigureTeam = ( value ) => {
 
 }
 
-export const createTeam = ( value ) => {
+export const createTeam = () => {
     
     return async ( dispatch, getState ) => {
 
         const { teamStore } = getState()
            
         // To dispatch
-        const { teams } = teamStore
+        const { teams , configureTeam } = teamStore
+        const { name, description, leader, roles, tools, knowledges, language, members } = configureTeam
 
         const actualState = teams
 
         try {
+
+            const newTeam = {
+                name,
+                description, 
+                leader: leader.user._id,
+                roles: getID(roles),
+                tools: getID(tools),
+                knowledges: getID(knowledges),
+                language,
+                members: getID(members)
+            }
+
+            const { data } = await api.post('/team', newTeam)
+            console.log(data)
 
         } catch( error ) {
             console.log(error)

@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { PATH_MEMBER } from "../../home/routes/paths"
-import { createMember } from "../../redux/store/members/memberThunk";
+import { createMember, updateMember } from "../../redux/store/members/memberThunk";
 import { filterMembersList } from "../utils/filterMembersList";
 
 export const NewEditMember = ({ isEdit=false , currentMember }) => {
@@ -72,10 +72,19 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
 
 
     const onSubmit = (data) => {
-      console.log(data)
-      reset();
-      dispatch(createMember(data))
-      navigate(PATH_MEMBER.manageMembers);
+
+      if (isEdit){
+        console.log(currentMember)
+
+        const { _id } = currentMember
+        reset();
+        dispatch(updateMember(data, _id))
+        navigate(PATH_MEMBER.manageMembers);
+      }else{ 
+        reset();
+        dispatch(createMember(data))
+        navigate(PATH_MEMBER.manageMembers);
+      }
     }
 
   return (

@@ -54,7 +54,36 @@ export const createProfile = ( value ) => {
     }
 }
 
-export const updateProfile = () => {
+export const updateProfile = ( value, id ) => {
+
+
+    return async (dispatch, getState) => {
+
+        const { profileStore } = getState()
+
+        // To dispatch
+        const { profiles } = profileStore
+        const actualState = profiles
+
+        try {
+
+            const newData = {
+                name: value.name,
+                description: value.description,
+                roles: getID(value.roles),
+                tools: getID(value.tools)
+            }
+
+            const { data } = await api.put(`/profile/${id}` , newData)
+
+            const newState = [ ...actualState,  data.profile ]
+ 
+            dispatch(onSetProfile ( { type: 'profiles' , value : newState  } ))
+
+        } catch( error ) {
+            console.log(error)
+        }
+    } 
 
 }
 

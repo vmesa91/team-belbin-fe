@@ -114,17 +114,12 @@ export function ConfigTeamPage() {
   const getLengthBySympathy = (value) => {
 
     const { colleagues } = leader
-    console.log(colleagues)
     const listFive = colleagues.filter( (coll) =>  coll.score === 5)
     const listFour = colleagues.filter( (coll) =>  coll.score === 4)
     const listThree = colleagues.filter( (coll) =>  coll.score === 3)
     const listTwo = colleagues.filter( (coll) =>  coll.score === 2)
     const listOne = colleagues.filter( (coll) =>  coll.score === 1)
 
-    console.log('five =>', listFive)
-    console.log('four =>', listFour)
- 
-    console.log(membersFiltered)
     const sumBySympathy = membersFiltered?.filter((item) => {
   
       switch (value) {
@@ -144,7 +139,6 @@ export function ConfigTeamPage() {
       }
     })
 
-    console.log('sumBySympathy', sumBySympathy)
 
     return sumBySympathy?.length
   
@@ -234,11 +228,7 @@ export function ConfigTeamPage() {
             bgcolor: 'background.neutral',
           }}
           >
-          {TABS.map((tab) => {  
-            console.log(tab)
-
-            console.log(tab.count)
-              return <Tab
+          {TABS.map((tab) =>  <Tab
                 key={tab.value}
                 value={tab.value}
                 label={tab.icon}
@@ -248,7 +238,7 @@ export function ConfigTeamPage() {
                   </Label>
                 }
               />
-              })}
+              )}
           </Tabs>
 
           <Divider />

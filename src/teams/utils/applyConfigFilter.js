@@ -55,7 +55,6 @@ export function applyFilter({
         
 
     if (filterSympathy !== 'Todos') {
-      console.log("🚀 ~ file: applyConfigFilter.js:58 ~ filterSympathy:", filterSympathy)
       const { colleagues } = leader
       const listFive = colleagues.filter( (coll) =>  coll.score === 5)
       const listFour = colleagues.filter( (coll) =>  coll.score === 4)
@@ -64,7 +63,6 @@ export function applyFilter({
       const listOne = colleagues.filter( (coll) =>  coll.score === 1)
 
       inputData = inputData.filter((item) => {
-        console.log("🚀 ~ file: applyConfigFilter.js:66 ~ inputData=inputData.filter ~ item:", item)
         switch (filterSympathy) {
           case '5':
             return listFive.find( ( listuser ) => listuser.user._id === item.user._id ) ? true : false
@@ -80,8 +78,6 @@ export function applyFilter({
             break;
         }
       })
-
-      console.log(inputData)
     } 
 
     return inputData;

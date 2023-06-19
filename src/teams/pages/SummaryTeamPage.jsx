@@ -10,18 +10,21 @@ import { members } from '../../_mock/dataMembers'
 import { TeamWidgetExpertise } from "../sections/summary/TeamWidgetExpertise"
 import { TeamCarouselMembers } from "../sections/summary/TeamCarouselMembers"
 import { LoadingButton } from "@mui/lab"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
+import { createTeam } from "../../redux/store/teams/teamThunk"
 
 
 export const SummaryTeamPage = () => {
 
   const  methodsForm = useForm() 
+  const dispatch = useDispatch()
 
   const { configureTeam } = useSelector( state => state.teamStore )
   const { name, description, leader, roles, tools, knowledges, members } = configureTeam 
 
   const onSubmit = () => {
-    console.log('On Submit')
+    //"/team/configTeam"
+   dispatch( createTeam() )
   }
 
   return (
@@ -68,7 +71,7 @@ export const SummaryTeamPage = () => {
             <LoadingButton type="submit" variant="contained">
                 {'Atrás'}
             </LoadingButton>
-            <LoadingButton onClick={ () => handleClickItem( "/team/configTeam" ) } type="submit" variant="outlined">
+            <LoadingButton onClick={ onSubmit } type="submit" variant="outlined">
                 {'Crear Equipo'}
             </LoadingButton>
         </Stack>
