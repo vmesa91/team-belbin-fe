@@ -20,7 +20,7 @@ export const MemberTableRow = ({
 
 
 
-  const { user, profile, language, teams } = row
+  const { user, profile, language, team } = row
 
   const { name , surname, image} = user 
 
@@ -61,7 +61,7 @@ export const MemberTableRow = ({
         </TableCell>
 
         <TableCell align="left">{ summaryOptions('profile', profile) }</TableCell>
-        <TableCell align="left">{ summaryOptions('teams', teams) }</TableCell>
+        <TableCell align="left">{ summaryOptions('teams', team) }</TableCell>
         <TableCell align="left">{ summaryOptions('language', language) }</TableCell>
 
         <TableCell align="right">

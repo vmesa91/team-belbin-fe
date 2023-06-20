@@ -3,6 +3,8 @@ import { Iconify } from "../../../common/components/Iconify/Iconify"
 import { MenuPopover } from "../../../common/components/MenuPopover/MenuPopover"
 import { useState } from "react"
 import { ConfirmDialog } from "../../../common/components/ConfirmDialog/ConfirmDialog"
+import { useSelector } from "react-redux"
+import { summaryOptions } from "../../../common/utils/summaryOptions"
 
 export const TeamTableRow = ({
     row,
@@ -13,7 +15,13 @@ export const TeamTableRow = ({
     onDeleteRow,
 }) => {
 
-  const { name, profile, language, member } = row
+  const { name, members, language } = row
+
+  const getProfiles = () => {
+     return members.map( (member) => member.profile  )
+  }
+
+  const profiles = getProfiles()
 
   const [openConfirm, setOpenConfirm] = useState(false)
 
@@ -59,9 +67,9 @@ export const TeamTableRow = ({
           </Stack>
         </TableCell>
 
-        <TableCell align="left">{profile}</TableCell>
-        <TableCell align="left">{member}</TableCell>
-        <TableCell align="left">{language}</TableCell>
+        <TableCell align="left">{ summaryOptions('profileList', profiles) }</TableCell>
+        <TableCell align="left">{summaryOptions('members', members)}</TableCell>
+        <TableCell align="left">{summaryOptions('language', language)}</TableCell>
 
         <TableCell align="right">
           <IconButton color={openPopover ? 'inherit' : 'default'} onClick={handleOpenPopover}>
@@ -114,4 +122,17 @@ export const TeamTableRow = ({
       />
    </>
   )
+}
+
+
+// Get Profiles
+
+const getProfiles = ( members , profiles) => {
+   
+  const profilesList = members.map( (member) => {
+     return profiles.find( (profile) => profile._id === member.profile )
+  } )
+
+ return profilesList
+ 
 }

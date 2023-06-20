@@ -73,8 +73,11 @@ export const createTeam = () => {
                 members: getID(members)
             }
 
-            const { data } = await api.post('/team', newTeam)
-            console.log(data)
+            await api.post('/team', newTeam)
+
+            const newState = [ ...actualState, configureTeam ]
+
+            dispatch(onSetTeam ( { type: 'teams' , value : newState  } ))
 
         } catch( error ) {
             console.log(error)

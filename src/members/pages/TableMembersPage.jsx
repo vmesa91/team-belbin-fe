@@ -69,7 +69,7 @@ export function TableMembersPage() {
 
   const navigate = useNavigate()
 
-  const { activeMember , members } = useSelector( state => state.memberStore )
+  const {  members } = useSelector( state => state.memberStore )
 
   const { teams } = useSelector( state => state.teamStore )
 

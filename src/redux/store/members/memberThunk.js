@@ -73,7 +73,6 @@ export const updateMember = ( value, id) => {
                 language: language
             }
 
-            console.log(newData)
             
             const { data } = await api.put(`/member/${id}` , newData)
             

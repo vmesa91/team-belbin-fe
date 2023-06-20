@@ -1,30 +1,18 @@
 import { Helmet } from 'react-helmet-async';
-import { filter } from 'lodash';
 
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // @mui
 import {
   Card,
   Table,
   Stack,
-  Paper,
-  Avatar,
   Button,
-  Popover,
-  Checkbox,
-  TableRow,
-  MenuItem,
   TableBody,
-  TableCell,
   Container,
-  Typography,
   IconButton,
   TableContainer,
   TablePagination,
-  Tabs,
-  Divider,
-  Tab,
   Tooltip,
 } from '@mui/material';
 // components
@@ -33,26 +21,22 @@ import { Iconify } from '../../common/components/Iconify/Iconify'
 // sections
 import { TableListHead } from '../../common/sections/table/TableListHead';
 // Config
-import { dataTableTeams , dataTableConfigTeam } from '../config/configTableTeams'
+import { dataTableTeams } from '../config/configTableTeams'
 
 // Mock
 import { profiles } from '../../_mock/dataProfiles'
-import { dataKnowledges } from '../../_mock/dataKnowledges'
-import { teams } from '../../_mock/dataTeams'
 import { dataCountries } from '../../_mock/dataCountries'
-import { members } from '../../_mock/dataMembers'
 
 import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBreadcrumbs';
 
 // UTILS Methods
-import { getComparator } from '../../common/utils/comparatorMethods'
-import { applySortFilter } from '../../common/utils/filterMethods'
 import {  applyFilter } from '../utils/applyTableFilter'
 import { useTable } from '../../hooks/useTable';
 import { TeamTableToolbar } from '../sections/table/TeamTableToolbar';
 import { TableSelectedAction } from '../../common/sections/table/TableSelectedAction';
 import { TeamTableRow } from '../sections/table/TeamTableRow';
 import { ConfirmDialog } from '../../common/components/ConfirmDialog/ConfirmDialog';
+import { useDispatch, useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -61,8 +45,6 @@ export function TableTeamsPage() {
 
   const {
     page,
-    order,
-    orderBy,
     rowsPerPage,
     setPage,
     //
@@ -71,24 +53,36 @@ export function TableTeamsPage() {
     onSelectRow,
     onSelectAllRows,
     //
-    onSort,
     onChangePage,
     onChangeRowsPerPage
   } = useTable()
 
-  const [tableData, setTableData] = useState(teams)
+   
+  const dispatch = useDispatch()
 
   const navigate = useNavigate()
-  
+
+  const { teams } = useSelector( state => state.teamStore )
+
+  const { profiles } = useSelector( state => state.profileStore )
+
+  const { members } = useSelector( state => state.memberStore )
+
+  const [tableData, setTableData] = useState(teams)
+
   const [openConfirm, setOpenConfirm] = useState(false);
  
   const [filterName, setFilterName] = useState('');
   
-  const [filterProfile, setFilterProfile] = useState('')
+  const [filterProfile, setFilterProfile] = useState([])
 
-  const [filterMember, setFilterMember] = useState('')
+  const [filterMember, setFilterMember] = useState([])
 
-  const [filterLanguage, setFilterLanguage] = useState('')
+  const [filterLanguage, setFilterLanguage] = useState([])
+
+  useEffect(() => {
+    setTableData(teams)
+  }, [teams]) 
 
 
   const dataFiltered = applyFilter({
@@ -104,9 +98,9 @@ export function TableTeamsPage() {
 
   const isFiltered =
   filterName !== '' ||
-  filterProfile !== '' ||
-  filterMember !== '' ||
-  filterLanguage !== '' 
+  filterProfile.length > 0 ||
+  filterLanguage.length > 0 ||
+  filterMember.length > 0 
 
   const isNotFound =
   (!dataFiltered.length && !!filterName) ||
@@ -129,19 +123,19 @@ export function TableTeamsPage() {
     setFilterName(event.target.value);
   }
 
-  const handleFilterByProfile = (event) => {
+  const handleFilterByProfile = ({target}) => {
     setPage(0);
-    setFilterProfile(event.target.value);
+    (target.innerText === undefined ) ? handleResetFilter() : setFilterProfile([ ...filterProfile , target.innerText ])
   }
 
-  const handleFilterByMember = (event) => {
+  const handleFilterByMember = ({target}) => {
     setPage(0);
-    setFilterMember(event.target.value);
+    (target.innerText === undefined ) ? handleResetFilter() : setFilterMember([ ...filterMember , target.innerText ])
   }
 
-  const handleFilterByLanguage = (event) => {
+  const handleFilterByLanguage = ({target}) => {
     setPage(0);
-    setFilterLanguage(event.target.value);
+    (target.innerText === undefined ) ? handleResetFilter() : setFilterLanguage([ ...filterLanguage , target.innerText ])
   }
 
   const handleDeleteRow = (id) => {
@@ -180,9 +174,9 @@ export function TableTeamsPage() {
 
   const handleResetFilter = () => {
     setFilterName('');
-    setFilterProfile('');
-    setFilterMember('');
-    setFilterLanguage('')
+    setFilterProfile([]);
+    setFilterMember([]);
+    setFilterLanguage([])
   }
 
   return (
@@ -222,8 +216,7 @@ export function TableTeamsPage() {
 
          <Card>
 
-          {/* <TableListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} /> */}
-          < TeamTableToolbar 
+         < TeamTableToolbar 
             isFiltered={isFiltered}
             filterName={filterName}
             filterProfile={filterProfile}
@@ -262,12 +255,9 @@ export function TableTeamsPage() {
 
                 <Table sx={{ minWidth: 800 }}>
                   <TableListHead 
-                    order={order}
-                    orderBy={orderBy}
                     headLabel={dataTableTeams}
                     rowCount={tableData.length}
                     numSelected={selected.length}
-                    onSort={onSort}
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,

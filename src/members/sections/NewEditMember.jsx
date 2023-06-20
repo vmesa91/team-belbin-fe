@@ -157,6 +157,7 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
             < CustomAutocomplete
                 name="belbinRol"
                 label="Selecciona uno o varios roles"
+                filterSelectedOptions
                 multiple
                 options={dataRolesBelbin.map( role => ({ 'label': role.name, '_id': role._id, 'group' : role.group }))}
                 groupBy={(option) => option.group } 

@@ -125,6 +125,7 @@ export const NewEditTeam = ({ isEdit, currentTeam }) => {
               < CustomAutocomplete
                   name="roles"
                   label="Selecciona Rol"
+                  filterSelectedOptions
                   multiple
                   options={roles}
                   getOptionLabel={(option) => option.name}
@@ -134,6 +135,7 @@ export const NewEditTeam = ({ isEdit, currentTeam }) => {
               < CustomAutocomplete
                   name="tools"
                   label="Selecciona Tecnología" 
+                  filterSelectedOptions
                   multiple
                   options={tools}
                   getOptionLabel={(option) => option.name}
@@ -143,6 +145,7 @@ export const NewEditTeam = ({ isEdit, currentTeam }) => {
               < CustomAutocomplete
                   name="knowledges"
                   label="Añadir uno o más conocimientos"
+                  filterSelectedOptions
                   multiple
                   options={knowledges}
                   getOptionLabel={(option) => option.name}
@@ -151,9 +154,11 @@ export const NewEditTeam = ({ isEdit, currentTeam }) => {
                   
               < CustomAutocomplete
                   name="language"
-                  label="Añadir uno o más idiomas"
+                  label="Selecciona uno o varios idiomas"
+                  filterSelectedOptions
                   multiple
-                  options={dataCountries.map((language) => language.name)}
+                  options={dataCountries}
+                  getOptionLabel={(option)=>(option.name?option.name:'')}
                   sx={{ p: 3}}
                   />
             </Stack>

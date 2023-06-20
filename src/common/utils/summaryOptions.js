@@ -3,6 +3,7 @@ import { isEmpty } from "lodash"
 
 export const summaryOptions = ( type, list ) => {
 
+
     if (list === null) return '-'
 
     if ( isEmpty(list)) return '-'
@@ -48,6 +49,19 @@ export const summaryOptions = ( type, list ) => {
                 return list.name
     
             }
+
+        case 'profileList':
+             {
+                const listConcat = list.map(( li ) => li.name )
+                if (listConcat.length > 3) {
+                    const listSlice = listConcat.slice(0,2)
+                    const listSliceWarp = listConcat.slice(2)
+                    return listSlice.join(", ") + ` ( +${listSliceWarp.length.toString()} )`
+                    } else {
+                    return listConcat.join(", ")
+                    }
+             }
+
         case 'teams':
             {
                 const listConcat = list.map(( li ) => li.name )

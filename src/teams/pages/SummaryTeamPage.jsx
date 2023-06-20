@@ -12,11 +12,13 @@ import { TeamCarouselMembers } from "../sections/summary/TeamCarouselMembers"
 import { LoadingButton } from "@mui/lab"
 import { useDispatch, useSelector } from "react-redux"
 import { createTeam } from "../../redux/store/teams/teamThunk"
+import { useNavigate } from "react-router-dom"
+import { PATH_TEAM } from "../../home/routes/paths"
 
 
 export const SummaryTeamPage = () => {
 
-  const  methodsForm = useForm() 
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const { configureTeam } = useSelector( state => state.teamStore )
@@ -25,6 +27,7 @@ export const SummaryTeamPage = () => {
   const onSubmit = () => {
     //"/team/configTeam"
    dispatch( createTeam() )
+   navigate(PATH_TEAM.manageTeams); 
   }
 
   return (

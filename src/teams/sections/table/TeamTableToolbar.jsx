@@ -18,7 +18,7 @@ export const TeamTableToolbar = ({
     optionsMembers,
     optionsLanguages
 }) => {
-
+  
   return (
     <Stack
     spacing={2}
@@ -46,7 +46,10 @@ export const TeamTableToolbar = ({
         multiple
         limitTags={3}
         id="profiles"
-        options={optionsProfiles.map((profile) => profile.name)}
+        filterSelectedOptions
+        onChange={onFilterByProfile}
+        options={optionsProfiles}
+        getOptionLabel={(option) => option.name}
         defaultValue={[]}
         sx={{ maxHeight: 120 , width: '500px'}}
         renderInput={(params) => (
@@ -57,7 +60,10 @@ export const TeamTableToolbar = ({
         multiple
         limitTags={3}
         id="members"
-        options={optionsMembers.map((member) => member.name)}
+        filterSelectedOptions
+        onChange={onFilterByMember}
+        options={optionsMembers}
+        getOptionLabel={(option) => option.user.name + ' ' +  option.user.surname}
         defaultValue={[]}
         sx={{ maxHeight: 120 , width: '500px'}}
         renderInput={(params) => (
@@ -67,10 +73,12 @@ export const TeamTableToolbar = ({
       <Autocomplete
         multiple
         limitTags={3}
-        id="languages"
-        options={optionsLanguages.map((language) => language.name)}
+        id="language"
+        filterSelectedOptions
+        onChange={onFilterByLanguage}
+        options={optionsLanguages}
+        getOptionLabel={(option) => option.name}
         defaultValue={[]}
-        readOnly
         sx={{ maxHeight: 120 , width: '500px' }}
         renderInput={(params) => (
           <TextField {...params} label="Idiomas" placeholder="Idiomas" sx={{textTransform: 'capitalize'}}/>
