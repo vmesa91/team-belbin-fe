@@ -1,9 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 import useResponsive from "../../hooks/useResponsive";
 import styled from '@emotion/styled';
-
+import { Link } from '@mui/material'
 import { Container , Typography } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { PATH_AUTH } from '../../home/routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +35,7 @@ const StyledContent = styled('div')(({ theme }) => ({
 
 export const AuthLayout = ( { children , title = '' } ) => {
 
-  const mdUp = useResponsive('up', 'md')
+  const navigate = useNavigate()
   return (
     <>
         <Helmet>
@@ -46,13 +47,26 @@ export const AuthLayout = ( { children , title = '' } ) => {
         <Container maxWidth="sm" >
             <StyledContent>
                 <Typography variant="h4" gutterBottom>
-                  BIENVENIDO!! 
+                  { title === 'Login' ? 'Bienvenido a Team Belbin' : 'Crear cuenta' }
                 </Typography>
 
-                <Typography variant="body2" sx={{ mb: 5 }}>
-                    Don’t have an account? {''}
-                    <Link variant="subtitle2">Registro</Link>
-                </Typography>
+                {  title === 'Login' 
+                
+                 ?  
+                  <Typography variant="body2" sx={{ mb: 5 }}>
+                      ¿No tienes cuenta? {'  '}  
+                      <Link onClick={() => { navigate(PATH_AUTH.register) }} variant="subtitle2">Registro</Link>
+                  </Typography>
+
+                  :  
+
+                  <Typography variant="body2" sx={{ mb: 5 }}>
+                       Volver al Login {'  '}  
+                      <Link onClick={() => { navigate(PATH_AUTH.login) }}  variant="subtitle2">Login</Link>
+                  </Typography>
+
+
+                 }
                   
                   {/* LOGIN OR REGISTER */}
                   { children }
