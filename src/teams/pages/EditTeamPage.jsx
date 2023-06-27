@@ -2,15 +2,30 @@
 import { Helmet } from "react-helmet-async"
 import { CustomBreadcrumbs } from "../../common/components/Breadcrumbs/CustomBreadcrumbs"
 import { NewEditTeam } from "../sections/NewEditTeam"
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { paramCase } from "change-case";
+import { Container } from "@mui/material";
+import { useEffect } from "react";
+import { editTeam } from "../../redux/store/teams/teamThunk";
 
 export const EditTeamPage = () => {
 
-    const { name } = useParams();
+    const { id } = useParams()
 
-    const { activeProfile , teams } = useSelector( state => state.teamStore )
+    const dispatch = useDispatch()
 
-    const currentTeam = teams.find((team) => paramCase(team.name) === name);
+    useEffect(() => {
+      dispatch( editTeam(id) )
+    }, [])
+    
+    const { teams } = useSelector( state => state.teamStore )
+    const { members } = useSelector( state => state.memberStore )
+
+    const foundTeam = teams.find((team) => paramCase(team._id) === id);
+  
+    const leaderData = members.find( ( member ) => member.user._id === foundTeam.leader._id )
+    const currentTeam = { ...foundTeam, leader: leaderData }
 
     return (
 
@@ -30,7 +45,7 @@ export const EditTeamPage = () => {
                { name: 'Crear Equipo' },
              ]}
            />
-            <NewEditTeam isEdit currentTeam={currentTeam}/>
+            <NewEditTeam isEdit={true} currentTeam={currentTeam}/>
          </Container>
         </>
     

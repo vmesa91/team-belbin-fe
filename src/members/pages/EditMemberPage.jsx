@@ -34,7 +34,7 @@ export const EditMemberPage = () => {
 
   let currentMember = members.find((member) => paramCase(member._id) === id);
   currentMember = mappingMember(currentMember)
-  console.log(currentMember)
+
 
   return (
     <>

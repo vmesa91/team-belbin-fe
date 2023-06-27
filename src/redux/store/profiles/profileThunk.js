@@ -3,7 +3,6 @@ import { onSetProfile } from "./profileSlice"
 import api from "../../../api/config"
 
 
-
 export const getProfileId = (id) => {
     
     return async (dispatch) => {
@@ -19,6 +18,7 @@ export const getProfiles = () => {
     
         const { data } = await api.get('/profile')
         dispatch(onSetProfile ( { type: 'profiles' , value : data.profiles  } ))
+        dispatch(onSetProfile ( { type: 'mostProfiles' , value : data.mostProfiles  } ))
     }
 }
 
@@ -49,7 +49,8 @@ export const createProfile = ( value ) => {
             dispatch(onSetProfile ( { type: 'profiles' , value : newState  } ))
 
         } catch( error ) {
-            console.log(error)
+            dispatch(onSetProfile ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
+
         }
     }
 }
@@ -81,7 +82,7 @@ export const updateProfile = ( value, id ) => {
             dispatch(onSetProfile ( { type: 'profiles' , value : newState  } ))
 
         } catch( error ) {
-            console.log(error)
+            dispatch(onSetProfile ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
         }
     } 
 

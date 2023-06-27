@@ -10,13 +10,14 @@ import { Link } from 'react-router-dom';
 const StyledRoot = styled('div')(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
       display: 'flex',
+      backgroundColor:'white'
     },
   }))
 
 const StyledSection = styled('div')(({ theme }) => ({
-width: '80%',
 display: 'flex',
-backgroundColor: theme.palette.background.default,
+width: '200%',
+backgroundColor: 'white'
 }));
 
 const StyledContent = styled('div')(({ theme }) => ({
@@ -42,7 +43,7 @@ export const AuthLayout = ( { children , title = '' } ) => {
 
         <StyledRoot>
 
-        <Container maxWidth="sm">
+        <Container maxWidth="sm" >
             <StyledContent>
                 <Typography variant="h4" gutterBottom>
                   BIENVENIDO!! 

@@ -43,6 +43,7 @@ import { deleteProfile , deleteProfiles } from '../../redux/store/profiles/profi
 import { TableEmptyRows } from '../../common/sections/table/TableEmptyRows';
 import { TableNoData } from '../../common/sections/table/TableNoData';
 import { emptyRows } from '../../common/utils/emptyRows';
+import { updataInfo } from '../../common/utils/updateInfo';
 
 // ------------------------------------------------------------------
 
@@ -63,12 +64,15 @@ export function TableProfilesPage() {
     onChangeRowsPerPage
   } = useTable() 
 
+  updataInfo()
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const { activeProfile , profiles } = useSelector( state => state.profileStore )
 
   const { tools , roles, errorMessage } = useSelector( state => state.dataStore )
+
+  const { members } = useSelector( state => state.memberStore )
 
   const [tableData, setTableData] = useState(profiles)
   
@@ -225,7 +229,6 @@ export function TableProfilesPage() {
             isFiltered={isFiltered}
             filterName={filterName}
             filterRol={filterRol}
-            filterTechnology={filterTechnology}
             filterMember={filterMember}
             onFilterByName={handleFilterByName}
             onFilterByRol={handleFilterByRol}
@@ -234,7 +237,7 @@ export function TableProfilesPage() {
             onResetFilter={handleResetFilter}
             optionsRoles={roles} 
             optionsTechnologies={tools}
-            optionsMembers={tools}
+            optionsMembers={members}
             />
 
             <TableContainer sx={{ minWidth: 800 }}>

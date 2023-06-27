@@ -4,8 +4,8 @@ import { createSlice } from '@reduxjs/toolkit';
 export const teamSlice = createSlice({
     name: 'team',
     initialState: {
-        activeTeam: null,
         configureTeam: null,
+        idEditTeam: '',
         teams: [],
         errorMessage: undefined
     },

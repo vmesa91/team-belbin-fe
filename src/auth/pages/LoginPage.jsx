@@ -21,6 +21,7 @@ export const LoginPage = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
+
     if (errorMessage !== undefined) {
 
       reset()

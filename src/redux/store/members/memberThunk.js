@@ -35,8 +35,6 @@ export const createMember = ( value ) => {
                 knowledges: getID(knowledges),
                 language: language
             }
-
-            console.log(newData)
             
             const { data } = await api.post('/member' , newData)
             
@@ -45,7 +43,7 @@ export const createMember = ( value ) => {
             dispatch(onSetMember ( { type: 'members' , value : newState  } ))
 
         } catch(error){
-            console.log(error)
+            dispatch(onSetMember ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
         } 
 
     }
@@ -66,24 +64,24 @@ export const updateMember = ( value, id) => {
             const newData = {
                 user,
                 profile: profile._id,
-                belbinRol: getID(belbinRol),
+                belbinRol,
                 expertise,
                 colleagues,
                 knowledges: getID(knowledges),
                 language: language
             }
-
             
             const { data } = await api.put(`/member/${id}` , newData)
-            
-            const newState = [ ...actualState,  data.member ]
+
+            let newState = actualState.filter( (row) => row.user._id != value.user._id)
+
+            newState = [ ...newState,  data.updateMember ]
         
             dispatch(onSetMember ( { type: 'members' , value : newState  } ))
 
         } catch(error){
-            console.log(error)
+            dispatch(onSetMember ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
         } 
-
     }
 } 
 
@@ -119,7 +117,7 @@ export const deleteMembers = (value) => {
         newState = actualState.filter( (row) => !value.includes(row._id))
 
         try {
-            value.map((val) => { api.delete(`/member/${val}`)} )
+            await value.map((val) => { api.delete(`/member/${val}`)} )
             dispatch(onSetMember ( { type: 'members' , value : newState  } ))
         } catch ( error ) {
             dispatch(onSetMember ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
@@ -127,6 +125,19 @@ export const deleteMembers = (value) => {
 
     }
 }
+
+export const getRolesBelbin = () => {
+
+    return async ( dispatch ) => {
+
+        try {
+            const { data } = await api.get('/member/rolesBelbin')
+            dispatch( onSetMember (  {type: 'groupingRoles', value: data.result} ) )
+        } catch (error) {
+            dispatch(onSetMember ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
+        }
+    }
+} 
 
 
 // Extract ID

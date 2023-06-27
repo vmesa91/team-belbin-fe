@@ -4,9 +4,13 @@ import { createSlice } from '@reduxjs/toolkit';
 export const memberSlice = createSlice({
     name: 'member',
     initialState: {
-        activeMember: null,
         members: [],
-        errorMessage: undefined
+        errorMessage: undefined,
+        groupingRoles: {
+            'Roles Mentales' : 0,
+            'Roles Sociales' : 0,
+            'Roles de Acción' : 0
+        }
     },
     reducers: {
         onSetMember: ( state, { payload } ) => {

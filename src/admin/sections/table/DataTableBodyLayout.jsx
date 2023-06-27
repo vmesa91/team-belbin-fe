@@ -1,6 +1,6 @@
 
 
-import { Button, Card, IconButton, Table, TableBody, TableContainer, TablePagination, Tooltip } from '@mui/material'
+import { Button, Card, IconButton, Table, TableBody, TableContainer, Tooltip } from '@mui/material'
 import { DataTableToolbar } from './DataTableToolbar'
 import { DataTableRow, TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedAction, TableSkeleton } from '../../components/Table'
 import { Iconify } from '../../../common/components/Iconify/Iconify'
@@ -9,8 +9,8 @@ import { useTable } from '../../hooks/useTable'
 import { getComparator } from '../../utils/utils'
 import { TablePaginationCustom } from '../../components/Table/TablePaginationCustom'
 import { ConfirmDialog } from '../../../common/components/ConfirmDialog/ConfirmDialog'
-import { useDispatch, useSelector } from 'react-redux'
-import { deleteData } from '../../../redux/store/data/dataThunk'
+import { useDispatch } from 'react-redux'
+import { deleteData, deleteDatas } from '../../../redux/store/data/dataThunk'
 
 
 export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , typeData }) => {
@@ -49,6 +49,8 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
   
   const isNotFound = (!dataFiltered.length && !!filterName) 
 
+  const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+
   const handleOpenConfirm = () => {
     setOpenConfirm(true);
   };
@@ -66,7 +68,7 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
 
     const deleteRow = tableData.filter((row) => row._id !== id);
     setSelected([]);
-    dispatch( deleteData( deleteRow , typeData ) )
+    dispatch( deleteData( id , typeData ) )
     setTableData(deleteRow)
 
     if (page > 0) {
@@ -80,7 +82,7 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
     
     const deleteRows = tableData.filter((row) => selectedRows.includes(row._id));
     setSelected([]);
-    dispatch( deleteData( deleteRows , typeData ) )
+    dispatch( deleteDatas( deleteRows , typeData ) )
     setTableData(deleteRows)
     
 

@@ -40,34 +40,40 @@ export const NewDataModalForm = ({ onCancel }) => {
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
-        <Stack spacing={3} sx={{ px: 3 }}>
+
+      <Box sx={ {  display: 'flex', flexDirection: 'column', 'align-items': 'center'} } >
+        <Stack spacing={3} sx={{ px: 3 , display: 'flex', flexDirection: 'row', 'align-items': 'center', flexWrap: 'wrap'} }>
             <CustomTextField name="name" label="Nombre"/>
+
+            <CustomSelect
+                    name='dataOption'
+                    size="small"
+                    label="Tipo de Dato">
+                    {dataOptions.map((option) => (
+                        <MenuItem
+                        key={option._id}
+                        value={option.label}
+                        >
+                          {option.label}
+                      </MenuItem>
+                    ))}
+            </CustomSelect>
         </Stack>
         
-        <CustomSelect
-                name='dataOption'
-                size="small"
-                label="Tipo de Dato"
-                sx={{ maxWidth: { md: 160 } }}>
-                {dataOptions.map((option) => (
-                    <MenuItem
-                    key={option._id}
-                    value={option.label}
-                    >
-                      {option.label}
-                  </MenuItem>
-                ))}
-        </CustomSelect>
+        <Stack sx={ { padding: 3 } }>
+            <CustomSwitch  name="activation" label="Activación"/>
+        </Stack>
 
-        <CustomSwitch name="activation" label="Activación"/>
+        <Stack sx={ { display: 'flex' , flexDirection: 'row-reverse' , justifyContent: 'space-between', padding: 3 } } >
+            <Button  variant="outlined" color="inherit" onClick={onCancel}>
+              Cancelar
+            </Button>
 
-        <Button variant="outlined" color="inherit" onClick={onCancel}>
-          Cancelar
-        </Button>
-
-        <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-          Añadir
-        </LoadingButton>
+            <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+              Añadir
+            </LoadingButton>
+        </Stack>
+      </Box>
     </FormProvider>
   )
 }

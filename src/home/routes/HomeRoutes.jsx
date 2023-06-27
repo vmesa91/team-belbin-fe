@@ -14,6 +14,7 @@ import { ConfigTeamPage } from '../../teams/pages/ConfigTeamPage'
 import { SummaryTeamPage } from '../../teams/pages/SummaryTeamPage'
 import { EditProfilePage } from '../../profiles/pages/EditProfilePage'
 import { EditMemberPage } from '../../members/pages/EditMemberPage'
+import { EditTeamPage } from '../../teams/pages/EditTeamPage'
 
 export const HomeRoutes = () => {
     return (
@@ -54,6 +55,10 @@ export const HomeRoutes = () => {
                     <Route
                         path="/team/createTeam"
                         element={<CreateTeamPage />}
+                    ></Route>
+                    <Route
+                        path="/team/editTeam/:id"
+                        element={<EditTeamPage />}
                     ></Route>
                     <Route
                         path="/team/configTeam"

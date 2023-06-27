@@ -37,6 +37,9 @@ import { TableSelectedAction } from '../../common/sections/table/TableSelectedAc
 import { TeamTableRow } from '../sections/table/TeamTableRow';
 import { ConfirmDialog } from '../../common/components/ConfirmDialog/ConfirmDialog';
 import { useDispatch, useSelector } from 'react-redux';
+import { deleteTeam, deleteTeams } from '../../redux/store/teams/teamThunk';
+import { PATH_TEAM } from '../../home/routes/paths';
+import { updataInfo } from '../../common/utils/updateInfo';
 
 // ----------------------------------------------------------------------
 
@@ -57,7 +60,8 @@ export function TableTeamsPage() {
     onChangeRowsPerPage
   } = useTable()
 
-   
+  updataInfo()
+
   const dispatch = useDispatch()
 
   const navigate = useNavigate()
@@ -141,6 +145,7 @@ export function TableTeamsPage() {
   const handleDeleteRow = (id) => {
     const deleteRow = tableData.filter((row) => row._id !== id);
     setSelected([]);
+    dispatch( deleteTeam(id) )
     setTableData(deleteRow);
 
     if (page > 0) {
@@ -153,6 +158,7 @@ export function TableTeamsPage() {
   const handleDeleteRows = (selectedRows) => {
     const deleteRows = tableData.filter((row) => !selectedRows.includes(row._id));
     setSelected([]);
+    dispatch( deleteTeams( selectedRows ) )
     setTableData(deleteRows);
 
     if (page > 0) {
@@ -168,7 +174,7 @@ export function TableTeamsPage() {
   }
 
   const handleEditRow = (id) => {
-    // navigate(PATH_DASHBOARD.invoice.edit(id));
+    navigate(PATH_TEAM.editTeam(id));
   }
 
 
@@ -205,7 +211,7 @@ export function TableTeamsPage() {
             action={
               <Button
                 component={RouterLink}
-                to={''}
+                to={PATH_TEAM.createTeam}
                 variant="contained"
                 startIcon={<Iconify icon="eva:plus-fill" />}
               >

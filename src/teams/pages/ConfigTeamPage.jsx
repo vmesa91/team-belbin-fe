@@ -26,6 +26,7 @@ import {
   Divider,
   Tab,
   Tooltip,
+  Alert,
 } from '@mui/material';
 // components
 import { Label } from '../../common/components/Label';
@@ -59,6 +60,7 @@ import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
 import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
+import { useTheme } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -82,8 +84,12 @@ export function ConfigTeamPage() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
 
+  const theme = useTheme();
+
+
   const { configureTeam } = useSelector( state => state.teamStore )
   const { members } = useSelector( state => state.memberStore )
+  const [validateMembers, setvalidateMembers] = useState(false)
   const { knowledges, tools , roles, leader } = configureTeam
 
   const [tableData, setTableData] = useState(members)
@@ -147,20 +153,14 @@ export function ConfigTeamPage() {
   const TABS = [
     { value: 'Todos', label: 'Todos', color: 'primary', count: membersFiltered?.length},
     { value: '5', label: 'Super Happy', color: 'success', count: getLengthBySympathy(5) , icon: <SentimentVerySatisfiedIcon color="success" /> },
-    { value: '4', label: 'Happy', color: 'warning', count: getLengthBySympathy(4) , icon: <SentimentSatisfiedAltIcon color="success" />},
-    { value: '3', label: 'Not working', color: 'default', count: getLengthBySympathy(3) , icon: <SentimentSatisfiedIcon color="warning" />},
-    { value: '2', label: 'Regular', color: 'info', count: getLengthBySympathy(2) , icon: <SentimentDissatisfiedIcon color="error" />},
+    { value: '4', label: 'Happy', color: 'warning', count: getLengthBySympathy(4) , icon: <SentimentSatisfiedAltIcon color="warning" />},
+    { value: '3', label: 'Not working', color: 'default', count: getLengthBySympathy(3) , icon: <SentimentSatisfiedIcon color="default" />},
+    { value: '2', label: 'Regular', color: 'info', count: getLengthBySympathy(2) , icon: <SentimentDissatisfiedIcon color="info" />},
     { value: '1', label: 'Bad', color: 'error', count: getLengthBySympathy(1) , icon: <SentimentVeryDissatisfiedIcon color="error" /> },
   ]
 
   const dataInPage = dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 
-  const isNotFound =
-  (!dataFiltered.length && !!filterRol) ||
-  (!dataFiltered.length && !!filterSympathy) ||
-  (!dataFiltered.length && !!roles) ||
-  (!dataFiltered.length && !!knowledges) ||
-  (!dataFiltered.length && !!tools) 
 
 
   // Methods
@@ -220,6 +220,7 @@ export function ConfigTeamPage() {
           />
 
          <Card>
+         {!!validateMembers && <Alert severity="error">{'errors.afterSubmit.message'}</Alert>}
           <Tabs
           value={filterSympathy}
           onChange={handleFilterBySympathy}
@@ -296,9 +297,6 @@ export function ConfigTeamPage() {
                               row={row}
                               selected={selected.includes(row)}
                               onSelectRow={() => onSelectRow(row)}
-/*                               onViewRow={() => handleViewRow(row._id)}
-                              onEditRow={() => handleEditRow(row._id)}
-                              onDeleteRow={() => handleDeleteRow(row._id)} */
                           />
                        ))
                     }
@@ -322,9 +320,6 @@ export function ConfigTeamPage() {
         </Card>
 
         <Stack spacing={3} sx={{ mt: 3 , display:"flex", flexDirection:'row', justifyContent:'center', gap:'20px'}}>
-          <LoadingButton type="submit" variant="contained">
-              {'Cancelar'}
-          </LoadingButton>
           <LoadingButton onClick={ handleClickItem } type="submit" variant="outlined">
               {'Siguiente'}
           </LoadingButton>

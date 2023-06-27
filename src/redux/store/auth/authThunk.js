@@ -1,10 +1,11 @@
 import api from "../../../api/config"
-import { useApi } from "../../../api/hooks/useApi"
 import { sessionActive } from "../../../api/utils/sessionActive"
 import { onSetAuth } from "./authSlice"
 
 
 export const login = ( value ) => {
+
+    console.log('####### LOGIN #######')
 
     return async ( dispatch ) => {
 
@@ -71,6 +72,8 @@ export const register = (value) => {
 
 export const checkAuthToken = () => {
 
+    console.log('####### CHECK AUTH TOKEN #######')
+
     const token = localStorage.getItem('token')
 
     return async ( dispatch ) => {
@@ -100,6 +103,7 @@ export const checkAuthToken = () => {
             sessionActive( 'refreshToken' , data )
         } 
         catch (error){
+            console.log("🚀 ~ file: authThunk.js:107 ~ return ~ error:", error)
             localStorage.clear()
             dispatch(onSetAuth ( { type: 'status' , value: 'not-authorized' } ))
             dispatch(onSetAuth ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))

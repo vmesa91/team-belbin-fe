@@ -1,5 +1,5 @@
 
-import { Box, Card, Container, MenuItem, Select, Snackbar, Stack, TextField, Typography } from "@mui/material"
+import { Box, Card, Container, Divider, MenuItem, Select, Snackbar, Stack, TextField, Typography } from "@mui/material"
 // @mui
 
 import { FormProvider } from "../../common/components/Form/FormProvider";
@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo } from "react";
 import { useDispatch , useSelector } from "react-redux";
 import { createProfile , getProfiles, updateProfile } from "../../redux/store/profiles/profileThunk";
-import { PATH_PROFILE } from "../../home/routes/paths"
+import { PATH_HOME, PATH_PROFILE } from "../../home/routes/paths"
 
 
 export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
@@ -22,14 +22,14 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
   const dispatch = useDispatch()
 
 
-/*   // Comprobaciones
+  // Comprobaciones
   const NewProfileSchema = Yup.object().shape({
     name: Yup.string().required('El nombre es requerido'),
     description: Yup.string().required('La descripción es requerida'),
-    rol: Yup.array().required('Es requerido al menos un Rol'),
-    technology: Yup.array().required('Es requerida al menos una tecnología'),
+    roles: Yup.array().min(1, 'Es requerido al menos 1 rol'),
+    tools: Yup.array().min(2, 'Es requerido al menos 2 tecnologías'),
   })
- */
+ 
 
   const { tools , roles, knowledges , errorMessage } = useSelector( state => state.dataStore )
 
@@ -43,19 +43,13 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
     [ currentProfile ] 
   )
 
-  const  methodsForm = useForm({ defaultValues })
+  const  methodsForm = useForm({ 
+    resolver: yupResolver(NewProfileSchema),
+    defaultValues })
 
   const { reset, watch, setValue, handleSubmit , formState: { isSubmitting } } = methodsForm
 
   const values = watch()
- /*
-  const  methodsForm = useForm({  
-    resolver: yupResolver(NewProfileSchema),
-    defaultValues
-  })  */
-
-  
-
 
  useEffect(() => {
     if (isEdit && currentProfile) {
@@ -71,16 +65,13 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
 
     if (isEdit) {
       const { _id } = currentProfile
-      reset();
       dispatch(updateProfile(data, _id))
-      navigate(PATH_PROFILE.manageProfiles);
-
     }else {
-      reset();
       dispatch(createProfile(data))
-      navigate(PATH_PROFILE.manageProfiles); 
-
     }   
+    reset();
+    navigate(PATH_HOME.dashboard);
+
   }
   
   return (
@@ -110,6 +101,8 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
               </Stack>
           </Card>
 
+     <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
+
      <Card sx={{ p: 3 , m: 4 }}>
         <Stack sx={{ display: 'flex' , flexDirection: 'row' ,  justifyContent: 'space-around'}}>
 
@@ -117,8 +110,10 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
               name="roles"
               label="Selecciona Rol"
               multiple
+              filterSelectedOptions
               options={roles}
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={(option)=>(option.name?option.name:'')}
+              isOptionEqualToValue={(option, value) => option._id === value._id}
               sx={{ width: '450px' }}
               />
 
@@ -126,8 +121,10 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
               name="tools"
               label="Selecciona Tecnología" 
               multiple
+              filterSelectedOptions
               options={tools}
-              getOptionLabel={(option) => option.name}
+              getOptionLabel={(option)=>(option.name?option.name:'')}
+              isOptionEqualToValue={(option, value) => option._id === value._id}
               sx={{ width: '450px' }}
               />
         </Stack>
@@ -137,9 +134,7 @@ export const NewEditProfile = ({ isEdit=false , currentProfile }) => {
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
           {!isEdit ? 'Crear Perfil' : 'Guardar Cambios'}
           </LoadingButton>
-          <LoadingButton type="submit" variant="outlined" sx={{ marginTop: '0 !important' }}>
-              Cancelar
-          </LoadingButton>
+    
       </Stack>
   </FormProvider>
 

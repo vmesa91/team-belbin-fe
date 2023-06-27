@@ -46,6 +46,7 @@ import { TableNoData } from '../../common/sections/table/TableNoData';
 import { TableEmptyRows } from '../../common/sections/table/TableEmptyRows';
 import { emptyRows } from '../../common/utils/emptyRows';
 import { deleteMember, deleteMembers } from '../../redux/store/members/memberThunk';
+import { updataInfo } from '../../common/utils/updateInfo';
 
 // ----------------------------------------------------------------------
 
@@ -64,6 +65,8 @@ export function TableMembersPage() {
     onChangePage,
     onChangeRowsPerPage
   } = useTable()
+
+  updataInfo()
 
   const dispatch = useDispatch()
 

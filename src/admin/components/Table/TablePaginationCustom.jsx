@@ -6,7 +6,7 @@ export const TablePaginationCustom = ({
     ...other }) => {
   return (
     <Box sx={{ position: 'relative', ...sx }}>
-        <TablePagination rowsPerPageOptions={0} component="div" {...other} />
+        <TablePagination rowsPerPageOptions={[0]} component="div" {...other} />
     </Box>
   )
 }

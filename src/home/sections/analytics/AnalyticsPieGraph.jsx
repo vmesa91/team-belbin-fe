@@ -64,7 +64,7 @@ export const AnalyticsPieGraph = ({ title, subheader, chart, ...other }) => {
         tooltip: {
           fillSeriesColor: false,
           y: {
-            formatter: (value) => '7',
+            formatter: series.map((i) => i.value),
             title: {
               formatter: (seriesName) => `${seriesName}`,
             },

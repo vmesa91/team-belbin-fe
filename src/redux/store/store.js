@@ -7,6 +7,7 @@ import { teamSlice } from "./teams/teamSlice";
 import { userSlice } from "./user/userSlice";
 
 
+
 export const store = configureStore({
     reducer: {
         authStore: authSlice.reducer,

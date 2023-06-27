@@ -1,4 +1,4 @@
-import { Avatar, Button, Checkbox, Divider, IconButton, Link, MenuItem, Stack, TableCell, TableRow } from "@mui/material"
+import { Avatar, Button, Checkbox, Divider, IconButton, Link, MenuItem, Stack, TableCell, TableRow, Typography } from "@mui/material"
 import { Iconify } from "../../../common/components/Iconify/Iconify"
 import { MenuPopover } from "../../../common/components/MenuPopover/MenuPopover"
 import { useState } from "react"
@@ -53,17 +53,9 @@ export const TeamTableRow = ({
         <TableCell>
         <Stack direction="row" alignItems="center" spacing={2}>
             <Iconify width={40} icon="flat-color-icons:opened-folder"/>
-
-            <div>
-              <Link
-                noWrap
-                variant="subtitle2"
-                onClick={onViewRow}
-                sx={{ cursor: 'pointer' }}
-              >
-                {name}
-              </Link>
-            </div>
+            <Typography variant="subtitle2" color="common.blue" noWrap>
+              {name}
+            </Typography>
           </Stack>
         </TableCell>
 

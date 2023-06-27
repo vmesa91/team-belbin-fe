@@ -21,7 +21,6 @@ export const ScoreTools = ( { tools } ) => {
 
     const values = watch();
 
-    console.log(fields)
 
     const [listTool, setlistTool] = useState([values.expertise])
     
@@ -81,7 +80,7 @@ export const ScoreTools = ( { tools } ) => {
       
     return (
 
-    <Stack sx={{ display: 'flex' , flexDirection: 'row' ,  justifyContent: 'space-around'}}>
+    <Stack sx={{ display: 'flex' , flexDirection: 'row' ,  justifyContent: 'space-around', alignItems: 'strech'}}>
        <Typography variant="title" sx={{ color: 'text.secondary' }}>
             Añadir Tecnología/s
         </Typography>

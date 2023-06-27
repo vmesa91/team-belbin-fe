@@ -52,6 +52,7 @@ export const PATH_MEMBER = {
 export const PATH_TEAM = {
     root: ROOT_TEAM,
     createTeam: paths(ROOT_TEAM, '/createTeam'),
+    editTeam: (id) => paths(ROOT_TEAM, `/editTeam/${id}`),
     configTeam: paths(ROOT_TEAM, '/configTeam'),
     summaryTeam: paths(ROOT_TEAM, '/summaryTeam'),
     manageTeams: paths(ROOT_TEAM, '/tableTeams')

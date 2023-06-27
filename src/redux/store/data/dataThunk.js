@@ -81,7 +81,7 @@ export const createData = ( value ) => {
 
             const resp = await api.post(`/${method}` , data)
             const newState = [ ...actualState,  { ...data, id: resp.data.uid} ]
-            console.log(newState)
+       
             dispatch(onSetData ( { type: typeOption , value : newState  } ))
 
         } catch(error) {
@@ -91,8 +91,52 @@ export const createData = ( value ) => {
 }
 
 
-export const deleteData = ( value , type ) => {
+export const deleteData = ( id , type ) => {
 
+    return async (dispatch, getState) => {
+        
+        const { dataStore } = getState()
+        let typeOption = 'tools'
+        let actualState = dataStore.tools
+        let method = 'tool'
+        let newState = []
+
+        switch (type) {
+
+            case 'Knowledge':
+                typeOption = 'knowledges'
+                method = 'knowledge'
+                actualState = dataStore.knowledges
+                break;
+                
+            case 'Rol':
+                typeOption = 'roles'
+                method = 'role'
+                actualState = dataStore.roles
+                break;
+        
+            default:
+                break;
+        }
+
+
+        newState = actualState.filter( (row) => !id.includes(row._id))
+       
+        try{
+           const res = await api.delete(`/${method}/${id}`)
+           dispatch(onSetData ( { type: typeOption , value : newState  } ))
+
+        } catch( error ) {
+            console.log("🚀 ~ file: dataThunk.js:130 ~ return ~ error:", error)
+            dispatch(onSetData ( { type: 'errorMessage' , value: error.response?.data?.msg || 'Error' } ))
+        }
+ 
+        }
+        
+    }
+
+
+export const deleteDatas = ( value , type ) => {
 
     return async (dispatch, getState) => {
         
@@ -124,11 +168,11 @@ export const deleteData = ( value , type ) => {
         newState = actualState.filter( (row) => !value.includes(row))
        
         try{
-            // llamada al backend
-           //value.map((val) => { api.delete(`/${method}:${val._id}`)} )
+           await value.map( (val) => { api.delete(`/${method}/${val._id}`) } ) 
            dispatch(onSetData ( { type: typeOption , value : newState  } ))
 
         } catch( error ) {
+            console.log("🚀 ~ file: dataThunk.js:175 ~ return ~ error:", error)
             dispatch(onSetData ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
         }
  

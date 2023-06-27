@@ -55,7 +55,7 @@ export const RegisterPage = () => {
 }
 
   return (
-    <AuthLayout title='Register'>
+    <AuthLayout title='Register' >
        <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={3}>
           {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}

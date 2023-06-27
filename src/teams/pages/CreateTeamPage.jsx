@@ -24,7 +24,7 @@ export const CreateTeamPage = () => {
            { name: 'Crear Equipo' },
          ]}
        />
-        <NewEditTeam />
+        <NewEditTeam isEdit={false}/>
      </Container>
     </>
 

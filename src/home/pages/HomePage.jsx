@@ -1,55 +1,62 @@
-import { Box } from '@mui/system'
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { getDataForKnowledges, getDataForRoles, getDataForTools } from '../../redux/store/data/dataThunk'
-import { getProfiles } from '../../redux/store/profiles/profileThunk'
-import { getMembers } from '../../redux/store/members/memberThunk'
-import { getTeams } from '../../redux/store/teams/teamThunk'
-import { getUsers } from '../../redux/store/user/userThunk'
+
+import { useSelector } from 'react-redux'
 import { Helmet } from 'react-helmet-async'
-import { Container, Grid, Typography } from '@mui/material'
+import { Alert, Container, Grid, Typography } from '@mui/material'
 import { AnalyticsWidgetSummary } from '../sections/analytics/AnalyticsWidgetSummary'
 import { AnalyticsPieGraph } from '../sections/analytics/AnalyticsPieGraph'
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { AnalyticsDataActivity } from '../sections/analytics/AnalyticsDataActivity'
+import AnalyticsProfilesGraph from '../sections/analytics/AnalyticsProfilesGraph'
+import { useDispatch } from "react-redux"
+import { getDataForKnowledges, getDataForRoles, getDataForTools } from "../../redux/store/data/dataThunk"
+import { getUsers } from "../../redux/store/user/userThunk"
+import { getProfiles } from "../../redux/store/profiles/profileThunk"
+import { getMembers, getRolesBelbin } from "../../redux/store/members/memberThunk"
+import { getTeams } from "../../redux/store/teams/teamThunk"
+import { useEffect, useState } from "react"
+import Loading from '../../common/animations/Loading'
 
-
-const TIME_LABELS = {
-  week: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'],
-  month: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
-  year: ['2022','2023'],
-};
 
 export const HomePage = () => {
 
-
-  // * Init APP
-  const dispatch = useDispatch()
-
-  useEffect(() => {
-      // Data
-      dispatch( getDataForRoles() )
-      dispatch( getDataForKnowledges() )
-      dispatch( getDataForTools() )
-      // Users
-      dispatch( getUsers() )
-      // Profiles
-      dispatch( getProfiles() )
-      // Members
-      dispatch( getMembers() )
-      // Teams
-      dispatch( getTeams() )
-    }, [])
-
+    
     const theme = useTheme();
+    // * Init APP
+    const dispatch = useDispatch()
 
+    useEffect(() => {
+        // Data
+        dispatch( getDataForRoles() )
+        dispatch( getDataForKnowledges() )
+        dispatch( getDataForTools() )
+        // Users
+        dispatch( getUsers() )
+        // Profiles
+        dispatch( getProfiles() )
+        // Members
+        dispatch( getMembers() )
+        // Teams
+        dispatch( getTeams() )
+        // Roles belbin Graph
+        dispatch( getRolesBelbin() )
+
+      }, [])
+
+  
     const { teams } = useSelector( state => state.teamStore )
     const { roles, tools, knowledges } = useSelector( state => state.dataStore )
-    const { members } = useSelector( state => state.memberStore )
-    const { profiles } = useSelector( state => state.profileStore )
-    const sumData = roles.length + knowledges.length + tools.length
-
+    const { members, groupingRoles } = useSelector( state => state.memberStore )
+    const { profiles , mostProfiles } = useSelector( state => state.profileStore )
+    const sumData = roles.length + knowledges.length + tools.length  
+    
+    const [isLoading, setIsLoading] = useState(true)
+  
+    useEffect(() => {
+      if (Object.keys(groupingRoles).length > 0  & profiles.length > 0 & mostProfiles.length > 0 ){
+        setIsLoading(false)
+      }
+    }, [groupingRoles, profiles, mostProfiles])
+      
     return (
 
     <>  
@@ -57,6 +64,7 @@ export const HomePage = () => {
           <title> Home | Dashboard </title>
         </Helmet>
         
+        { isLoading ? < Loading /> :
         <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           ¡Bienvenido de nuevo! 
@@ -104,13 +112,11 @@ export const HomePage = () => {
               title="Roles de Belbin"
               chart={{
                 series: [
-                  { label: 'America', value: 4344 },
-                  { label: 'Asia', value: 5435 },
-                  { label: 'Europe', value: 1443 },
-                  { label: 'Africa', value: 4443 },
+                  { label: 'Roles Mentales', value: groupingRoles['Roles Mentales'] },
+                  { label: 'Roles Sociales', value: groupingRoles['Roles Sociales'] },
+                  { label: 'Roles de Acción', value: groupingRoles['Roles de Acción'] }
                 ],
                 colors: [
-                  theme.palette.primary.main,
                   theme.palette.info.main,
                   theme.palette.error.main,
                   theme.palette.warning.main,
@@ -119,54 +125,29 @@ export const HomePage = () => {
             />
           </Grid>
 
-          <Grid item xs={12} md={6} lg={8}>
-            <AnalyticsDataActivity
-              title="Actividad"
-              chart={{
-                labels: TIME_LABELS,
-                colors: [
-                  theme.palette.primary.main,
-                  theme.palette.error.main,
-                  theme.palette.warning.main,
-                  theme.palette.text.disabled,
-                ],
-                series: [
-                  {
-                    type: 'Week',
-                    data: [
-                      { name: 'Images', data: [20, 34, 48, 65, 37, 48] },
-                      { name: 'Media', data: [10, 34, 13, 26, 27, 28] },
-                      { name: 'Documents', data: [10, 14, 13, 16, 17, 18] },
-                      { name: 'Other', data: [5, 12, 6, 7, 8, 9] },
-                    ],
-                  },
-                  {
-                    type: 'Month',
-                    data: [
-                      { name: 'Images', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
-                      { name: 'Media', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
-                      { name: 'Documents', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
-                      { name: 'Other', data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 12, 43, 34] },
-                    ],
-                  },
-                  {
-                    type: 'Year',
-                    data: [
-                      { name: 'Images', data: [10, 34, 13, 56, 77] },
-                      { name: 'Media', data: [10, 34, 13, 56, 77] },
-                      { name: 'Documents', data: [10, 34, 13, 56, 77] },
-                      { name: 'Other', data: [10, 34, 13, 56, 77] },
-                    ],
-                  },
-                ],
-              }}
-            />
+         <Grid item xs={12} md={6} lg={8}>
+            <AnalyticsProfilesGraph
+                title="Perfiles más populares"
+                profiles={profiles}
+                chart={{
+                  colors: [
+                    theme.palette.primary.main,
+                    theme.palette.info.main,
+                    theme.palette.error.main,
+                    theme.palette.warning.main,
+                  ],
+                  series: [
+                    { label: mostProfiles[0]?.name, value: mostProfiles[0]?.members },
+                    { label: mostProfiles[1]?.name, value: mostProfiles[1]?.members },
+                    { label: mostProfiles[2]?.name, value: mostProfiles[2]?.members },
+                    { label: mostProfiles[3]?.name, value: mostProfiles[3]?.members },
+                  ],
+                }}
+              />
+          </Grid> 
           </Grid>
 
-
-
-          </Grid>
-        </Container>
+        </Container>}
 
     </>
   )

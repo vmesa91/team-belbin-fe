@@ -19,19 +19,18 @@ import { CustomBreadcrumbs } from '../../common/components/Breadcrumbs/CustomBre
 import { DataTableBodyLayout } from '../sections/table/DataTableBodyLayout'
 import { Iconify } from '../../common/components/Iconify/Iconify';
 import { NewDataModalForm } from '../sections/dialog/NewDataModalForm';
-import { useDispatch, useSelector } from 'react-redux';
-import { getDataForRoles , getDataForKnowledges , getDataForTools } from '../../redux/store/data/dataThunk';
+import { useSelector } from 'react-redux';
 import Loading from '../../common/animations/Loading';
 
 
 const TABLE_HEAD_ROLES = [
-  { id: 'roles' , label: 'Roles' , align: 'center'}
+  { _id: 'roles' , label: 'Roles' , align: 'center'}
 ]
 const TABLE_HEAD_KNOWLEDGES = [
-  { id: 'knowledges' , label: 'Conocimientos' , align: 'center'}
+  { _id: 'knowledges' , label: 'Conocimientos' , align: 'center'}
 ]
 const TABLE_HEAD_TECHNOLOGIES = [
-  { id: 'tecnhnologies' , label: 'Tecnologías' , align: 'center'}
+  { _id: 'tecnhnologies' , label: 'Tecnologías' , align: 'center'}
 ]
 
 export const DataPage = () => {

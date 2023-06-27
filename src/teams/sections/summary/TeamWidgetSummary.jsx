@@ -19,7 +19,7 @@ const StyledDropZone = styled('div')(({ theme }) => ({
   border: `1px dashed ${alpha(theme.palette.grey[500], 0.32)}`,
 }));
 
-export const TeamWidgetSummary = ({ title, total, description, icon, teamlead, sx, ...other }) => {
+export const TeamWidgetSummary = ({ title, description, icon, teamlead, sx, ...other }) => {
   
   const { user } = teamlead
   return (
@@ -39,11 +39,7 @@ export const TeamWidgetSummary = ({ title, total, description, icon, teamlead, s
         <div>
           <Typography variant="h3">{title}</Typography>
 
-          <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
-             {total} Miembros
-          </Typography>
-
-          <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
+          <Typography variant="subtitle3" sx={{ color: 'text.secondary' }}>
              {description}
           </Typography>
         </div>
@@ -73,7 +69,7 @@ export const TeamWidgetSummary = ({ title, total, description, icon, teamlead, s
         {...other}
     >
         <div>
-        <Typography variant="h4"> { user.name } </Typography>
+        <Typography variant="h4"> { user.name + ' ' + user.surname} </Typography>
 
         <Typography variant="subtitle2" sx={{ color: 'text.secondary' }}>
           TEAM LEAD 

@@ -13,7 +13,15 @@ export const getTeams = () => {
     }
 }
 
-export const configureTeam = ( value ) => {
+export const editTeam = (id) => {
+
+    return async (dispatch) => {
+
+        dispatch(onSetTeam ( { type: 'idEditTeam' , value : id  } ))
+    }
+}
+
+export const configureTeam = ( value , isEdit ) => {
 
      const { leader } = value
 
@@ -22,9 +30,8 @@ export const configureTeam = ( value ) => {
         const { memberStore } = getState()
         const { members } = memberStore
         const dataLeader = members.find( (member) => member._id === leader  )
-           
-
-        dispatch( onSetTeam( { type: 'configureTeam' , value: { ...value, leader: dataLeader }  } ))
+        
+        dispatch( onSetTeam( { type: 'configureTeam' , value: { ...value, leader: dataLeader, isEdit: isEdit }  } ))
 
     }
 }
@@ -73,9 +80,9 @@ export const createTeam = () => {
                 members: getID(members)
             }
 
-            await api.post('/team', newTeam)
+            const { data } = await api.post('/team', newTeam)
 
-            const newState = [ ...actualState, configureTeam ]
+            const newState = [ ...actualState, data.team ]
 
             dispatch(onSetTeam ( { type: 'teams' , value : newState  } ))
 
@@ -88,5 +95,86 @@ export const createTeam = () => {
 
 }
 
+export const updateTeam = () => {
+
+    return async (dispatch , getState ) => {
+
+        const { teamStore } = getState()
+        
+        const { teams , configureTeam , idEditTeam } = teamStore
+        
+        const { name, description, leader, roles, tools, knowledges, language, members } = configureTeam
+
+        const actualState = teams
+        
+        const newTeam = {
+            name,
+            description, 
+            leader: leader.user._id,
+            roles: getID(roles),
+            tools: getID(tools),
+            knowledges: getID(knowledges),
+            language,
+            members: getID(members)
+        }
+
+        try {
+            
+            const { data } = await api.put(`/team/${idEditTeam}` , newTeam)
+    
+            let newState = actualState.filter( (row) => row._id != value._id)
+    
+            newState = [ ...newState,  data.updateTeam ]
+            console.log("🚀 ~ file: teamThunk.js:119 ~ return ~ newState:", newState)
+
+            dispatch(onSetTeam ( { type: 'teams' , value : newState  } ))
+
+        }catch(error){
+            console.log(error)
+        }
+    }
+}
+
+export const deleteTeam = ( value ) => {
+
+    return async  ( dispatch, getState )  => {
+        
+        const { teamStore } = getState()
+        let actualState = teamStore.teams
+        let newState = []
+
+        newState = actualState.filter( (row) => !value.includes(row._id))
+
+        try {
+            await api.delete(`/team/${value}`)
+            
+            dispatch(onSetTeam( { type: 'teams', value: newState } ))
+        }catch( error ) {
+            dispatch(onSetTeam( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
+        }
+    }
+}
+
+export const deleteTeams = (value) => {
+
+    return async ( dispatch, getState ) => {
+        
+        const { teamStore } = getState()
+    
+        let actualState = teamStore.teams
+        let newState = []
+    
+        newState = actualState.filter( (row) => !value.includes(row._id))
+        
+        try {
+            value.map((val) => { api.delete(`/team/${val}`)} )
+            dispatch(onSetTeam ( { type: 'teams' , value : newState  } ))
+        }catch(error){
+            dispatch(onSetTeam ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
+        }
+    }
+    
+
+}
 // Extract ID
 const getID = ( list ) => list.map( li => li._id )

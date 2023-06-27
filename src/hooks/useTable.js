@@ -58,7 +58,7 @@ export const useTable = (props) => {
   // Function to manage all selected rows
   const onSelectAllRows = useCallback((checked, newSelecteds) => {
 
-    console.log(checked, newSelecteds)
+   
     if (checked) {
       setSelected(newSelecteds);
       return;
