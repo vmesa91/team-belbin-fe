@@ -68,7 +68,7 @@ export const SummaryTeamPage = () => {
           </Grid>
          <Grid item xs={12} md={6}>
          <TeamSympathySummary
-                title="Conexión del equipo"
+                title="Conexión del equipo con el líder del equipo"
                 total={ members.length }
                 chart={{
                   series: seriesSympathy,

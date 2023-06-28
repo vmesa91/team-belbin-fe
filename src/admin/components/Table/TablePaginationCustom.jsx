@@ -1,4 +1,4 @@
-import { Box, FormControlLabel, TablePagination } from '@mui/material'
+import { Box, TablePagination } from '@mui/material'
 import React from 'react'
 
 export const TablePaginationCustom = ({ 
@@ -6,7 +6,7 @@ export const TablePaginationCustom = ({
     ...other }) => {
   return (
     <Box sx={{ position: 'relative', ...sx }}>
-        <TablePagination rowsPerPageOptions={[0]} component="div" {...other} />
+        <TablePagination rowsPerPageOptions={[3, 6]} component="div" {...other} />
     </Box>
   )
 }

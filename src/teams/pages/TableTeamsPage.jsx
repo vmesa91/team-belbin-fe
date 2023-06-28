@@ -250,7 +250,7 @@ export function TableTeamsPage() {
                     }
                     action={
                       <Stack direction="row">
-                          <Tooltip title="Delete">
+                          <Tooltip title="Eliminar">
                             <IconButton color="primary" onClick={handleOpen}>
                               <Iconify icon="eva:trash-2-outline" />
                             </IconButton>
@@ -308,7 +308,7 @@ export function TableTeamsPage() {
       <ConfirmDialog 
         open={openConfirm}
         onClose={handleClose}
-        title="Delete"
+        title="Eliminar"
         content={
           <>
             ¿Esta seguro que desea eliminar <strong> {selected.length} </strong> elementos?

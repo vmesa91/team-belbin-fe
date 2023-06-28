@@ -66,7 +66,7 @@ export function TableListToolbar({ numSelected, filterName, onFilterName }) {
       )}
 
       {numSelected > 0 ? (
-        <Tooltip title="Delete">
+        <Tooltip title="Eliminar">
           <IconButton>
             <Iconify icon="eva:trash-2-fill" />
           </IconButton>

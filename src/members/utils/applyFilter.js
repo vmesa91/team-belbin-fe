@@ -26,8 +26,8 @@ export function applyFilter({
 
     if (filterTeam.length > 0) {
        inputData = inputData.filter((member) => {
-          const { teams } = member
-          return teams?.find( (team) => filterTeam.find(( ft ) => (ft === team.name) ? true : false) )
+          const { team } = member
+          return team?.find( (team) => filterTeam.find(( ft ) => (ft === team.name) ? true : false) )
         } 
       );
     }

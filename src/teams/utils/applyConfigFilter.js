@@ -9,8 +9,7 @@ export function applyFilter({
   filterKnowledges,
   filterTools
   }) {
-
-
+ 
     let inputDatafilterRoles = [];
     let inputDatafilterKnowledges = [];
     let inputDatafilterTools = [];
@@ -44,15 +43,15 @@ export function applyFilter({
     inputData = [ ... new Set(inputDataAll) ]
 
     if (filterRol.length > 0) {
-      console.log("🚀 ~ file: applyConfigFilter.js:47 ~ filterRol:", filterRol)
+
       inputData = inputData.filter(
         (member) => { 
           const { belbinRol } = member
           const mappeo = mapperRoles(belbinRol, optionsRolBelbin)
-          console.log("🚀 ~ file: applyConfigFilter.js:51 ~ mappeo:", mappeo)
           return  mappeo.some(( rol ) => filterRol.includes(rol?.name))
         }
-      );
+
+        );
     }
         
 

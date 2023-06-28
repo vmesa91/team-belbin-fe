@@ -6,7 +6,6 @@ import{ useEffect, useMemo, useState } from 'react'
 
 // @MUI
 import {  
-  Alert,
   Box,
   Button,
   Container,
@@ -37,7 +36,6 @@ export const DataPage = () => {
 
   const { tools , roles, knowledges , errorMessage, isLoading } = useSelector( state => state.dataStore )
 
-  const [hasError, setHasError] = useState(false)
   const [tableDataRoles, setTableDataRoles] = useState([]);
   const [tableDataKnowledges, setTableDataKnowledges] = useState([]);
   const [tableDataTools, setTableDataTools] = useState([]);
@@ -59,13 +57,6 @@ export const DataPage = () => {
   }, [roles , knowledges, tools])  
   
   
-  useEffect(() => {
-    if (errorMessage !== undefined) {
-      setHasError(true)
-      
-    }
-  }, [errorMessage])
-
   return (
     <>
       <Helmet>
@@ -91,7 +82,7 @@ export const DataPage = () => {
             </Button>
           }
         />
-        {!!hasError && <Alert severity="error" sx={{ width: '30%' , padding: '2px' }}> {errorMessage} </Alert>}
+    
         <Box spacing={2} sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
           <DataTableBodyLayout key={'roles'} tableData={tableDataRoles} setTableData={setTableDataRoles} TABLE_HEAD={TABLE_HEAD_ROLES} typeData={'Rol'}/>       

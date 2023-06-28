@@ -15,12 +15,12 @@ export const CustomAutocomplete = ({ name, label, helperText, ...other }) => {
             {...field}
             onChange={(event, newValue) => setValue(name, newValue, { shouldValidate: true })}
             renderInput={(params) => (
-            <TextField
-                label={label}
-                error={!!error}
-                helperText={error ? error?.message : helperText}
-                {...params}
-            />
+                  <TextField
+                      label={label}
+                      error={!!error}
+                      helperText={error ? error?.message : helperText}
+                      {...params}
+                  />
             )}
             {...other}
         />

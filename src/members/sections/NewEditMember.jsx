@@ -99,49 +99,6 @@ export const NewEditMember = ({ isEdit=false , currentMember }) => {
 
   return (
     <FormProvider methods={methodsForm} onSubmit={handleSubmit(onSubmit)}>
-    {/*     <Card sx={{ p: 3, m: 4, display: 'flex', flexDirection: 'column', padding: '4%'}}>
-            <Box sx={{ p: 2, m: 2, display: 'flex', padding: '6', flexWrap: 'wrap'}}>
-                <Typography variant="title" sx={{ color: 'text.secondary' }}>
-                        Nombre y Apellidos
-                </Typography>
-
-                < CustomSelect native
-                    name="user"
-                    label="Selecciona un usuario activo">
-                    <option value="" />
-                        {users.map((usr) => (
-                          <option key={usr._id} label={usr.name + ' ' +  usr.surname} disabled={ filterListmember.find( fl => fl._id === usr._id ) ? true : false }>{usr._id}</option>
-                        )
-                    )}
-                </CustomSelect>
-            </Box>
-
-            <Box sx={{ p: 2, m: 2, display: 'flex', padding: '6', flexWrap: 'wrap'}}>
-              <Typography variant="title" sx={{ color: 'text.secondary' }}>
-                      Añadir Roles de Belbin
-              </Typography>
-              < CustomAutocomplete
-                  name="belbinRol"
-                  label="Selecciona uno o varios roles"
-                  filterSelectedOptions
-                  multiple
-                  options={dataRolesBelbin.map( role => ({ 'label': role.name, '_id': role._id, 'group' : role.group }))}
-                  isOptionEqualToValue={(option, value) => option._id === value._id}
-                  groupBy={(option) => option.group } 
-              />
-            </Box>
-            <Box sx={{ p: 2, m: 2, display: 'flex', padding: '6', flexWrap: 'wrap'}}>
-                <Typography variant="title" sx={{ color: 'text.secondary' }}>
-                        Añadir Perfil
-                </Typography>
-                <CustomAutocomplete
-                        name="profile"
-                        label="Selecciona un perfil"
-                        options={profiles}
-                        getOptionLabel={(option)=>(option.name?option.name:'')}
-                    />
-                </Box> 
-        </Card> */}
 
 <Card sx={{ p: 3, m: 4, display: 'grid', gridTemplateRows: '1fr 1fr 1fr', gap: '20px', padding: '4%'}}>
     <Box sx={{ p: 2, m: 2, display: 'flex', padding: '6', flexWrap: 'wrap'}}>

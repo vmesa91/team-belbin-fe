@@ -73,7 +73,7 @@ export const updateMember = ( value, id) => {
             
             const { data } = await api.put(`/member/${id}` , newData)
 
-            let newState = actualState.filter( (row) => row.user._id != value.user._id)
+            let newState = actualState.filter( (row) => row.user._id != id)
 
             newState = [ ...newState,  data.updateMember ]
         

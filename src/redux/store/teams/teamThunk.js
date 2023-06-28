@@ -87,7 +87,7 @@ export const createTeam = () => {
             dispatch(onSetTeam ( { type: 'teams' , value : newState  } ))
 
         } catch( error ) {
-            console.log(error)
+            dispatch(onSetTeam( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
         }
 
 
@@ -125,12 +125,11 @@ export const updateTeam = () => {
             let newState = actualState.filter( (row) => row._id != value._id)
     
             newState = [ ...newState,  data.updateTeam ]
-            console.log("🚀 ~ file: teamThunk.js:119 ~ return ~ newState:", newState)
 
             dispatch(onSetTeam ( { type: 'teams' , value : newState  } ))
 
         }catch(error){
-            console.log(error)
+            dispatch(onSetTeam( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
         }
     }
 }

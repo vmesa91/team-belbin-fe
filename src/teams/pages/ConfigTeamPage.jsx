@@ -89,7 +89,7 @@ export function ConfigTeamPage() {
 
   const { configureTeam } = useSelector( state => state.teamStore )
   const { members } = useSelector( state => state.memberStore )
-  const [validateMembers, setvalidateMembers] = useState(false)
+  const [validateMembers, setvalidateMembers] = useState(true)
   const { knowledges, tools , roles, leader } = configureTeam
 
   const [tableData, setTableData] = useState(members)
@@ -172,6 +172,9 @@ export function ConfigTeamPage() {
     setOpenConfirm(false);
   }
 
+  const handleCloseAlert = () => {
+    setvalidateMembers(false)
+  }
   const handleFilterBySympathy = (event, newValue) => {
     setPage(0);
     setFilterSympathy(newValue);
@@ -188,10 +191,13 @@ export function ConfigTeamPage() {
 
 
   const handleClickItem = () => 
-    {
-      navigate( "/team/summaryTeam")
-      dispatch(addMembersConfigureTeam( selected ))
-
+  {
+      if ((selected.length) >= 4) {
+       dispatch(addMembersConfigureTeam( selected ))
+       navigate( "/team/summaryTeam")
+      } else {
+        setvalidateMembers(true)
+      }
     }; 
 
   return (
@@ -220,7 +226,10 @@ export function ConfigTeamPage() {
           />
 
          <Card>
-         {!!validateMembers && <Alert severity="error">{'errors.afterSubmit.message'}</Alert>}
+         {validateMembers && (
+          <Alert severity="info" onClose={handleCloseAlert}>El equipo debe tener 4 miembros mínimo</Alert> 
+         )}
+ 
           <Tabs
           value={filterSympathy}
           onChange={handleFilterBySympathy}
@@ -265,7 +274,7 @@ export function ConfigTeamPage() {
                     }
                     action={
                       <Stack direction="row">
-                          <Tooltip title="Delete">
+                          <Tooltip title="Eliminar">
                             <IconButton color="primary" onClick={handleOpen}>
                               <Iconify icon="eva:trash-2-outline" />
                             </IconButton>
@@ -303,7 +312,6 @@ export function ConfigTeamPage() {
                   </TableBody>
 
                 </Table>
-
 
             </TableContainer> 
 

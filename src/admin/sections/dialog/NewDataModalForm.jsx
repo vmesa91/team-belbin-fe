@@ -16,7 +16,7 @@ export const NewDataModalForm = ({ onCancel }) => {
   const dispatch = useDispatch()
   const defaultValues = {
       name: '',
-      dataOption: null,
+      dataOption: '',
       activation: false
     }
 
@@ -41,8 +41,8 @@ export const NewDataModalForm = ({ onCancel }) => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)} >
 
-      <Box sx={ {  display: 'flex', flexDirection: 'column', 'align-items': 'center'} } >
-        <Stack spacing={3} sx={{ px: 3 , display: 'flex', flexDirection: 'row', 'align-items': 'center', flexWrap: 'wrap'} }>
+      <Box sx={ {  display: 'flex', flexDirection: 'column', alignItems: 'center'} } >
+        <Stack spacing={3} sx={{ px: 3 , display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap'} }>
             <CustomTextField name="name" label="Nombre"/>
 
             <CustomSelect

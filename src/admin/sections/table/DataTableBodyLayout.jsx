@@ -134,7 +134,7 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
                     )
                     }
                     action={
-                    <Tooltip title="Delete">
+                    <Tooltip title="Eliminar">
                         <IconButton color="primary" onClick={handleOpenConfirm}>
                         <Iconify icon="eva:trash-2-outline" />
                         </IconButton>
@@ -193,7 +193,7 @@ export const DataTableBodyLayout = ({ tableData , setTableData , TABLE_HEAD , ty
         <ConfirmDialog 
             open={openConfirm}
             onClose={handleCloseConfirm}
-            title="Delete"
+            title="Eliminar"
             content={
             <>
                 ¿Estás seguro que desea eliminar <strong> {selected.length} </strong> elementos?

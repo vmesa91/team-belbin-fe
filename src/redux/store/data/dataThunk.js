@@ -80,7 +80,7 @@ export const createData = ( value ) => {
             } 
 
             const resp = await api.post(`/${method}` , data)
-            const newState = [ ...actualState,  { ...data, id: resp.data.uid} ]
+            const newState = [ ...actualState,  { ...data, _id: resp.data.uid} ]
        
             dispatch(onSetData ( { type: typeOption , value : newState  } ))
 
@@ -123,11 +123,10 @@ export const deleteData = ( id , type ) => {
         newState = actualState.filter( (row) => !id.includes(row._id))
        
         try{
-           const res = await api.delete(`/${method}/${id}`)
+           const resp = await api.delete(`/${method}/${id}`)
            dispatch(onSetData ( { type: typeOption , value : newState  } ))
 
         } catch( error ) {
-            console.log("🚀 ~ file: dataThunk.js:130 ~ return ~ error:", error)
             dispatch(onSetData ( { type: 'errorMessage' , value: error.response?.data?.msg || 'Error' } ))
         }
  
@@ -166,13 +165,12 @@ export const deleteDatas = ( value , type ) => {
 
 
         newState = actualState.filter( (row) => !value.includes(row))
-       
+
         try{
-           await value.map( (val) => { api.delete(`/${method}/${val._id}`) } ) 
+          await value.map( (val) => { api.delete(`/${method}/${val._id}`) } ) 
            dispatch(onSetData ( { type: typeOption , value : newState  } ))
 
         } catch( error ) {
-            console.log("🚀 ~ file: dataThunk.js:175 ~ return ~ error:", error)
             dispatch(onSetData ( { type: 'errorMessage' , value: error.response.data?.msg || 'Error' } ))
         }
  

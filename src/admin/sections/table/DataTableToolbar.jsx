@@ -38,7 +38,7 @@ export const DataTableToolbar = ({
           onClick={onResetFilter}
           startIcon={<Iconify icon="eva:trash-2-outline" />}
         >
-          Borrar
+          Limpiar
         </Button>
       )}
     </Stack>

@@ -10,7 +10,6 @@ import { useEffect } from 'react'
 
 export const AppRouter = () => {
 
-  console.log('####### APP ROUTER #######')
   const { status } = useSelector( state => state.authStore )
   const dispatch = useDispatch()
 
