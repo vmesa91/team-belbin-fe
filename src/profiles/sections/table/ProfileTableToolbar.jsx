@@ -7,6 +7,7 @@ export const ProfileTableToolbar = ({
   filterName,
   filterRol,
   filterMember,
+  filterTechnology,
   onFilterByName,
   onFilterByRol,
   onFilterByMember,
@@ -65,21 +66,21 @@ export const ProfileTableToolbar = ({
         defaultValue={[]}
         sx={{ maxHeight: 120 , width: '500px'}}
         renderInput={(params) => (
-          <TextField {...params} label="Miembros" placeholder="Miembros" sx={{textTransform: 'capitalize'}}/>
+          <TextField {...params} label="Miembros" placeholder="Miembros" value={filterMember}  sx={{textTransform: 'capitalize'}}/>
         )}
       />
       <Autocomplete
         multiple
         limitTags={2}
-        id="technologies"
+        id="tools"
         filterSelectedOptions
         onChange={onFilterByTechnology}
         options={optionsTechnologies}
-        getOptionLabel={(option) => option.user.name}
+        getOptionLabel={(option) => option.name}
         defaultValue={[]}
         sx={{ maxHeight: 120 , width: '500px' }}
         renderInput={(params) => (
-          <TextField {...params} label="Tecnologías" placeholder="Tecnología" value={filterMember} sx={{textTransform: 'capitalize'}}/>
+          <TextField {...params} label="Tecnologías" placeholder="Tecnología" value={filterTechnology} sx={{textTransform: 'capitalize'}}/>
         )}
       />
       {isFiltered && (

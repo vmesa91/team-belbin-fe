@@ -230,6 +230,7 @@ export function TableProfilesPage() {
             filterName={filterName}
             filterRol={filterRol}
             filterMember={filterMember}
+            filterTool={filterTechnology}
             onFilterByName={handleFilterByName}
             onFilterByRol={handleFilterByRol}
             onFilterByMember={handleFilterByMember}

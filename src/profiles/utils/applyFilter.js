@@ -6,7 +6,6 @@ export function applyFilter({
     filterTechnology,
     filterMember
   }) {
-
   
     if (filterName) {
       inputData = inputData.filter(
@@ -27,7 +26,7 @@ export function applyFilter({
     if (filterTechnology.length > 0) {
        inputData = inputData.filter((profile) => {
           const { tools } = profile
-          return tools.find( (tool) => filterTechnology.find(( ft ) => (ft === tool.name) ? true : false) )
+        return tools.find( (tool) => filterTechnology.find(( ft ) => (ft === tool.name) ? true : false) )
         } 
       );
     }
@@ -35,7 +34,9 @@ export function applyFilter({
     if (filterMember.length > 0) {
        inputData = inputData.filter((profile) => {
           const { members } = profile
-          return members.find( (member) => filterMember.find(( fm ) => (fm === member.name) ? true : false) )
+          console.log("🚀 ~ file: applyFilter.js:40 ~ inputData=inputData.filter ~ members:", members)
+          const resl = members.find( (member) => filterMember.find(( fm ) => (fm === (member.user.name + ' ' + member.user.username)) ? true : false) )
+          console.log("🚀 ~ file: applyFilter.js:39 ~ inputData=inputData.filter ~ resl:", resl)
         } 
       );
     }
