@@ -34,9 +34,8 @@ export function applyFilter({
     if (filterMember.length > 0) {
        inputData = inputData.filter((profile) => {
           const { members } = profile
-          console.log("🚀 ~ file: applyFilter.js:40 ~ inputData=inputData.filter ~ members:", members)
-          const resl = members.find( (member) => filterMember.find(( fm ) => (fm === (member.user.name + ' ' + member.user.username)) ? true : false) )
-          console.log("🚀 ~ file: applyFilter.js:39 ~ inputData=inputData.filter ~ resl:", resl)
+          return members.find( (member) => filterMember.find(( fm ) => fm === member.user.name + ' ' + member.user.surname )? true : false)
+          
         } 
       );
     }
